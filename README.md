@@ -17,8 +17,9 @@ curl -sSL https://github.com/rhythmcache/BootAnimation-Creator-Script/releases/d
 chmod +x genbootanim.sh
 ./genbootanim.sh
 ```
+## Convert Bootanimation.zip to video
 
-- Convert bootanimation.zip into video
+- Converts bootanimation.zip into video
 - Not Guaranteed to work with every Bootanimation.zip
 ```
 curl -sSL https://github.com/rhythmcache/BootAnimation-Creator-Script/releases/download/V1/boo2mp4.sh -o boot2mp4.sh
