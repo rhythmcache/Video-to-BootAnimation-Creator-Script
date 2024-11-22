@@ -27,5 +27,5 @@ chmod +x boot2mp4.sh
 ./boot2mp4.sh
 ```
 
-# Bugs ?
-(Ask Here)[https://t.me/ximistuffschat]
+
+If you find any bugs , report here[https://t.me/ximistuffschat]
