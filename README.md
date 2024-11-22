@@ -26,3 +26,6 @@ curl -sSL https://github.com/rhythmcache/BootAnimation-Creator-Script/releases/d
 chmod +x boot2mp4.sh
 ./boot2mp4.sh
 ```
+
+# Bugs ?
+(Ask Here)[https://t.me/ximistuffschat]
