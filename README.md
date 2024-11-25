@@ -30,3 +30,6 @@ Also see - https://github.com/rhythmcache/video-to-bootanimation
 
 
 If you find any bugs , report here https://t.me/ximistuffschat
+
+## License
+This project is licensed under the GNU General Public License v3.0.
