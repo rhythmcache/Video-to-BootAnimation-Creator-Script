@@ -12,7 +12,7 @@ chmod +x cbootanim.sh
 ```
 
 - If you want to create just a bootanimation.zip from video  , use this
-- Recommend to select "loop animation" if your video is too short or if its a gif
+- Recommended to select "loop animation" if your video is too short or if its a gif
 ```
 curl -sSL https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script/releases/download/V1/genbootanim.sh -o genbootanim.sh
 chmod +x genbootanim.sh
