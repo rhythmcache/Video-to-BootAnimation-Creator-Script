@@ -79,8 +79,20 @@ echo -e "${GREEN}"
 read -p "Enter output path (e.g., /path/to/output.zip): " output_path
 echo -e "${NC}"
 
+# Prompt for looping option
+echo -e "${GREEN}"
+read -p "Loop animation? (1 for yes, 2 for no): " loop_option
+echo -e "${NC}"
+
+# Check if the entered option is valid
+if [[ "$loop_option" != "1" && "$loop_option" != "2" ]]; then
+    echo "Error: Invalid option selected. Please select 1 or 2."
+    exit 1
+fi
+
 # Temporary directory setup for processing
-TMP_DIR="~/bootanim"
+# Get the current directory dynamically and assign it to TMP_DIR
+TMP_DIR="$(pwd)/bootanim"
 rm -rf "$TMP_DIR"
 mkdir -p "$TMP_DIR/frames" "$TMP_DIR/result"
 desc_file="$TMP_DIR/result/desc.txt"
@@ -119,12 +131,17 @@ for frame in "$TMP_DIR/frames"/*.jpg; do
     mkdir -p "$TMP_DIR/result/part$part_index"
   fi
 done
-
-# Append part entries in desc.txt
-for i in $(seq 0 "$part_index"); do
-  echo "p 1 0 part$i" >> "$desc_file"
-done
-
+# Create desc.txt and handle looping
+if [[ "$loop_option" == "1" ]]; then
+  for i in $(seq 0 "$part_index"); do
+    echo "c 0 0 part$i" >> "$desc_file"
+  done
+else
+  # Append part entries in desc.txt
+  for i in $(seq 0 "$part_index"); do
+    echo "p 1 0 part$i" >> "$desc_file"
+  done
+fi
 # Zip the bootanimation
 echo "Creating bootanimation.zip..."
 cd "$TMP_DIR/result" || { echo "Error accessing result directory."; exit 1; }
