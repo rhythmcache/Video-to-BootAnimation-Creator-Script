@@ -5,6 +5,7 @@ A Termux/Linux Script which can convert videos into Bootanimation Magisk Module.
 - copy and paste this on termux or Linux terminal
 - creates a flashable magisk module
 - Flash created zip in magisk or kernel su or aPatch
+- - Recommended to select "loop animation" if your video is too short or if its a gif
 ```
 curl -sSL https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script/releases/download/V1/cbootanim.sh -o cbootanim.sh
 chmod +x cbootanim.sh
@@ -12,7 +13,7 @@ chmod +x cbootanim.sh
 ```
 
 - If you want to create just a bootanimation.zip from video  , use this
-- Recommended to select "loop animation" if your video is too short or if its a gif
+
 ```
 curl -sSL https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script/releases/download/V1/genbootanim.sh -o genbootanim.sh
 chmod +x genbootanim.sh
