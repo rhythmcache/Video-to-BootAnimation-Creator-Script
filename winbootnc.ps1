@@ -138,14 +138,18 @@ Get-ChildItem "$TMP_DIR\frames\*.jpg" | ForEach-Object {
 
 # Create desc.txt and handle looping
 if ($loop_option -eq "1") {
-    0..$part_index | ForEach-Object {
-        "c 0 0 part$_`n" | Add-Content $desc_file
+    $content = 0..$part_index | ForEach-Object {
+        "c 0 0 part$_"
     }
 } else {
-    0..$part_index | ForEach-Object {
-        "p 1 0 part$_`n" | Add-Content $desc_file
+    $content = 0..$part_index | ForEach-Object {
+        "p 1 0 part$_"
     }
 }
+
+# Write the content with Unix line endings (LF)
+[System.IO.File]::WriteAllLines($desc_file, $content)
+
 
 Write-Host "Creating bootanimation.zip..." -ForegroundColor $GREEN
 
