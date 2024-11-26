@@ -31,6 +31,15 @@ curl -sSL https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script/r
 chmod +x genbootanim.sh
 ./genbootanim.sh
 ```
+### On Windows
+#### Steps: On windows to create bootanimation.zip from video file.
+- Just copy and paste this in Windows Powershell
+```
+   Invoke-WebRequest -Uri "https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script/releases/download/V1/winbootnc.ps1" -OutFile "$env:TEMP\winbootnc.ps1"; & "$env:TEMP\winbootnc.ps1"
+```
+or [Download winbootnc.ps1](https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script/releases/download/V1/winbootnc.ps1) and Run it directly in windows powershell
+
+
 ## Convert Bootanimation.zip to video
 
 - Converts bootanimation.zip into video
@@ -41,12 +50,6 @@ chmod +x boot2mp4.sh
 ./boot2mp4.sh
 ```
 
-### On Windows
-#### Steps:
-- Just copy and paste this in Windows Powershell
-```
-   Invoke-WebRequest -Uri "https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script/releases/download/V1/winbootnc.ps1" -OutFile "$env:TEMP\winbootnc.ps1"; & "$env:TEMP\winbootnc.ps1"
-```
 
 
 
