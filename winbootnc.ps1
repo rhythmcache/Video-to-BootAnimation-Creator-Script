@@ -1,6 +1,7 @@
 # Set color variables
 $GREEN = [ConsoleColor]::Green
 $NC = [ConsoleColor]::Reset
+$RED = [ConsoleColor]::Red
 
 # Check if script is running as Administrator
 If (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
