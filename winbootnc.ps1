@@ -93,7 +93,7 @@ if ($loop_option -ne "1" -and $loop_option -ne "2") {
 }
 
 # Temporary directory setup for processing
-$TMP_DIR = "$PWD\bootanim"
+$TMP_DIR = "C:\TMPDIR"
 Remove-Item -Recurse -Force $TMP_DIR -ErrorAction SilentlyContinue
 New-Item -Path $TMP_DIR -ItemType Directory
 New-Item -Path "$TMP_DIR\frames" -ItemType Directory
@@ -147,10 +147,16 @@ if ($loop_option -eq "1") {
     }
 }
 
-# Zip the bootanimation using zip with 0 compression
-Write-Host "Creating bootanimation.zip with no compression..." -ForegroundColor $GREEN
-Start-Process -NoNewWindow -Wait -FilePath "zip" -ArgumentList "-r0", "`"$output_path`"", "`"$TMP_DIR\result\*`""
+Write-Host "Creating bootanimation.zip..." -ForegroundColor $GREEN
 
+#
+Set-Location -Path "$TMP_DIR\result"
+
+# Create the ZIP file from the current directory's contents
+Write-Host "Creating bootanimation.zip ..." -ForegroundColor $GREEN
+Start-Process -NoNewWindow -Wait -FilePath "zip" -ArgumentList "-r0", "`"$output_path`"", "." -PassThru
+
+# Check for errors
 if ($LASTEXITCODE -eq 0) {
     Write-Host "Bootanimation created at $output_path" -ForegroundColor $GREEN
 } else {
@@ -158,8 +164,24 @@ if ($LASTEXITCODE -eq 0) {
     exit 1
 }
 
-Write-Host "Bootanimation created at $output_path" -ForegroundColor $GREEN
+# Return to the original directory
+Set-Location -Path $PWD
+
+
+Start-Sleep -Seconds 1
+Set-Location -Path "C:\Users\Admin"
+
+
 
 # Clean up
 Remove-Item -Recurse -Force $TMP_DIR
-Write-Host "Process complete." -ForegroundColor $GREEN
+while ($true) {
+    Write-Host "Process completed"
+    Start-Sleep -Seconds 1  # Wait for 1 second before printing again
+    if ($host.UI.RawUI.KeyAvailable) {
+        $null = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")  # Read the key press (without displaying it)
+        break  # Exit the loop when any key is pressed
+    }
+}
+
+
