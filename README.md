@@ -1,6 +1,18 @@
 # BootAnimation-Creator-Script
 A Termux/Linux Script which can convert videos into Bootanimation Magisk Module.
 
+
+## Features
+- Converts videos into Android-compatible boot animations.
+- can scale video to the desired resolution and fps
+
+## Requirements
+- **FFmpeg**: Used for extracting frames from the video.
+- **Zip Utility**: Used for creating the `bootanimation.zip`.
+- **Chocolatey (Windows)**: to install ffmpeg and zip automatically on Windows.
+---
+
+
 ## How To Use ?
 - copy and paste this on termux or Linux terminal
 - creates a flashable magisk module
@@ -28,6 +40,16 @@ curl -sSL https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script/r
 chmod +x boot2mp4.sh
 ./boot2mp4.sh
 ```
+
+### On Windows
+#### Steps:
+- Just copy and paste this in Windows Powershell
+```
+   Invoke-WebRequest -Uri "https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script/releases/download/V1/winbootnc.ps1" -OutFile "$env:TEMP\winbootnc.ps1"; & "$env:TEMP\winbootnc.ps1"
+```
+
+
+
 Also see - https://github.com/rhythmcache/video-to-bootanimation
 
 
