@@ -1,5 +1,5 @@
 # BootAnimation-Creator-Script
-A Termux/Linux/Windows Script which can convert videos into Bootanimation Magisk Module.
+A Termux/Linux Script which can convert videos into Bootanimation Magisk Module.
 
 
 ## Features
@@ -9,7 +9,6 @@ A Termux/Linux/Windows Script which can convert videos into Bootanimation Magisk
 ## Requirements
 - **FFmpeg**: Used for extracting frames from the video.
 - **Zip Utility**: Used for creating the `bootanimation.zip`.
-- **Chocolatey (Windows)**: to install ffmpeg and zip automatically on Windows.
 ---
 
 
@@ -31,14 +30,6 @@ curl -sSL https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script/r
 chmod +x genbootanim.sh
 ./genbootanim.sh
 ```
-### On Windows
-#### Steps: On windows to create bootanimation.zip from video file.
-- Just copy and paste this in Windows Powershell
-```
-   Invoke-WebRequest -Uri "https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script/releases/download/V1/winbootnc.ps1" -OutFile "$env:TEMP\winbootnc.ps1"; & "$env:TEMP\winbootnc.ps1"
-```
-or [Download winbootnc.ps1](https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script/releases/download/V1/winbootnc.ps1) and Run it directly in windows powershell
-
 
 ## Convert Bootanimation.zip to video
 
