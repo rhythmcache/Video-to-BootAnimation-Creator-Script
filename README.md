@@ -1,5 +1,5 @@
 # BootAnimation-Creator-Script
-A Termux/Linux Script which can convert videos into Bootanimation Magisk Module.
+A Termux/Linux/Windows Script which can convert videos into Bootanimation Magisk Module.
 
 
 ## Features
