@@ -117,9 +117,6 @@ if ($frame_count -eq 0) {
 }
 Write-Host "Processed $frame_count frames." -ForegroundColor $GREEN
 
-# Create desc.txt
-"$width $height $fps`n" | Set-Content -NoNewline $desc_file
-
 # Pack frames into parts if more than 400 frames
 $max_frames = 400
 $part_index = 0
@@ -135,8 +132,10 @@ Get-ChildItem "$TMP_DIR\frames\*.jpg" | ForEach-Object {
         New-Item -Path "$TMP_DIR\result\part$part_index" -ItemType Directory
     }
 }
+# Create desc.txt with resolution and fps
+"$width $height $fps" | Out-File $desc_file -Force
 
-# Create desc.txt and handle looping
+# Create loop content
 if ($loop_option -eq "1") {
     $content = 0..$part_index | ForEach-Object {
         "c 0 0 part$_"
@@ -146,10 +145,11 @@ if ($loop_option -eq "1") {
         "p 1 0 part$_"
     }
 }
+# Append loop content to the file
+Add-Content -Path $desc_file -Value $content
 
-# Write the content with Unix line endings (LF)
-[System.IO.File]::WriteAllLines($desc_file, $content)
-
+# Convert line endings to Unix (LF) by reading the file, replacing CRLF with LF, and writing it back
+(Get-Content $desc_file -Raw) -replace "`r`n", "`n" | Set-Content $desc_file -Force
 
 Write-Host "Creating bootanimation.zip..." -ForegroundColor $GREEN
 
