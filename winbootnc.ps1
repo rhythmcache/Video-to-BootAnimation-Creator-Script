@@ -148,8 +148,8 @@ if ($loop_option -eq "1") {
 # Append loop content to the file
 Add-Content -Path $desc_file -Value $content
 
-# Convert line endings to Unix (LF) by reading the file, replacing CRLF with LF, and writing it back
-(Get-Content $desc_file -Raw) -replace "`r`n", "`n" | Set-Content $desc_file -Force
+# Convert line endings to Unix (LF)
+(Get-Content -Path $desc_file -Raw) -replace "`r", "" | Set-Content -Path $desc_file -Force -NoNewline
 
 Write-Host "Creating bootanimation.zip..." -ForegroundColor $GREEN
 
