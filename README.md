@@ -10,7 +10,7 @@ A  Termux/Linux script that converts YouTube videos or local video files into An
 
 ## Requirements
 - **FFmpeg**: Used for extracting frames from the video.
-- **Zip Utility**: Used for creating the `bootanimation.zip`.
+- **Zip**: Used for creating the `bootanimation.zip`.
 - **yt-dlp**: Download YouTube videos (if selected as input).
 ---
 
