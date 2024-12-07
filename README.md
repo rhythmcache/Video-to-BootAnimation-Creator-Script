@@ -9,6 +9,7 @@ A  Termux/Linux script that converts YouTube videos or local video files into An
 - can scale bootanimations to the desired resolution and fps
 
 ## Requirements
+Ensure that these dependencies are installed in your environment though script will try to install the dependencies if it finds any of them Missing.
 - **FFmpeg**: Used for extracting frames from the video.
 - **Zip**: Used for creating the `bootanimation.zip`.
 - **yt-dlp**: Download YouTube videos (if selected as input).
@@ -18,6 +19,7 @@ A  Termux/Linux script that converts YouTube videos or local video files into An
 
 - To install yt-dlp on Termux, run the following commands:
 ```
+termux-setup-storage -y
 pkg install openssl-tool python -y
 pip install yt-dlp
 ```
