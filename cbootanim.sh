@@ -71,14 +71,55 @@ if ! command -v unzip &> /dev/null; then
     install_package "unzip" || { echo "Failed to install unzip."; exit 1; }
 fi
 
-# Prompt
-echo -e "${GREEN}"
-read -p "Enter video path (e.g.,/path/to/video.mp4): " video
-echo -e "${NC}"
-if [ ! -f "$video" ]; then
+# Prompt for video source
+echo -e "${GREEN}Choose video source:${NC}"
+echo "1. YouTube Video"
+echo "2. Local Video"
+read -p "Enter your choice (1 or 2): " source_choice
+
+if [[ "$source_choice" == "1" ]]; then
+  # YouTube video selected
+  if ! command -v yt-dlp &> /dev/null; then
+    echo "yt-dlp not found. Installing..."
+    install_package "yt-dlp" || { echo "Failed to install yt-dlp."; exit 1; }
+  fi
+
+  read -p "Enter YouTube video link: " yt_url
+
+  # List available resolutions
+echo "Fetching available resolutions..."
+yt_dlp_info=$(yt-dlp -F "$yt_url")
+echo "Available resolutions (MP4 only):"
+yt_dlp_resolutions=$(echo "$yt_dlp_info" | grep -E '^[0-9]+ ' | grep -i "mp4" | awk '{print $1, $2, $3, $NF}')
+
+if [[ -z "$yt_dlp_resolutions" ]]; then
+  echo "No MP4 formats available for this video."
+  exit 1
+fi
+
+echo "$yt_dlp_resolutions"
+read -p "Enter the format code for the desired resolution: " format_code
+
+  # Download video
+  yt_dlp_output="downloaded_video.mp4"
+  yt-dlp -f "$format_code" -o "$yt_dlp_output" "$yt_url" || {
+    echo "Error downloading video from YouTube."
+    exit 1
+  }
+  video="$yt_dlp_output"
+elif [[ "$source_choice" == "2" ]]; then
+
+  # Local video selected
+  read -p "Enter video path (e.g., /path/to/video.mp4): " video
+  if [ ! -f "$video" ]; then
     echo "Error: Video file does not exist."
     exit 1
+  fi
+else
+  echo "Invalid choice. Exiting."
+  exit 1
 fi
+
 
 echo -e "${GREEN}"
 read -p "Enter output resolution (e.g., 1080x1920): " resolution
