@@ -13,12 +13,6 @@ A  Termux/Linux script that converts YouTube videos or local video files into An
 - **Zip**: Used for creating the `bootanimation.zip`.
 - **yt-dlp**: Download YouTube videos (if selected as input).
 ---
-
-
-
-
-## How To Use ?
-
 ### Termux Users
 - Since yt-dlp is not available in Termux's repositories, you need to install it using Python if you want to use the YouTube to bootanimation converter.
 
@@ -27,6 +21,8 @@ A  Termux/Linux script that converts YouTube videos or local video files into An
 pkg install openssl-tool python -y
 pip install yt-dlp
 ```
+
+## How To Use ?
 - copy and paste this on termux or Linux terminal
 - Choose either YouTube video or local video as the source.
 - For YouTube videos, select the desired resolution to download.
