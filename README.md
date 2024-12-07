@@ -38,7 +38,7 @@ chmod +x genbootanim.sh
 ./genbootanim.sh
 ```
 
-##Termux Users
+## Termux Users
 - Since yt-dlp is not available in Termux's repositories, you need to install it using Python if you want to use the YouTube to bootanimation converter.
 
 - To install yt-dlp on Termux, run the following commands:
