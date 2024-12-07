@@ -6,7 +6,7 @@ A  Termux/Linux script that converts YouTube videos or local video files into An
 
 ## Features
 - Convert `YouTube` videos or `local` video files into boot animations.
-- can scale video to the desired resolution and fps
+- can scale bootanimations to the desired resolution and fps
 
 ## Requirements
 - **FFmpeg**: Used for extracting frames from the video.
