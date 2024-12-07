@@ -1,24 +1,29 @@
 # BootAnimation-Creator-Script
-A Termux/Linux Script which can convert videos into Bootanimation Magisk Module.
 
+A  Termux/Linux script that converts YouTube videos or local video files into Android-compatible bootanimation Magisk modules.
+
+---
 
 ## Features
-- Converts videos into Android-compatible boot animations.
+- Convert `YouTube` videos or `local` video files into boot animations.
 - can scale video to the desired resolution and fps
 
 ## Requirements
 - **FFmpeg**: Used for extracting frames from the video.
 - **Zip Utility**: Used for creating the `bootanimation.zip`.
+- **yt-dlp**: Download YouTube videos (if selected as input).
 ---
 
 
 ## How To Use ?
 - copy and paste this on termux or Linux terminal
-- creates a flashable magisk module
+- Choose either YouTube video or local video as the source.
+- For YouTube videos, select the desired resolution to download.
+- The script will generate a flashable Magisk module.
 - Flash created zip in magisk or kernel su or aPatch
 - - Recommended to select "loop animation" if your video is too short or if its a gif
 ```
-curl -sSL https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script/releases/download/V1/cbootanim.sh -o cbootanim.sh
+curl -sSL https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script/releases/download/V2/cbootanim.sh -o cbootanim.sh
 chmod +x cbootanim.sh
 ./cbootanim.sh
 ```
@@ -26,7 +31,7 @@ chmod +x cbootanim.sh
 - If you want to create just a bootanimation.zip from video  , use this
 
 ```
-curl -sSL https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script/releases/download/V1/genbootanim.sh -o genbootanim.sh
+curl -sSL https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script/releases/download/V2/genbootanim.sh -o genbootanim.sh
 chmod +x genbootanim.sh
 ./genbootanim.sh
 ```
