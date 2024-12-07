@@ -19,7 +19,7 @@ Ensure that these dependencies are installed in your environment though script w
 
 - To install yt-dlp on Termux, run the following commands:
 ```
-termux-setup-storage -y
+termux-setup-storage
 pkg install openssl-tool python -y
 pip install yt-dlp
 ```
