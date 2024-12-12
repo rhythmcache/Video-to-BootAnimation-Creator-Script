@@ -81,3 +81,7 @@ If you find any bugs , report here https://t.me/ximistuffschat
 
 ## License
 This project is licensed under the GNU General Public License v3.0.
+
+
+---
+[![Telegram](https://img.shields.io/badge/Telegram-Join%20Chat-blue?style=flat-square&logo=telegram)](https://t.me/ximistuffschat)
