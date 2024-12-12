@@ -54,7 +54,11 @@ bootc -i <path to video file> <resolution> <fps> [loop] <output/path/bootanimati
 ```
 bootc -i <path to video file> <resolution> <fps <output/path/bootanimation.zip>
 ```
-
+- For example
+```
+./bootc -i /storage/emulated/0/Movies/VID_20241211_201851_329.mp4 1080x2400 50 /sdcard/bootanimation.zip
+```
+---
 ## Convert Bootanimation.zip to video
 
 - Converts bootanimation.zip into video
@@ -65,13 +69,6 @@ chmod +x boot2mp4.sh
 ./boot2mp4.sh
 ```
 
----
-
-```
-- For example
-```
-./bootc -i /storage/emulated/0/Movies/VID_20241211_201851_329.mp4 1080x2400 50 /sdcard/bootanimation.zip
-```
 
 
 
