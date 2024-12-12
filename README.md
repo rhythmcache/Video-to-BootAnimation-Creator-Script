@@ -56,6 +56,23 @@ chmod +x boot2mp4.sh
 ./boot2mp4.sh
 ```
 
+---
+## Use As Command-Line
+- [Download This](https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script/releases/download/V1/bootc) and give executable permission
+- General Syntax to use for creating a looped boot-animation 
+```
+bootc -i <path to video file> <resolution> <fps> [loop] <output/path/bootanimation.zip>
+```
+- General Syntaz to use for creating a non-looped boot-animation (same just remove the loop)
+```
+bootc -i <path to video file> <resolution> <fps <output/path/bootanimation.zip>
+```
+- For example
+```
+./bootc -i /storage/emulated/0/Movies/VID_20241211_201851_329.mp4 1080x2400 50 /sdcard/bootanimation.zip
+```
+
+
 
 
 
