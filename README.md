@@ -53,7 +53,7 @@ bootc -i <path to video file> <resolution> <fps> [loop] <output/path/bootanimati
 - General Syntax to use for creating a non-looped boot-animation (same just remove the loop)
 ```
 bootc -i <path to video file> <resolution> <fps <output/path/bootanimation.zip>
-
+```
 
 ## Convert Bootanimation.zip to video
 
