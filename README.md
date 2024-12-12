@@ -48,7 +48,7 @@ chmod +x genbootanim.sh
 - [Download This](https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script/releases/download/V2/bootc) and give executable permission
 - General Syntax to use for creating a looped boot-animation 
 ```
-bootc -i <path to video file> <resolution> <fps> [loop] <output/path/bootanimation.zip>
+bootc -i <path to video file> <resolution> <fps> loop <output/path/bootanimation.zip>
 ```
 - General Syntax to use for creating a non-looped boot-animation (same just remove the loop)
 ```
