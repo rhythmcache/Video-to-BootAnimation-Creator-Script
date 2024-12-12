@@ -1,0 +1,125 @@
+#!/bin/bash
+
+# Set color variables
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+
+# Usage function
+usage() {
+    echo -e "${GREEN}Usage:${NC}"
+    echo "$(basename "$0") -i <path to video file> <resolution> <fps> [loop] <output/path/bootanimation.zip>"
+    echo -e "\nOptions:"
+    echo "  -i         Path to the video file"
+    echo "  resolution Resolution of the bootanimation (e.g., 1080x2400)"
+    echo "  fps        Frame rate of the bootanimation"
+    echo "  loop       Optional; adds looping to the bootanimation"
+    echo "  output     Path to save the generated bootanimation.zip"
+    exit 1
+}
+
+# Check for required binaries
+if ! command -v ffmpeg &> /dev/null; then
+    echo "Error: ffmpeg not found."
+    exit 1
+fi
+
+if ! command -v zip &> /dev/null; then
+    echo "Error: zip not found."
+    exit 1
+fi
+
+# Validate and parse arguments
+if [ "$#" -lt 5 ]; then
+    usage
+fi
+
+if [ "$1" != "-i" ]; then
+    usage
+fi
+
+video="$2"
+resolution="$3"
+fps="$4"
+output="${@: -1}"
+loop_option="no"
+
+if [[ "$*" == *loop* ]]; then
+    loop_option="yes"
+fi
+
+# Validate video file
+if [ ! -f "$video" ]; then
+    echo "Error: Video file not found at $video"
+    exit 1
+fi
+
+# Validate resolution
+if [[ ! "$resolution" =~ ^[0-9]+x[0-9]+$ ]]; then
+    echo "Error: Invalid resolution format. Use <width>x<height> (e.g., 1080x2400)."
+    exit 1
+fi
+width=$(echo "$resolution" | cut -d'x' -f1)
+height=$(echo "$resolution" | cut -d'x' -f2)
+
+# Validate FPS
+if [[ ! "$fps" =~ ^[0-9]+$ ]]; then
+    echo "Error: FPS must be a positive integer."
+    exit 1
+fi
+
+# Create temporary directories
+TMP_DIR="$(pwd)/bootanim"
+rm -rf "$TMP_DIR"
+mkdir -p "$TMP_DIR/frames" "$TMP_DIR/result"
+desc_file="$TMP_DIR/result/desc.txt"
+
+# Generate frames
+ffmpeg -i "$video" -vf "scale=${width}:${height}" "$TMP_DIR/frames/%06d.jpg" || {
+    echo "Error: Failed to extract frames from video."
+    exit 1
+}
+
+# Validate frames
+frame_count=$(ls -1 "$TMP_DIR/frames" | wc -l)
+if [ "$frame_count" -eq 0 ]; then
+    echo "Error: No frames generated."
+    exit 1
+fi
+echo "Processed $frame_count frames."
+
+# Create desc.txt
+echo "$width $height $fps" > "$desc_file"
+max_frames=400
+part_index=0
+frame_index=0
+
+mkdir -p "$TMP_DIR/result/part$part_index"
+for frame in "$TMP_DIR/frames"/*.jpg; do
+    mv "$frame" "$TMP_DIR/result/part$part_index/"
+    frame_index=$((frame_index + 1))
+    if [ "$frame_index" -ge "$max_frames" ]; then
+        frame_index=0
+        part_index=$((part_index + 1))
+        mkdir -p "$TMP_DIR/result/part$part_index"
+    fi
+done
+
+# Add loop or play sections to desc.txt
+if [ "$loop_option" == "yes" ]; then
+    for i in $(seq 0 "$part_index"); do
+        echo "c 0 0 part$i" >> "$desc_file"
+    done
+else
+    for i in $(seq 0 "$part_index"); do
+        echo "p 1 0 part$i" >> "$desc_file"
+    done
+fi
+
+# Create bootanimation.zip
+cd "$TMP_DIR/result" || { echo "Error: Failed to access result directory."; exit 1; }
+zip -r -0 "$output" . || { echo "Error: Failed to create zip file."; exit 1; }
+echo "Bootanimation created at $output"
+
+# Clean up
+rm -rf "$TMP_DIR"
+echo "Process complete."
