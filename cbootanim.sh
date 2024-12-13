@@ -222,59 +222,40 @@ mkdir -p "./magisk_module/animation"
 mod="./magisk_module"
 mkdir -p "$mod//META-INF/com/google/android/"
 
-# Create or overwrite the file "install" with the content below
-cat <<'EOF' > "$mod/install.sh"
-SKIPMOUNT=false
-PROPFILE=false
-POSTFSDATA=false
-LATESTARTSERVICE=false
-REPLACE_EXAMPLE="
-/system/app/Youtube
-/system/priv-app/SystemUI
-/system/priv-app/Settings
-/system/framework
-"
-REPLACE="
-"
-print_modname() {
-ui_print "=================="
-ui_print "Bootanimation"
-ui_print "=================="
-}
-on_install() {
-unzip -o "$ZIPFILE" 'animation/*' -d $MODPATH >&2
+# Write Customize.sh
+cat <<'EOF' > "$mod/customize.sh"
 if [ -f "/system/product/media/bootanimation.zip" ]; then
-mkdir -p $MODPATH/system/product/media
-cp -f $MODPATH/animation/bootanimation.zip $MODPATH/system/product/media/
-ui_print "Installing bootanimation to product/media"
+    mkdir -p $MODPATH/system/product/media
+    cp -f $MODPATH/animation/bootanimation.zip $MODPATH/system/product/media/
+    ui_print "Installing bootanimation to product/media"
 elif [ -f "/system/media/bootanimation.zip" ]; then
-mkdir -p $MODPATH/system/media
-cp -f $MODPATH/animation/bootanimation.zip $MODPATH/system/media/
-ui_print " [*] Installing bootanimation to system/media"
+    mkdir -p $MODPATH/system/media
+    cp -f $MODPATH/animation/bootanimation.zip $MODPATH/system/media/
+    ui_print "Installing bootanimation to system/media"
 else
-ui_print "Failed to install. Please report in the support group."
-exit 1
+    ui_print "Failed to install. Bootanimation file not found in system/product/media or system/media."
+    abort
 fi
+
 ui_print ""
-ui_print " [*] Done!"
+ui_print "[*] Done!"
 ui_print ""
-}
-set_permissions() {
+
+# Set permissions recursively
 set_perm_recursive $MODPATH/system 0 0 0755 0644
-}
+
+# Clean up the animation directory
 rm -rf $MODPATH/animation
-unity_custom() {
-: # Leave this empty unless adding custom installation/uninstallation logic
-}
+
 EOF
 # Create or overwrite the file "module.prop" with the content below
 cat <<'EOF' > "$mod/module.prop"
-id=CBootanimation
+id=cbootanimation
 name=Bootanimation-Creator-Script
-version=2.0
-versionCode=23
-author=@coldnw
-description=follow @ximistuffs on telegram
+version=1.0
+versionCode=26
+author=coldnw.t.me | github.com/rhythmcache
+description=custom bootanimation for android.
 EOF
 #If written
 echo -e "${BRIGHT_CYAN} > > > Created props${NC}"
@@ -282,108 +263,47 @@ echo -e "${BRIGHT_CYAN} > > > Created props${NC}"
 #  update-binary
 echo " > > > Writing update-binary"
 cat <<'EOF' > "$mod/META-INF/com/google/android/update-binary"
+#!/sbin/sh
+
+#################
+# Initialization
+#################
+
 umask 022
-TMPDIR=/dev/tmp
-PERSISTDIR=/sbin/.magisk/mirror/persist
-rm -rf $TMPDIR 2>/dev/null
-mkdir -p $TMPDIR
+
+# echo before loading util_functions
 ui_print() { echo "$1"; }
+
 require_new_magisk() {
-ui_print "*******************************"
-ui_print " Please install Magisk v19.0+! "
-ui_print "*******************************"
-exit 1
+  ui_print "*******************************"
+  ui_print " Please install Magisk v20.4+! "
+  ui_print "*******************************"
+  exit 1
 }
-is_legacy_script() {
-unzip -l "$ZIPFILE" install.sh | grep -q install.sh
-return $?
-}
-print_modname() {
-local len
-len=`echo -n $MODNAME | wc -c`
-len=$((len + 2))
-local pounds=`printf "%${len}s" | tr ' ' '*'`
-ui_print "$pounds"
-ui_print " $MODNAME "
-ui_print "$pounds"
-ui_print "*******************"
-ui_print " Powered by Magisk "
-ui_print "*******************"
-}
+
+#########################
+# Load util_functions.sh
+#########################
+
 OUTFD=$2
 ZIPFILE=$3
+
 mount /data 2>/dev/null
-if [ -f /data/adb/magisk/util_functions.sh ]; then
+
+[ -f /data/adb/magisk/util_functions.sh ] || require_new_magisk
 . /data/adb/magisk/util_functions.sh
-NVBASE=/data/adb
-else
-require_new_magisk
-fi
-setup_flashable
-mount_partitions
-api_level_arch_detect
-$BOOTMODE && boot_actions || recovery_actions
-unzip -o "$ZIPFILE" module.prop -d $TMPDIR >&2
-[ ! -f $TMPDIR/module.prop ] && abort "! Unable to extract zip file!"
-$BOOTMODE && MODDIRNAME=modules_update || MODDIRNAME=modules
-MODULEROOT=$NVBASE/$MODDIRNAME
-MODID=`grep_prop id $TMPDIR/module.prop`
-MODPATH=$MODULEROOT/$MODID
-MODNAME=`grep_prop name $TMPDIR/module.prop`
-rm -rf $MODPATH 2>/dev/null
-mkdir -p $MODPATH
-if is_legacy_script; then
-unzip -oj "$ZIPFILE" module.prop install.sh uninstall.sh 'common/*' -d $TMPDIR >&2
-. $TMPDIR/install.sh
-print_modname
-on_install
-[ -f $TMPDIR/uninstall.sh ] && cp -af $TMPDIR/uninstall.sh $MODPATH/uninstall.sh
-$SKIPMOUNT && touch $MODPATH/skip_mount
-$PROPFILE && cp -af $TMPDIR/system.prop $MODPATH/system.prop
-cp -af $TMPDIR/module.prop $MODPATH/module.prop
-$POSTFSDATA && cp -af $TMPDIR/post-fs-data.sh $MODPATH/post-fs-data.sh
-$LATESTARTSERVICE && cp -af $TMPDIR/service.sh $MODPATH/service.sh
-ui_print "- Setting permissions"
-set_permissions
-else
-print_modname
-unzip -o "$ZIPFILE" customize.sh -d $MODPATH >&2
-if ! grep -q '^SKIPUNZIP=1$' $MODPATH/customize.sh 2>/dev/null; then
-ui_print "- Extracting module files"
-unzip -o "$ZIPFILE" -x 'META-INF/*' -d $MODPATH >&2
-set_perm_recursive $MODPATH 0 0 0755 0644
-fi
-[ -f $MODPATH/customize.sh ] && . $MODPATH/customize.sh
-fi
-for TARGET in $REPLACE; do
-ui_print "- Replace target: $TARGET"
-mktouch $MODPATH$TARGET/.replace
-done
-if $BOOTMODE; then
-mktouch $NVBASE/modules/$MODID/update
-cp -af $MODPATH/module.prop $NVBASE/modules/$MODID/module.prop
-fi
-if [ -f $MODPATH/sepolicy.rule -a -e $PERSISTDIR ]; then
-ui_print "- Installing custom sepolicy patch"
-PERSISTMOD=$PERSISTDIR/magisk/$MODID
-mkdir -p $PERSISTMOD
-cp -af $MODPATH/sepolicy.rule $PERSISTMOD/sepolicy.rule
-fi
-rm -rf \
-$MODPATH/system/placeholder $MODPATH/customize.sh \
-$MODPATH/README.md $MODPATH/.git* 2>/dev/null
-cd /
-$BOOTMODE || recovery_cleanup
-rm -rf $TMPDIR
-ui_print "- Done"
+[ $MAGISK_VER_CODE -lt 20400 ] && require_new_magisk
+
+install_module
 exit 0
+#######
 EOF
 #written
 echo -e "${BRIGHT_CYAN} > > > update-binary written succesfully${NC}"
 sleep 1 
-echo " > > > writing updater-script"
 
-#
+# Updater Script
+echo " > > > writing updater-script"
 cat <<'EOF' > "$mod/META-INF/com/google/android/updater-script"
 #MAGISK
 EOF
