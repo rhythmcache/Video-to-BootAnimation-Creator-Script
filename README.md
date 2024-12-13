@@ -30,9 +30,9 @@ pip install yt-dlp
 - For YouTube videos, select the desired resolution to download.
 - The script will generate a flashable Magisk module.
 - Flash created zip in magisk or kernel su or aPatch
-- - Recommended to select "loop animation" if your video is too short or if its a gif
+- ~~Recommended to select "loop animation" if your video is too short or if its a gif~~ ⚠️ Selecting loop animation is known to cause problems on some devices, so it's better to avoid it
 ```
-curl -sSL https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script/releases/download/V2/cbootanim.sh -o cbootanim.sh
+curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-Creator-Script/main/cbootanim.sh -o cbootanim.sh
 chmod +x cbootanim.sh
 ./cbootanim.sh
 ```
