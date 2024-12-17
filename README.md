@@ -37,13 +37,7 @@ chmod +x cbootanim.sh
 ./cbootanim.sh
 ```
 
-- If you want to create just a bootanimation.zip from video  , use this
 
-```
-curl -sSL https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script/releases/download/V2/genbootanim.sh -o genbootanim.sh
-chmod +x genbootanim.sh
-./genbootanim.sh
-```
 ## Use As Command-Line
 - [Download This](https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script/releases/download/V2/bootc) and give executable permission
 - General Syntax to use for creating a looped boot-animation 
