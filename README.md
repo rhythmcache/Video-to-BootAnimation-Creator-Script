@@ -88,11 +88,10 @@ If you find any bugs , report here https://t.me/ximistuffschat
 
     This Program Is Free Software. You can redistribute
     it
-    and/or modify it under the terms of the GNU
-    General Public
-    License as published by the Free
-    Software Foundation, either version 3
-    if the License , or (at your option) 
+    and/or modify it under the terms of the GNU General
+    Public
+    License as published by the Free Software Foundation, either version 3
+    of the License , or (at your option) 
     any later version.
 
     This program is distributed in the hope that it will be useful,
