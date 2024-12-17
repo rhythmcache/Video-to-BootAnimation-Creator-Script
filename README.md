@@ -1,6 +1,6 @@
 # BootAnimation-Creator-Script
 
-A  Termux/Linux script that converts YouTube videos or local video files into Android-compatible bootanimation Magisk modules.
+A  Termux/Linux Interactive script that converts YouTube videos or local video files into Android-compatible bootanimation Magisk modules.
 
 ---
 
@@ -40,6 +40,7 @@ chmod +x cbootanim.sh
 
 ## Use As Command-Line
 - [Download This](https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script/releases/download/V2/bootc) and give executable permission
+- it will create just a bootanimation.zip (not module)
 - General Syntax to use for creating a looped boot-animation 
 ```
 bootc -i <path to video file> <resolution> <fps> loop <output/path/bootanimation.zip>
@@ -53,13 +54,13 @@ bootc -i <path to video file> <resolution> <fps <output/path/bootanimation.zip>
 ./bootc -i /storage/emulated/0/Movies/VID_20241211_201851_329.mp4 1080x2400 50 /sdcard/bootanimation.zip
 ```
 ---
-- If you want to create just a bootanimation.zip (not magisk module)  from video  , use this
-
+- same but interactive script to create bootanimation.zip (not module)
 ```
 curl -sSL https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script/releases/download/V2/genbootanim.sh -o genbootanim.sh
 chmod +x genbootanim.sh
 ./genbootanim.sh
 ```
+
 ## Convert Bootanimation.zip to video
 
 - Converts bootanimation.zip into video
