@@ -53,6 +53,13 @@ bootc -i <path to video file> <resolution> <fps <output/path/bootanimation.zip>
 ./bootc -i /storage/emulated/0/Movies/VID_20241211_201851_329.mp4 1080x2400 50 /sdcard/bootanimation.zip
 ```
 ---
+- If you want to create just a bootanimation.zip (not magisk module)  from video  , use this
+
+```
+curl -sSL https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script/releases/download/V2/genbootanim.sh -o genbootanim.sh
+chmod +x genbootanim.sh
+./genbootanim.sh
+```
 ## Convert Bootanimation.zip to video
 
 - Converts bootanimation.zip into video
