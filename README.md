@@ -1,7 +1,7 @@
 # BootAnimation-Creator-Script
 
 A  Termux/Linux Interactive script that converts YouTube videos or local video files into Android-compatible bootanimation Magisk modules.
-[![Tutorial](https://img.shields.io/badge/Tutorial-YouTube-red?logo=youtube)](https://youtu.be/lZdVf88BTZ4)
+
 
 ---
 
@@ -19,6 +19,7 @@ Ensure that these dependencies are installed in your environment though script w
 - Since yt-dlp is not available in Termux's repositories, you need to install it using Python if you want to use the YouTube to bootanimation converter.
 
 - To install yt-dlp on Termux, run the following commands:
+- [![Tutorial](https://img.shields.io/badge/Tutorial-YouTube-red?logo=youtube)](https://youtu.be/lZdVf88BTZ4)
 ```
 termux-setup-storage
 pkg install openssl-tool python -y
