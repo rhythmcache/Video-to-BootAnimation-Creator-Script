@@ -90,7 +90,7 @@ if [[ $(ls -1 "$frames_dir" | wc -l) -eq 0 ]]; then
 fi
 
 echo -e "${YELLOW}Generating video...${NC}"
-if ! ffmpeg -y -framerate "$fps" -i "$frames_dir/%05d.png" -s "$resolution" -pix_fmt yuv420p "$output_path" 2>&1 | grep "frame"; then
+if ! ffmpeg -y -framerate "$fps" -i "$frames_dir/%05d.*" -s "$resolution" -pix_fmt yuv420p "$output_path" 2>&1 | grep "frame"; then
     echo -e "${RED}Failed to generate video.${NC}"
     exit 1
 fi
