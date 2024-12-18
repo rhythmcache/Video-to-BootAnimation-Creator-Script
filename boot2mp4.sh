@@ -53,7 +53,7 @@ trap cleanup EXIT
 
 echo -e "${YELLOW}Extracting bootanimation.zip...${NC}"
 mkdir -p "$extract_dir"
-unzip -o "$zip_path" -d "$extract_dir" || { echo -e "${RED}Failed to unzip bootanimation.zip${NC}"; exit 1; }
+unzip -o "$zip_path" -d "$extract_dir" > /dev/null || { echo -e "${RED}Failed to unzip bootanimation.zip${NC}"; exit 1; }
 desc_file="$extract_dir/desc.txt"
 
 if [[ -f "$desc_file" ]]; then
@@ -72,16 +72,12 @@ fi
 
 echo -e "${YELLOW}Processing frames...${NC}"
 mkdir -p "$frames_dir"
-find "$extract_dir" -type f -name "*.jpg" -o -name "*.png" | while read -r frame; do
-    base_name=$(basename "$frame")
-    num_part=$(echo "$base_name" | grep -oE '[0-9]+')
+frame_counter=1
 
-    if [[ -n $num_part ]]; then
-        printf -v new_name "%09d.${base_name##*.}" $((10#$num_part))
-        cp "$frame" "$frames_dir/$new_name"
-    else
-        echo -e "${YELLOW}Warning: Unable to extract sequence number from $base_name, skipping.${NC}"
-    fi
+find "$extract_dir" -type f -iname "*.jpg" -o -iname "*.png" | sort | while read -r frame; do
+    printf -v new_name "%05d.png" "$frame_counter"
+    cp "$frame" "$frames_dir/$new_name"
+    ((frame_counter++))
 done
 
 if [[ $(ls -1 "$frames_dir" | wc -l) -eq 0 ]]; then
@@ -90,7 +86,7 @@ if [[ $(ls -1 "$frames_dir" | wc -l) -eq 0 ]]; then
 fi
 
 echo -e "${YELLOW}Generating video...${NC}"
-if ! ffmpeg -y -framerate "$fps" -i "$frames_dir/%09d.*" -s "$resolution" -pix_fmt yuv420p "$output_path" 2>&1 | grep "frame"; then
+if ! ffmpeg -y -framerate "$fps" -i "$frames_dir/%05d.png" -s "$resolution" -pix_fmt yuv420p "$output_path" 2>&1 | grep "frame"; then
     echo -e "${RED}Failed to generate video.${NC}"
     exit 1
 fi
