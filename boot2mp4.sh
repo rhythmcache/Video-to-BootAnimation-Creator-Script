@@ -77,7 +77,7 @@ find "$extract_dir" -type f -name "*.jpg" -o -name "*.png" | while read -r frame
     num_part=$(echo "$base_name" | grep -oE '[0-9]+')
 
     if [[ -n $num_part ]]; then
-        printf -v new_name "%05d.${base_name##*.}" $((10#$num_part))
+        printf -v new_name "%09d.${base_name##*.}" $((10#$num_part))
         cp "$frame" "$frames_dir/$new_name"
     else
         echo -e "${YELLOW}Warning: Unable to extract sequence number from $base_name, skipping.${NC}"
@@ -90,7 +90,7 @@ if [[ $(ls -1 "$frames_dir" | wc -l) -eq 0 ]]; then
 fi
 
 echo -e "${YELLOW}Generating video...${NC}"
-if ! ffmpeg -y -framerate "$fps" -i "$frames_dir/%05d.*" -s "$resolution" -pix_fmt yuv420p "$output_path" 2>&1 | grep "frame"; then
+if ! ffmpeg -y -framerate "$fps" -i "$frames_dir/%09d.*" -s "$resolution" -pix_fmt yuv420p "$output_path" 2>&1 | grep "frame"; then
     echo -e "${RED}Failed to generate video.${NC}"
     exit 1
 fi
