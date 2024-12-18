@@ -207,7 +207,7 @@ if [[ "$loop_option" == "1" ]]; then
 else
   # Append part entries in desc.txt
   for i in $(seq 0 "$part_index"); do
-    echo "p 1 0 part$i" >> "$desc_file"
+    echo "c 1 0 part$i" >> "$desc_file"
   done
 fi
 
