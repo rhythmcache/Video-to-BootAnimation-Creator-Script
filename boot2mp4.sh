@@ -53,7 +53,7 @@ trap cleanup EXIT
 
 echo -e "${YELLOW}Extracting bootanimation.zip...${NC}"
 mkdir -p "$extract_dir"
-unzip -o "$zip_path" -d "$extract_dir" > /dev/null || { echo -e "${RED}Failed to unzip bootanimation.zip${NC}"; exit 1; }
+unzip -o "$zip_path" -d "$extract_dir" || { echo -e "${RED}Failed to unzip bootanimation.zip${NC}"; exit 1; }
 desc_file="$extract_dir/desc.txt"
 
 if [[ -f "$desc_file" ]]; then
