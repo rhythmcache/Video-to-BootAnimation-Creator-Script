@@ -1,3 +1,5 @@
+#!/bin/bash
+
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -21,42 +23,58 @@ get_package_manager() {
     fi
 }
 
+check_and_install() {
+    if ! command -v ffmpeg &> /dev/null; then
+        echo -e "${YELLOW}ffmpeg not found. Installing...${NC}"
+        install_dependencies ffmpeg
+    else
+        echo -e "${GREEN}ffmpeg is already installed.${NC}"
+    fi
+
+    if ! command -v unzip &> /dev/null; then
+        echo -e "${YELLOW}unzip not found. Installing...${NC}"
+        install_dependencies unzip
+    else
+        echo -e "${GREEN}unzip is already installed.${NC}"
+    fi
+}
+
 install_dependencies() {
     PACKAGE_MANAGER=$(get_package_manager)
 
     case $PACKAGE_MANAGER in
         "termux")
-            echo -e "${YELLOW}Termux detected. Installing ffmpeg and unzip...${NC}"
-            pkg install -y ffmpeg unzip
+            echo -e "${YELLOW}Termux detected. Installing $1...${NC}"
+            pkg install -y $1
             ;;
         "apt")
-            echo -e "${YELLOW}Debian-based (Ubuntu, etc.) detected. Installing ffmpeg and unzip...${NC}"
-            sudo apt update && sudo apt install -y ffmpeg unzip
+            echo -e "${YELLOW}Debian-based (Ubuntu, etc.) detected. Installing $1...${NC}"
+            sudo apt update && sudo apt install -y $1
             ;;
         "dnf")
-            echo -e "${YELLOW}Red Hat-based (CentOS, Fedora, etc.) detected. Installing ffmpeg and unzip...${NC}"
-            sudo dnf install -y ffmpeg unzip
+            echo -e "${YELLOW}Red Hat-based (CentOS, Fedora, etc.) detected. Installing $1...${NC}"
+            sudo dnf install -y $1
             ;;
         "pacman")
-            echo -e "${YELLOW}Arch-based (Arch, Manjaro, etc.) detected. Installing ffmpeg and unzip...${NC}"
-            sudo pacman -S --noconfirm ffmpeg unzip
+            echo -e "${YELLOW}Arch-based (Arch, Manjaro, etc.) detected. Installing $1...${NC}"
+            sudo pacman -S --noconfirm $1
             ;;
         "apk")
-            echo -e "${YELLOW}Alpine Linux detected. Installing ffmpeg and unzip...${NC}"
-            sudo apk add ffmpeg unzip
+            echo -e "${YELLOW}Alpine Linux detected. Installing $1...${NC}"
+            sudo apk add $1
             ;;
         "zypper")
-            echo -e "${YELLOW}openSUSE detected. Installing ffmpeg and unzip...${NC}"
-            sudo zypper install -y ffmpeg unzip
+            echo -e "${YELLOW}openSUSE detected. Installing $1...${NC}"
+            sudo zypper install -y $1
             ;;
         *)
-            echo -e "${RED}Unknown or unsupported package manager. Please install ffmpeg and unzip manually.${NC}"
+            echo -e "${RED}Unknown or unsupported package manager. Please install $1 manually.${NC}"
             exit 1
             ;;
     esac
 }
 
-install_dependencies
+check_and_install
 
 echo -e "${GREEN}Enter bootanimation zip path (e.g., /path/to/bootanimation.zip):${NC}"
 read zip_path
