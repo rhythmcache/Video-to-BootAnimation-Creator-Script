@@ -228,27 +228,24 @@ mkdir -p "$mod//META-INF/com/google/android/"
 # Write Customize.sh
 cat <<'EOF' > "$mod/customize.sh"
 if [ -f "/system/product/media/bootanimation.zip" ]; then
-    mkdir -p $MODPATH/system/product/media
-    cp -f $MODPATH/animation/bootanimation.zip $MODPATH/system/product/media/
+    mkdir -p "$MODPATH/system/product/media"
+    cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH/system/product/media/"
     ui_print "Installing bootanimation to product/media"
+    echo "description=bootanimation installed at /system/product/media , if it isn't working, report it to @ximistuffschat on tg" >> "$MODPATH/module.prop"
 elif [ -f "/system/media/bootanimation.zip" ]; then
-    mkdir -p $MODPATH/system/media
-    cp -f $MODPATH/animation/bootanimation.zip $MODPATH/system/media/
+    mkdir -p "$MODPATH/system/media"
+    cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH/system/media/"
     ui_print "Installing bootanimation to system/media"
+    echo "description=bootanimation installed at /system/media, if it isn't working, report it to @ximistuffschat on tg" >> "$MODPATH/module.prop"
 else
     ui_print "Failed to install. Bootanimation file not found in system/product/media or system/media."
     abort
 fi
-
 ui_print ""
 ui_print "[*] Done!"
 ui_print ""
-
-# Set permissions recursively
-set_perm_recursive $MODPATH/system 0 0 0755 0644
-
-# Clean up the animation directory
-rm -rf $MODPATH/animation
+set_perm_recursive "$MODPATH/system" 0 0 0755 0644
+rm -rf "$MODPATH/animation"
 
 EOF
 # Create or overwrite the file "module.prop" with the content below
@@ -258,7 +255,6 @@ name=Bootanimation-Creator-Script
 version=1.0
 versionCode=26
 author=coldnw.t.me | github.com/rhythmcache
-description=custom bootanimation for android.
 EOF
 #If written
 echo -e "${BRIGHT_CYAN} > > > Created props${NC}"
