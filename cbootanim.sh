@@ -171,7 +171,10 @@ echo "Processing completed."
 # Count frames
 frame_count=$(ls -1 "$TMP_DIR/frames" | wc -l)
 if [ "$frame_count" -eq 0 ]; then
-    echo "No frames generated. Exiting."
+    echo "Error: No frames generated. Exiting."
+    echo "If you are using Termux, make sure you grant storage permissions by running:"
+    echo " 'termux-setup-storage' "
+    echo "and ensure the video file is correct"
     exit 1
 fi
 echo "Processed $frame_count frames."
