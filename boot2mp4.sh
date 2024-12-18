@@ -1,103 +1,121 @@
-#!/bin/bash
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m'
 
-# Function to install a package if not present
-install_package() {
-  local package="$1"
-
-  if command -v pkg &> /dev/null; then
-    pkg update && pkg install -y "$package"
-  elif command -v dnf &> /dev/null; then
-    sudo dnf install -y "$package"
-  elif command -v pacman &> /dev/null; then
-    sudo pacman -Sy --noconfirm "$package"
-  elif command -v zypper &> /dev/null; then
-    sudo zypper install -y "$package"
-  elif command -v yum &> /dev/null; then
-    sudo yum install -y "$package"
-  elif command -v apk &> /dev/null; then
-    sudo apk add "$package"
-  elif command -v apt &> /dev/null; then
-    sudo apt update && sudo apt install -y "$package"
-  else
-    echo "Error: Unsupported package manager. Please install $package manually."
-    exit 1
-  fi
+get_package_manager() {
+    if command -v pkg &> /dev/null; then
+        echo "termux"
+    elif command -v apt &> /dev/null; then
+        echo "apt"
+    elif command -v dnf &> /dev/null; then
+        echo "dnf"
+    elif command -v pacman &> /dev/null; then
+        echo "pacman"
+    elif command -v apk &> /dev/null; then
+        echo "apk"
+    elif command -v zypper &> /dev/null; then
+        echo "zypper"
+    else
+        echo "unknown"
+    fi
 }
 
-# Check for ffmpeg and unzip binaries, install if missing
-if ! command -v ffmpeg &> /dev/null; then
-    echo "ffmpeg not found. Installing..."
-    install_package "ffmpeg" || { echo "Failed to install ffmpeg."; exit 1; }
-fi
+install_dependencies() {
+    PACKAGE_MANAGER=$(get_package_manager)
 
-if ! command -v unzip &> /dev/null; then
-    echo "unzip not found. Installing..."
-    install_package "unzip" || { echo "Failed to install unzip."; exit 1; }
-fi
+    case $PACKAGE_MANAGER in
+        "termux")
+            echo -e "${YELLOW}Termux detected. Installing ffmpeg and unzip...${NC}"
+            pkg install -y ffmpeg unzip
+            ;;
+        "apt")
+            echo -e "${YELLOW}Debian-based (Ubuntu, etc.) detected. Installing ffmpeg and unzip...${NC}"
+            sudo apt update && sudo apt install -y ffmpeg unzip
+            ;;
+        "dnf")
+            echo -e "${YELLOW}Red Hat-based (CentOS, Fedora, etc.) detected. Installing ffmpeg and unzip...${NC}"
+            sudo dnf install -y ffmpeg unzip
+            ;;
+        "pacman")
+            echo -e "${YELLOW}Arch-based (Arch, Manjaro, etc.) detected. Installing ffmpeg and unzip...${NC}"
+            sudo pacman -S --noconfirm ffmpeg unzip
+            ;;
+        "apk")
+            echo -e "${YELLOW}Alpine Linux detected. Installing ffmpeg and unzip...${NC}"
+            sudo apk add ffmpeg unzip
+            ;;
+        "zypper")
+            echo -e "${YELLOW}openSUSE detected. Installing ffmpeg and unzip...${NC}"
+            sudo zypper install -y ffmpeg unzip
+            ;;
+        *)
+            echo -e "${RED}Unknown or unsupported package manager. Please install ffmpeg and unzip manually.${NC}"
+            exit 1
+            ;;
+    esac
+}
 
-# Define green color for text
-GREEN='\033[0;32m'
-NC='\033[0m' # No Color
+install_dependencies
 
-# Prompt for bootanimation zip and output video path with green color
 echo -e "${GREEN}Enter bootanimation zip path (e.g., /path/to/bootanimation.zip):${NC}"
-read -p "" zip_path
-if [ ! -f "$zip_path" ]; then
-    echo "Error: Zip file does not exist."
-    exit 1
-fi
-
+read zip_path
 echo -e "${GREEN}Enter output video path (e.g., /path/to/output.mp4):${NC}"
-read -p "" output_video
+read output_path
 
-# Temporary directory setup for extraction in the current directory
-TMP_DIR="./bootanim_extract"
-rm -rf "$TMP_DIR"
-mkdir -p "$TMP_DIR/frames"
-unzip -q "$zip_path" -d "$TMP_DIR" || { echo "Error unzipping file."; exit 1; }
+work_dir="$(pwd)/tmp"
+mkdir -p "$work_dir"
+extract_dir="$work_dir/extracted"
+frames_dir="$work_dir/frames"
 
-# Read desc.txt
-desc_file="$TMP_DIR/desc.txt"
-if [ ! -f "$desc_file" ]; then
-    echo "Error: desc.txt not found in bootanimation.zip."
+cleanup() {
+    rm -rf "$work_dir"
+}
+trap cleanup EXIT
+
+echo -e "${YELLOW}Extracting bootanimation.zip...${NC}"
+mkdir -p "$extract_dir"
+unzip -o "$zip_path" -d "$extract_dir" || { echo -e "${RED}Failed to unzip bootanimation.zip${NC}"; exit 1; }
+
+desc_file="$extract_dir/desc.txt"
+
+if [[ -f "$desc_file" ]]; then
+    resolution=$(awk 'NR==1 {print $1 "x" $2}' "$desc_file")
+    fps=$(awk 'NR==1 {print $3}' "$desc_file")  
+    
+    if [[ -z "$resolution" || -z "$fps" ]]; then
+        echo -e "${RED}Error: Unable to extract resolution or frame rate from desc.txt.${NC}"
+        exit 1
+    fi
+    echo -e "${GREEN}Resolution: $resolution, FPS: $fps${NC}"
+else
+    echo -e "${RED}Error: desc.txt not found in bootanimation zip.${NC}"
     exit 1
 fi
 
-# Parse width, height, and fps from desc.txt
-read width height fps < <(head -n 1 "$desc_file")
-echo "Resolution: ${width}x${height}, FPS: $fps"
+echo -e "${YELLOW}Processing frames...${NC}"
+mkdir -p "$frames_dir"
+find "$extract_dir" -type f -name "*.jpg" -o -name "*.png" | while read -r frame; do
+    base_name=$(basename "$frame")
+    num_part=$(echo "$base_name" | grep -oE '[0-9]+')
 
-# Collect frames from all part directories (both jpg and png formats)
-counter=0
-for part in "$TMP_DIR"/part*/; do
-    for ext in jpg png; do
-        for frame in "$part"*.$ext; do
-            if [ -f "$frame" ]; then
-                # Rename frames in sequential order for ffmpeg
-                printf -v new_frame "$TMP_DIR/frames/frame%09d.$ext" "$counter"
-                cp "$frame" "$new_frame"
-                counter=$((counter + 1))
-            fi
-        done
-    done
+    if [[ -n $num_part ]]; then
+        printf -v new_name "%05d.${base_name##*.}" $((10#$num_part))
+        cp "$frame" "$frames_dir/$new_name"
+    else
+        echo -e "${YELLOW}Warning: Unable to extract sequence number from $base_name, skipping.${NC}"
+    fi
 done
 
-# Check if any frames were copied
-if [ "$counter" -eq 0 ]; then
-    echo "Error: No frames found in bootanimation.zip."
-    echo "Check the structure of the extracted files manually."
-    rm -rf "$TMP_DIR"
+if [[ $(ls -1 "$frames_dir" | wc -l) -eq 0 ]]; then
+    echo -e "${RED}No valid frames found. Exiting.${NC}"
     exit 1
 fi
 
-# Generate video with ffmpeg
-echo "Creating video from frames..."
-ffmpeg -framerate "$fps" -i "$TMP_DIR/frames/frame%09d.jpg" -s "${width}x${height}" -c:v libx264 -pix_fmt yuv420p "$output_video" || {
-    echo "Error creating video from frames."
-    rm -rf "$TMP_DIR"
+echo -e "${YELLOW}Generating video...${NC}"
+ffmpeg -y -framerate "$fps" -i "$frames_dir/%05d.png" -s "$resolution" -pix_fmt yuv420p "$output_path" || {
+    echo -e "${RED}Failed to generate video.${NC}"
     exit 1
 }
 
-# Clean up
-rm -rf "$TMP_DIR"
-echo "Video created at $output_video"
+echo -e "${GREEN}Video successfully generated at $output_path.${NC}"
