@@ -37,11 +37,11 @@ pip install yt-dlp
 - Flash created zip in Magisk, KernelSU, or aPatch.
 - <s>Recommended to select "loop animation" if your video is too short or if it’s a GIF</s> ⚠️ Selecting loop animation is known to cause problems on some devices, so it’s better to avoid it.
 
-```bash
+```
 curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-Creator-Script/main/cbootanim.sh -o cbootanim.sh
 chmod +x cbootanim.sh
 ./cbootanim.sh
-
+```
 
 ## Use As Command-Line
 - [Download This](https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script/releases/download/V2/bootc) and give executable permission
