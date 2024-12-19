@@ -27,19 +27,19 @@ pip install yt-dlp
 ```
 ---
 
-> # How To Use?
->
-> - Copy and paste this below command on Termux or Linux terminal.
+ # How To Use?
+
+ - Copy and paste this below command on Termux or Linux terminal.
  ```
 curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-Creator-Script/main/cbootanim.sh -o cbootanim.sh
 chmod +x cbootanim.sh
 ./cbootanim.sh
 ```
-> - Choose either YouTube video or local video as the source.
-> - For YouTube videos, select the desired resolution to download.
-> - The script will generate a flashable Magisk module.
-> - Flash created zip in Magisk, KernelSU, or aPatch.
-> - ~~Recommended to select "loop animation" if your video is too short or if it's a GIF~~ ⚠️ Selecting loop animation is known to cause problems on some devices, so it's better to avoid it.
+ - Choose either YouTube video or local video as the source.
+ - For YouTube videos, select the desired resolution to download.
+ - The script will generate a flashable Magisk module.
+ - Flash created zip in Magisk, KernelSU, or aPatch.
+ - ~~Recommended to select "loop animation" if your video is too short or if it's a GIF~~ ⚠️ Selecting loop animation is known to cause problems on some devices, so it's better to avoid it.
 
 
 
