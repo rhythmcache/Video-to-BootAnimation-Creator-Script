@@ -25,23 +25,20 @@ termux-setup-storage
 pkg install openssl-tool python -y
 pip install yt-dlp
 ```
-<div style="background-color:#F0F0F0; padding:10px; border-radius:5px;">
-
-## How To Use ?
-
-- Copy and paste this on Termux or Linux terminal.
-- Choose either YouTube video or local video as the source.
-- For YouTube videos, select the desired resolution to download.
-- The script will generate a flashable Magisk module.
-- Flash created zip in Magisk, KernelSU, or aPatch.
-- <s>Recommended to select "loop animation" if your video is too short or if it's a GIF</s> ⚠️ Selecting loop animation is known to cause problems on some devices, so it's better to avoid it.
-
+---
+## How To Use?
+>
+> - Copy and paste this on Termux or Linux terminal.
+> - Choose either YouTube video or local video as the source.
+> - For YouTube videos, select the desired resolution to download.
+> - The script will generate a flashable Magisk module.
+> - Flash created zip in Magisk, KernelSU, or aPatch.
+> - ~~Recommended to select "loop animation" if your video is too short or if it's a GIF~~ ⚠️ Selecting loop animation is known to cause problems on some devices, so it's better to avoid it.
 ```
-curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-Creator-Script/main/cbootanim.sh -o cbootanim.sh
+ curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-Creator-Script/main/cbootanim.sh -o cbootanim.sh
 chmod +x cbootanim.sh
 ./cbootanim.sh
 ```
-</div>
 
 
 ## Use As Command-Line
