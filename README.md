@@ -26,18 +26,21 @@ pkg install openssl-tool python -y
 pip install yt-dlp
 ```
 
+<div style="border: 2px solid #4CAF50; padding: 15px; border-radius: 10px; background-color: #f9f9f9;">
+
 ## How To Use ?
-- copy and paste this on termux or Linux terminal
+
+- Copy and paste this on Termux or Linux terminal.
 - Choose either YouTube video or local video as the source.
 - For YouTube videos, select the desired resolution to download.
 - The script will generate a flashable Magisk module.
-- Flash created zip in magisk or kernel su or aPatch
-- ~~Recommended to select "loop animation" if your video is too short or if its a gif~~ ⚠️ Selecting loop animation is known to cause problems on some devices, so it's better to avoid it
-```
+- Flash created zip in Magisk, KernelSU, or aPatch.
+- <s>Recommended to select "loop animation" if your video is too short or if it’s a GIF</s> ⚠️ Selecting loop animation is known to cause problems on some devices, so it’s better to avoid it.
+
+```bash
 curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-Creator-Script/main/cbootanim.sh -o cbootanim.sh
 chmod +x cbootanim.sh
 ./cbootanim.sh
-```
 
 
 ## Use As Command-Line
