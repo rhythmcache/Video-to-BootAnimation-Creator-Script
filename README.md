@@ -26,7 +26,6 @@ pkg install openssl-tool python -y
 pip install yt-dlp
 ```
 ---
-```markdown
 > [!TIP]
 > ## How To Use?
 >
@@ -37,11 +36,10 @@ pip install yt-dlp
 > - Flash created zip in Magisk, KernelSU, or aPatch.
 > - ~~Recommended to select "loop animation" if your video is too short or if it's a GIF~~ ⚠️ Selecting loop animation is known to cause problems on some devices, so it's better to avoid it.
 >
-> ```bash
-> curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-Creator-Script/main/cbootanim.sh -o cbootanim.sh
-> chmod +x cbootanim.sh
-> ./cbootanim.sh
-> ```
+```
+curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-Creator-Script/main/cbootanim.sh -o cbootanim.sh
+chmod +x cbootanim.sh
+./cbootanim.sh
 ```
 
 
