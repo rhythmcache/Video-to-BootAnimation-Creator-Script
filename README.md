@@ -27,7 +27,6 @@ pip install yt-dlp
 ```
 ---
 
-> [!TIP]
 > # How To Use?
 >
 > - Copy and paste this below command on Termux or Linux terminal.
@@ -36,7 +35,6 @@ curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-C
 chmod +x cbootanim.sh
 ./cbootanim.sh
 ```
-[!TIP]
 > - Choose either YouTube video or local video as the source.
 > - For YouTube videos, select the desired resolution to download.
 > - The script will generate a flashable Magisk module.
