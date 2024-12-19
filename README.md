@@ -26,6 +26,7 @@ pkg install openssl-tool python -y
 pip install yt-dlp
 ```
 ---
+> [!TIP]
 ## How To Use?
 >
 > - Copy and paste this on Termux or Linux terminal.
