@@ -26,8 +26,6 @@ pkg install openssl-tool python -y
 pip install yt-dlp
 ```
 
-<div style="border: 2px solid #4CAF50; padding: 15px; border-radius: 10px; background-color: #f9f9f9;">
-
 ## How To Use ?
 
 - Copy and paste this on Termux or Linux terminal.
