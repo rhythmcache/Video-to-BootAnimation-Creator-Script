@@ -219,22 +219,48 @@ mkdir -p "$mod//META-INF/com/google/android/"
 
 # Write Customize.sh
 cat <<'EOF' > "$mod/customize.sh"
+resolve_path() {
+    local path="$1"
+    if [ -L "$path" ]; then
+        path=$(readlink -f "$path")
+    fi
+    echo "$path"
+}
 if [ -f "/system/product/media/bootanimation.zip" ]; then
-    mkdir -p "$MODPATH/system/product/media"
-    cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH/system/product/media/"
-    ui_print "Installing bootanimation to product/media"
-    echo "description=bootanimation installed at /system/product/media , if it isn't working, report it to @ximistuffschat on tg" >> "$MODPATH/module.prop"
+    bootanim_path=$(resolve_path "/system/product/media/bootanimation.zip")
+    mkdir -p "$MODPATH$(dirname "$bootanim_path")"
+    cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH$(dirname "$bootanim_path")/"
+    ui_print "Installing bootanimation to $(dirname "$bootanim_path")"
+    echo "description=bootanimation installed at $bootanim_path, if it isn't working, report it to @ximistuffschat on tg" >> "$MODPATH/module.prop"
 elif [ -f "/system/media/bootanimation.zip" ]; then
-    mkdir -p "$MODPATH/system/media"
-    cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH/system/media/"
-    ui_print "Installing bootanimation to system/media"
-    echo "description=bootanimation installed at /system/media, if it isn't working, report it to @ximistuffschat on tg" >> "$MODPATH/module.prop"
+    bootanim_path=$(resolve_path "/system/media/bootanimation.zip")
+    mkdir -p "$MODPATH$(dirname "$bootanim_path")"
+    cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH$(dirname "$bootanim_path")/"
+    ui_print "Installing bootanimation to $(dirname "$bootanim_path")"
+    echo "description=bootanimation installed at $bootanim_path, if it isn't working, report it to @ximistuffschat on tg" >> "$MODPATH/module.prop"
+elif [ -f "/oem/media/bootanimation.zip" ]; then
+    bootanim_path=$(resolve_path "/oem/media/bootanimation.zip")
+    mkdir -p "$MODPATH$(dirname "$bootanim_path")"
+    cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH$(dirname "$bootanim_path")/"
+    ui_print "Installing bootanimation to $(dirname "$bootanim_path")"
+    echo "description=bootanimation installed at $bootanim_path, if it isn't working, report it to @ximistuffschat on tg" >> "$MODPATH/module.prop"
 else
-    ui_print "Failed to install. Bootanimation file not found in system/product/media or system/media."
-    abort
+    ui_print "Bootanimation not found in primary locations. Searching system directories..."
+    bootanim_path=$(find /system -type f -name "bootanimation.zip" 2>/dev/null | head -n 1)
+    if [ -n "$bootanim_path" ]; then
+        bootanim_path=$(resolve_path "$bootanim_path")
+        relative_path="${bootanim_path#/system/}"
+        mkdir -p "$MODPATH/system/$relative_path"
+        cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH/system/$relative_path"
+        ui_print "Installing bootanimation to $relative_path"
+        echo "description=bootanimation installed at $bootanim_path, if it isn't working, report it to @ximistuffschat on tg" >> "$MODPATH/module.prop"
+    else
+        ui_print "Failed to find bootanimation.zip anywhere in system directories."
+        abort
+    fi
 fi
 ui_print ""
-ui_print "[*] Installation Complete ! "
+ui_print "[*] Installation Complete!"
 ui_print ""
 set_perm_recursive "$MODPATH/system" 0 0 0755 0644
 rm -rf "$MODPATH/animation"
