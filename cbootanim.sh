@@ -61,6 +61,7 @@ if ! command -v unzip &> /dev/null; then
     echo "unzip not found. Installing..."
     install_package "unzip" || { echo "Failed to install unzip."; exit 1; }
 fi
+rm -f downloaded_video.*
 
 # Prompt for video source
 echo -e "${GREEN}Choose video source:${NC}"
