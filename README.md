@@ -39,7 +39,7 @@ chmod +x cbootanim.sh
  - For YouTube videos, select the desired resolution to download.
  - The script will generate a flashable Magisk module.
  - Flash created zip in Magisk, KernelSU, or aPatch.
- - ~~Recommended to select "loop animation" if your video is too short or if it's a GIF~~ ⚠️ Selecting loop animation is known to cause problems on some devices, so it's better to avoid it.
+ - Recommended to select "loop animation" if your video is too short or if it's a GIF 
 
 
 
