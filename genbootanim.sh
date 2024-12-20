@@ -45,6 +45,8 @@ if ! command -v zip &> /dev/null; then
   install_package "zip" || { echo "Failed to install zip."; exit 1; }
 fi
 
+rm -f downloaded_video.*
+
 # Prompt for video source
 echo -e "${GREEN}Choose video source:${NC}"
 echo "1. YouTube Video"
