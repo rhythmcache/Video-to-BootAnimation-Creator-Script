@@ -105,6 +105,15 @@ If you find any bugs , report here https://t.me/ximistuffschat
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+###### ps
+
+If you are a ROM developer and you use this script to generate a bootanimation, you could give credit to this page.;)
+like  thanks to [ github/rhythmcache ] for bootanimation creator script  or anything that u like
+
+---
+
+This is polite and encourages proper credit.
+
 
 ---
 [![Telegram](https://img.shields.io/badge/Telegram-Join%20Chat-blue?style=flat-square&logo=telegram)](https://t.me/ximistuffschat)
