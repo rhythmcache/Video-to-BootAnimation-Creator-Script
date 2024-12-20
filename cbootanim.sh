@@ -194,12 +194,12 @@ done
 # Create desc.txt and handle looping
 if [[ "$loop_option" == "1" ]]; then
   for i in $(seq 0 "$part_index"); do
-    echo "c 0 0 part$i" >> "$desc_file"
+    echo "c 1 0 part$i" >> "$desc_file"
   done
 else
   # Append part entries in desc.txt
   for i in $(seq 0 "$part_index"); do
-    echo "c 1 0 part$i" >> "$desc_file"
+    echo "p 1 0 part$i" >> "$desc_file"
   done
 fi
 
