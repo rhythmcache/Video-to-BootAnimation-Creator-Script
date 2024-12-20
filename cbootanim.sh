@@ -234,7 +234,7 @@ else
     abort
 fi
 ui_print ""
-ui_print "[*] Done!"
+ui_print "[*] Installation Complete ! "
 ui_print ""
 set_perm_recursive "$MODPATH/system" 0 0 0755 0644
 rm -rf "$MODPATH/animation"
@@ -246,7 +246,7 @@ id=cbootanimation
 name=Bootanimation-Creator-Script
 version=1.0
 versionCode=26
-author=coldnw.t.me | github.com/rhythmcache
+author=rhythmcache.t.me | github.com/rhythmcache
 EOF
 #If written
 echo -e "${BRIGHT_CYAN} > > > Created props${NC}"
