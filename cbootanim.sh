@@ -1,6 +1,5 @@
 #!/bin/bash
-
-# Set color variables
+# Bootanimation creator script by github.com/rhythmcache
 WHITE='\033[1;37m'
 BRIGHT_YELLOW='\033[1;33m'
 BRIGHT_RED='\033[1;31m'
@@ -219,6 +218,9 @@ mkdir -p "$mod//META-INF/com/google/android/"
 
 # Write Customize.sh
 cat <<'EOF' > "$mod/customize.sh"
+# This Installer is a part of Bootanimation-Creator-Script
+# https://github.com/rhythmcache
+# rhythmcache.t.me
 resolve_path() {
     local path="$1"
     if [ -L "$path" ]; then
