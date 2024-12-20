@@ -306,9 +306,10 @@ echo " > > > Creating Magisk Module."
 # creating module
 cd "$mod" && zip -r "$output_path" ./* > /dev/null 2>&1 || { echo "Error creating module zip file."; exit 1; }
 sleep 1
-echo -e "${BRIGHT_CYAN}=========================================================================${NC}"
-echo -e "${WHITE}         Magisk-Module created at $output_path                                 ${NC}"
-echo -e "${BRIGHT_CYAN}======================================================================== ${NC}"
+echo -e "${BRIGHT_CYAN}=====================================================${NC}"
+echo -e "${WHITE}         -Magisk-Module ${NC}"
+echo -e "${WHITE}         created at $output_path ${NC}"
+echo -e "${BRIGHT_CYAN}==================================================== ${NC}"
 sleep 1
 
 # Clean up temporary files
