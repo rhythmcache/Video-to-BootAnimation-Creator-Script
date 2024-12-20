@@ -105,5 +105,7 @@ If you find any bugs , report here https://t.me/ximistuffschat
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+- dont use releases section to download scripts. they are unmaintained
+
 ---
 [![Telegram](https://img.shields.io/badge/Telegram-Join%20Chat-blue?style=flat-square&logo=telegram)](https://t.me/ximistuffschat)
