@@ -3,6 +3,7 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m'
+
 install_package() {
   local package="$1"
   if command -v pkg &> /dev/null; then
@@ -34,7 +35,6 @@ if ! command -v zip &> /dev/null; then
     echo "zip not found. Installing..."
     install_package "zip" || { echo "Failed to install zip."; exit 1; }
 fi
-
 
 echo -e "${GREEN}Enter bootanimation zip path (e.g., /path/to/bootanimation.zip):${NC}"
 read zip_path
@@ -73,9 +73,20 @@ fi
 echo -e "${YELLOW}Processing frames...${NC}"
 mkdir -p "$frames_dir"
 frame_counter=1
-
-find "$extract_dir" -type f -iname "*.jpg" -o -iname "*.png" | sort | while read -r frame; do
-    printf -v new_name "%05d.png" "$frame_counter"
+jpg_exists=$(find "$extract_dir" -type f -iname "*.jpg" | wc -l)
+png_exists=$(find "$extract_dir" -type f -iname "*.png" | wc -l)
+if [ "$png_exists" -gt 0 ]; then
+    extension="png"
+    echo -e "${GREEN}Found PNG frames, using PNG format...${NC}"
+elif [ "$jpg_exists" -gt 0 ]; then
+    extension="jpg"
+    echo -e "${GREEN}Found JPG frames, using JPG format...${NC}"
+else
+    echo -e "${RED}No valid frames (PNG or JPG) found. Exiting.${NC}"
+    exit 1
+fi
+find "$extract_dir" -type f -iname "*.$extension" | sort | while read -r frame; do
+    printf -v new_name "%05d.$extension" "$frame_counter"
     cp "$frame" "$frames_dir/$new_name"
     ((frame_counter++))
 done
@@ -86,7 +97,7 @@ if [[ $(ls -1 "$frames_dir" | wc -l) -eq 0 ]]; then
 fi
 
 echo -e "${YELLOW}Generating video...${NC}"
-if ! ffmpeg -y -framerate "$fps" -i "$frames_dir/%05d.png" -s "$resolution" -pix_fmt yuv420p "$output_path" 2>&1 | grep "frame"; then
+if ! ffmpeg -y -framerate "$fps" -i "$frames_dir/%05d.$extension" -s "$resolution" -pix_fmt yuv420p "$output_path" 2>&1 | grep "frame"; then
     echo -e "${RED}Failed to generate video.${NC}"
     exit 1
 fi
