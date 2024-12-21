@@ -85,9 +85,6 @@ chmod +x boot2mp4.sh
 Also see - https://github.com/rhythmcache/video-to-bootanimation
 
 
-If you find any bugs , report here https://t.me/ximistuffschat
-
-
 ## License
 
     This Program Is Free Software. You can redistribute
