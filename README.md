@@ -21,14 +21,18 @@
 ### 🔧 Termux-Specific Setup
 - Since Termux doesn't have yt-dlp in their repositories , you need to run these commands first if you want to use youtube to bootanimation converter
 ```
-termux-setup-storage && pkg install openssl-tool python -y && pip install yt-dlp
+termux-setup-storage
+pkg install openssl-tool python -y
+pip install yt-dlp
 ```
 
 
 ## 🚀 How To Use?
 - Copy and paste this below command in linux terminal or termux
 ```
-curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-Creator-Script/main/cbootanim.sh -o cbootanim.sh && chmod +x cbootanim.sh && ./cbootanim.sh
+curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-Creator-Script/main/cbootanim.sh -o cbootanim.sh
+chmod +x cbootanim.sh
+./cbootanim.sh
 ```
 
 > [!Tip] 
