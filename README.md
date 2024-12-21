@@ -21,9 +21,7 @@
 ### 🔧 Termux-Specific Setup
 - Since Termux doesn't have yt-dlp in their repositories , you need to run these commands first if you want to use youtube to bootanimation converter
 ```
-termux-setup-storage
-pkg install openssl-tool python -y
-pip install yt-dlp
+termux-setup-storage && pkg install openssl-tool python -y && pip install yt-dlp
 ```
 
 
