@@ -1,45 +1,46 @@
 # BootAnimation-Creator-Script
 
-A  Termux/Linux Interactive script that converts YouTube videos or local video files into Android-compatible bootanimation Magisk modules.
+ A Termux/Linux Interactive script that converts YouTube videos or local video files into Android-compatible bootanimation Magisk modules.
 
 [![Tutorial](https://img.shields.io/badge/Tutorial-YouTube-red?logo=youtube)](https://youtu.be/lZdVf88BTZ4)
----
+[![Telegram](https://img.shields.io/badge/Telegram-Join%20Chat-blue?style=flat-square&logo=telegram)](https://t.me/ximistuffschat)
 
-## Features
-- Convert `YouTube` videos or `local` video files into boot animations.
-- can scale bootanimations to the desired resolution and fps
+## 🌟 Features
 
-## Requirements
-Ensure that these dependencies are installed in your environment though script will try to install the dependencies if it finds any of them Missing.
-- **FFmpeg**: Used for extracting frames from the video.
-- **Zip**: Used for creating the `bootanimation.zip`.
-- **yt-dlp**: Download YouTube videos (if selected as input).
----
-### Termux Users
-- Since yt-dlp is not available in Termux's repositories, you need to install it using Python if you want to use the YouTube to bootanimation converter.
+- Convert `YouTube` or `local` video files into boot animations
+-  Scale bootanimations to desired resolution and FPS
 
-- To install yt-dlp on Termux, run the following commands:
+## ⚠️ Requirements
 
+> **Warning**: Ensure these dependencies are installed. The script will attempt to install missing dependencies.
+
+- **FFmpeg**: Used for extracting frames from the video
+- **Zip**: Used for creating the `bootanimation.zip`
+- **yt-dlp**: Download YouTube videos (if selected as input)
+
+### 🔧 Termux-Specific Setup
+- Since Termux doesn't have yt-dlp in their repositories , you need to run these commands first if you want to use youtube to bootanimation converter
 ```
 termux-setup-storage
 pkg install openssl-tool python -y
 pip install yt-dlp
 ```
----
 
- # How To Use?
 
- - Copy and paste this below command on Termux or Linux terminal.
- ```
+## 🚀 How To Use?
+- Copy and paste this below command in linux terminal or termux
+```
 curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-Creator-Script/main/cbootanim.sh -o cbootanim.sh
 chmod +x cbootanim.sh
 ./cbootanim.sh
 ```
- - Choose either YouTube video or local video as the source.
- - For YouTube videos, select the desired resolution to download.
- - The script will generate a flashable Magisk module.
- - Flash created zip in Magisk, KernelSU, or aPatch.
- - Recommended to select "loop animation" if your video is too short or if it's a GIF 
+
+> [!Tip] 
+> - Choose either YouTube video or local video as the source
+> - Select desired resolution for YouTube videos
+> - Script generates a flashable Magisk module
+> - Flash created zip in Magisk, KernelSU, or aPatch
+> - Recommended to select "loop animation" if your video is too short or if its a gif.
 
 
 
@@ -106,6 +107,3 @@ If you find any bugs , report here https://t.me/ximistuffschat
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 - dont use releases section to download scripts. they are unmaintained
-
----
-[![Telegram](https://img.shields.io/badge/Telegram-Join%20Chat-blue?style=flat-square&logo=telegram)](https://t.me/ximistuffschat)
