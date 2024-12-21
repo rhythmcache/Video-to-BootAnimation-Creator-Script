@@ -14,7 +14,7 @@
 
 > **Warning**: Ensure these dependencies are installed. The script will attempt to install missing dependencies.
 
-- **FFmpeg**: Used for extracting frames from the video
+- **FFmpeg and FFprobe**: Used for extracting information and frames from the video
 - **Zip**: Used for creating the `bootanimation.zip`
 - **yt-dlp**: Download YouTube videos (if selected as input)
 
