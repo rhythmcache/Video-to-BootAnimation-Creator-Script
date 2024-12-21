@@ -62,88 +62,116 @@ if ! command -v unzip &> /dev/null; then
 fi
 rm -f downloaded_video.*
 
-# Prompt for video source
+get_video_properties() {
+    local video_file="$1"
+    width=$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$video_file")
+    height=$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$video_file")
+    fps=$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$video_file" | bc)
+}
+
 echo -e "${GREEN}Choose video source:${NC}"
 echo "1. YouTube Video"
 echo "2. Local Video"
+
+echo -e "${BRIGHT_CYAN}"
 read -p "Enter your choice (1 or 2): " source_choice
+echo -e "${NC}"
 
 if [[ "$source_choice" == "1" ]]; then
-  # YouTube video selected
-  if ! command -v yt-dlp &> /dev/null; then
-    echo "yt-dlp not found. Installing..."
-    install_package "yt-dlp" || { echo "Failed to install yt-dlp."; exit 1; }
-  fi
+    if ! command -v yt-dlp &> /dev/null; then
+        echo "yt-dlp not found. Installing..."
+        install_package "yt-dlp" || { echo "Failed to install yt-dlp."; exit 1; }
+    fi
 
-  read -p "Enter YouTube video link: " yt_url
+    read -p "Enter YouTube video link: " yt_url
 
-  # List available resolutions
-echo "Fetching available resolutions..."
-yt_dlp_info=$(yt-dlp -F "$yt_url")
-echo "Available resolutions (MP4 only):"
-yt_dlp_resolutions=$(echo "$yt_dlp_info" | grep -E '^[0-9]+ ' | grep -i "mp4" | awk '{print $1, $2, $3, $NF}')
+    # List available resolutions
+    echo "Fetching available resolutions..."
+    yt_dlp_info=$(yt-dlp -F "$yt_url")
+    echo "Available resolutions (MP4 only):"
+    yt_dlp_resolutions=$(echo "$yt_dlp_info" | grep -E '^[0-9]+ ' | grep -i "mp4" | awk '{print $1, $2, $3, $NF}')
 
-if [[ -z "$yt_dlp_resolutions" ]]; then
-  echo "No MP4 formats available for this video."
-  exit 1
-fi
+    if [[ -z "$yt_dlp_resolutions" ]]; then
+        echo "No MP4 formats available for this video."
+        exit 1
+    fi
 
-echo "$yt_dlp_resolutions"
-read -p "Enter the format code for the desired resolution: " format_code
+    echo "$yt_dlp_resolutions"
+    read -p "Enter the format code for the desired resolution: " format_code
 
-  # Download video
-  yt_dlp_output="downloaded_video.mp4"
-  yt-dlp -f "$format_code" -o "$yt_dlp_output" "$yt_url" || {
-    echo "Error downloading video from YouTube."
-    exit 1
-  }
-  video="$yt_dlp_output"
+    # Download video
+    yt_dlp_output="downloaded_video.mp4"
+    yt-dlp -f "$format_code" -o "$yt_dlp_output" "$yt_url" || {
+        echo "Error downloading video from YouTube."
+        exit 1
+    }
+    video="$yt_dlp_output"
 elif [[ "$source_choice" == "2" ]]; then
-
-  # Local video selected
-  read -p "Enter video path (e.g., /path/to/video.mp4): " video
-  if [ ! -f "$video" ]; then
-    echo "Error: Video file does not exist."
-    exit 1
-  fi
+    # Local video selected
+    read -p "Enter video path (e.g., /path/to/video.mp4): " video
+    if [ ! -f "$video" ]; then
+        echo "Error: Video file does not exist."
+        exit 1
+    fi
 else
-  echo "Invalid choice. Exiting."
-  exit 1
+    echo "Invalid choice. Exiting."
+    exit 1
 fi
 
+echo -e "${BRIGHT_YELLOW}Choose configuration type to create bootanimation:${NC}"
 
-echo -e "${GREEN}"
-read -p "Enter output resolution (e.g., 1080x1920): " resolution
-echo -e "${NC}"
-width=$(echo "$resolution" | cut -d'x' -f1)
-height=$(echo "$resolution" | cut -d'x' -f2)
-
-echo -e "${GREEN}"
-read -p "Enter frame rate you want to put in bootanimation: " fps
+echo "1. Use Video's Default Resolution and FPS"
+echo "2. Custom configuration"
+echo -e "${BRIGHT_CYAN}"
+read -p "Enter your choice (1 or 2): " config_choice
 echo -e "${NC}"
 
+if [[ "$config_choice" == "1" ]]; then
+    get_video_properties "$video"
+    echo "Using video properties:"
+    echo "Resolution: ${width}x${height}"
+    echo "FPS: $fps"
+    
+    # Add loop prompt for default configuration
+    echo -e "${GREEN}"
+    read -p "Loop animation? (1 for yes, 2 for no): " loop_option
+    echo -e "${NC}"
+    
+    # Validate loop option
+    if [[ "$loop_option" != "1" && "$loop_option" != "2" ]]; then
+        echo "Error: Invalid option selected. Please select 1 or 2."
+        exit 1
+    fi
+else
+    echo -e "${BRIGHT_YELLOW}"
+    read -p "Enter output resolution (e.g., 1080x1920): " resolution
+    echo -e "${NC}"
+    width=$(echo "$resolution" | cut -d'x' -f1)
+    height=$(echo "$resolution" | cut -d'x' -f2)
+
+    echo -e "${BRIGHT_YELLOW}"
+    read -p "Enter frame rate you want to put in bootanimation: " fps
+    echo -e "${NC}"
+
+    echo -e "${BRIGHT_YELLOW}"
+    read -p "Loop animation? (1 for yes, 2 for no): " loop_option
+    echo -e "${NC}"
+    
+    if [[ "$loop_option" != "1" && "$loop_option" != "2" ]]; then
+        echo "Error: Invalid option selected. Please select 1 or 2."
+        exit 1
+    fi
+fi
+# Prompt for output path after loop option is specified
 echo -e "${GREEN}"
 read -p "Enter path to save the Magisk module (e.g., /path/to/module/name.zip): " output_path
 echo -e "${NC}"
-
-# Prompt for looping option
-echo -e "${GREEN}"
-read -p "Loop animation? (1 for yes, 2 for no): " loop_option
-echo -e "${NC}"
-
-# Check if the entered option is valid
-if [[ "$loop_option" != "1" && "$loop_option" != "2" ]]; then
-    echo "Error: Invalid option selected. Please select 1 or 2."
-    exit 1
-fi
-
 # Temporary directory setup
 TMP_DIR="$(pwd)/bootanim"
 rm -rf "$TMP_DIR"
 mkdir -p "$TMP_DIR/frames" "$TMP_DIR/result"
 desc_file="$TMP_DIR/result/desc.txt"
 output_zip="./bootanimation.zip"
-
 sleep 1
 echo -e "${BRIGHT_CYAN}========================================${NC}"
 echo -e "${WHITE}            Running Core Script               ${NC}"
