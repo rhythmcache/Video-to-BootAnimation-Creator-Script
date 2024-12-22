@@ -81,7 +81,7 @@ echo -e "${NC}"
 if [[ "$source_choice" == "1" ]]; then
     if ! command -v yt-dlp &> /dev/null; then
         echo "yt-dlp not found. Installing..."
-        install_package "yt-dlp" || { echo "Failed to install yt-dlp."; exit 1; }
+        install_package "yt-dlp" || { echo "Failed to install yt-dlp. Plz Install it Manually. "; exit 1; }
     fi
     echo -e "${BRIGHT_YELLOW}"
     read -p "Enter YouTube video link: " yt_url
