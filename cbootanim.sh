@@ -137,12 +137,13 @@ if [[ "$config_choice" == "1" ]]; then
     echo "FPS: $fps"
     
     # Add loop prompt for default configuration
-    echo "Select BootAnimation Behaviour:
-1. Bootanimation should stop if the device completes boot successfully.
-2. Bootanimation should play its full length, no matter what.
-3. Keep looping the animation until the device boots.
+    echo -e "${BRIGHT_YELLOW}" "Select BootAnimation Behaviour:"${NC}"
+    sleep 1
+echo "- 1. Bootanimation should stop if the device completes boot successfully.
+- 2. Bootanimation should play its full length, no matter what.
+- 3. Keep looping the animation until the device boots.
    - If your video is too short or if it is a GIF, choose '3'.
-   - If you are unsure, choose '1'."
+   - If you are unsure, choose 1."
     
     echo -e "${BRIGHT_YELLOW}"
     read -p "Select Your Desired Option (1,2 or 3): " loop_option
@@ -162,12 +163,13 @@ else
     echo -e "${BRIGHT_YELLOW}"
     read -p "Enter frame rate you want to put in bootanimation: " fps
     echo -e "${NC}"
-    echo "Select BootAnimation Behaviour:
-1. Bootanimation should stop if the device completes boot successfully.
-2. Bootanimation should play its full length, no matter what.
-3. Keep looping the animation until the device boots.
+    echo -e "${BRIGHT_YELLOW}" "Select BootAnimation Behaviour:"${NC}"
+    sleep 1
+echo "- 1. Bootanimation should stop if the device completes boot successfully.
+- 2. Bootanimation should play its full length, no matter what.
+- 3. Keep looping the animation until the device boots.
    - If your video is too short or if it is a GIF, choose '3'.
-   - If you are unsure, choose '1'."
+   - If you are unsure, choose 1."
     
     echo -e "${BRIGHT_YELLOW}"
     read -p "Select Your Desired Option (1,2 or 3): " loop_option
