@@ -39,10 +39,18 @@ check_termux_environment
 
 install_package() {
   local package="$1"
-  
-  # Detect package manager and install the package
+
   if command -v pkg &> /dev/null; then
-    pkg update && pkg install -y "$package"
+    echo "Termux detected"
+    if [ "$package" == "yt-dlp" ]; then
+      if ! command -v yt-dlp &> /dev/null; then
+        echo "yt-dlp not found. Installing via pip..."
+        pkg install python openssl-tool -y
+        pip install yt-dlp
+      fi
+    else
+      pkg update && pkg install -y "$package"
+    fi
   elif command -v dnf &> /dev/null; then
     sudo dnf install -y "$package"
   elif command -v pacman &> /dev/null; then
@@ -53,7 +61,7 @@ install_package() {
     sudo yum install -y "$package"
   elif command -v apk &> /dev/null; then
     sudo apk add "$package"
-  elif command -v apt &> /dev/null; then  # Termux package manager
+  elif command -v apt &> /dev/null; then  # Other Linux distros
     sudo apt update && sudo apt install -y "$package"
   else
     echo "Error: Unsupported package manager. Please install $package manually."
