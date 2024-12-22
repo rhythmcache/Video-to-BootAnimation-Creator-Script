@@ -21,13 +21,12 @@ echo -e "${BRIGHT_CYAN}========================================${NC}"
 echo -e "${WHITE}                 by  rhythmcache              ${NC}"
 echo -e "${BRIGHT_CYAN}========================================${NC}"
 sleep 2
-#install a package
 check_termux_environment() {
     if [ -n "$PREFIX" ] && [ -d "$PREFIX" ] && [ -x "$(command -v termux-setup-storage)" ]; then
-        echo -e "${RED}Termux Detected${NC}"
-        echo -e "${RED}Checking Internal Storage Access${NC}"
+        echo -e "${BRIGHT_RED}Termux Detected${NC}"
+        echo -e "${BRIGHT_RED}Checking Internal Storage Access${NC}"
         if [ -r /storage/emulated/0/ ] && [ -w /storage/emulated/0/ ]; then
-            echo ""
+            echo "Internal Storage Is Accessible...."
         else
             echo "Internal Storage is not fully accessible. Setting up storage..."
             termux-setup-storage
@@ -69,7 +68,6 @@ install_package() {
   fi
 }
 
-# Check for ffmpeg and zip and unzip binaries and install if missing
 if ! command -v ffmpeg &> /dev/null; then
     echo "ffmpeg not found. Installing..."
     install_package "ffmpeg" || { echo "Failed to install ffmpeg."; exit 1; }
