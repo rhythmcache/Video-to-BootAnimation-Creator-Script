@@ -137,13 +137,19 @@ if [[ "$config_choice" == "1" ]]; then
     echo "FPS: $fps"
     
     # Add loop prompt for default configuration
-    echo -e "${GREEN}"
-    read -p "Loop animation? (1 for yes, 2 for no): " loop_option
+    echo "Select BootAnimation Behaviour:
+1. Bootanimation should stop if the device completes boot successfully.
+2. Bootanimation should play its full length, no matter what.
+3. Keep looping the animation until the device boots.
+   - If your video is too short or if it is a GIF, choose '3'.
+   - If you are unsure, choose '1'."
+    
+    echo -e "${BRIGHT_YELLOW}"
+    read -p "Select Your Desired Option (1,2 or 3): " loop_option
     echo -e "${NC}"
     
-    # Validate loop option
-    if [[ "$loop_option" != "1" && "$loop_option" != "2" ]]; then
-        echo "Error: Invalid option selected. Please select 1 or 2."
+    if [[ "$loop_option" != "1" && "$loop_option" != "2" && "$loop_option" != "3" ]]; then
+        echo "Error: Invalid option selected. Please select 1 ,2 or 3"
         exit 1
     fi
 else
