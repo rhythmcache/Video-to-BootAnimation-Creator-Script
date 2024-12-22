@@ -22,6 +22,21 @@ echo -e "${WHITE}                 by  rhythmcache              ${NC}"
 echo -e "${BRIGHT_CYAN}========================================${NC}"
 sleep 2
 #install a package
+check_termux_environment() {
+    if [ -n "$PREFIX" ] && [ -d "$PREFIX" ] && [ -x "$(command -v termux-setup-storage)" ]; then
+        echo -e "${RED}Termux Detected${NC}"
+        echo -e "${RED}Checking Internal Storage Access${NC}"
+        if [ -r /storage/emulated/0/ ] && [ -w /storage/emulated/0/ ]; then
+            echo ""
+        else
+            echo "Internal Storage is not fully accessible. Setting up storage..."
+            termux-setup-storage
+        fi
+    fi
+}
+
+check_termux_environment
+
 install_package() {
   local package="$1"
   
