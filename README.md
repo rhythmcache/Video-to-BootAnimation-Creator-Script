@@ -19,7 +19,7 @@
 - **yt-dlp**: Download YouTube videos (if selected as input)
 
 ### 🔧 Termux-Specific Setup
-- Since Termux doesn't have yt-dlp in their repositories , you need to run these commands first if you want to use youtube to bootanimation converter
+- Since `Termux` doesn't have yt-dlp in their repositories , you need to run these commands first if you want to use youtube to bootanimation converter
 ```
 termux-setup-storage
 pkg install openssl-tool python -y
@@ -36,11 +36,12 @@ chmod +x cbootanim.sh
 ```
 
 > [!Tip] 
-> - Choose either YouTube video or local video as the source
-> - Select desired resolution for YouTube videos
+> - Choose either `YouTube` video or `local video` as the source
+> - Select desired resolution for `YouTube` videos
+> - Choose custom configuration or video default configuration to create `bootanimation`
 > - Script generates a flashable Magisk module
 > - Flash created zip in Magisk, KernelSU, or aPatch
-> - Recommended to select "loop animation" if your video is too short or if its a gif.
+> - Recommended to select `loop animation` if your video is too short or if its a gif.
 
 
 
