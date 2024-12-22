@@ -83,8 +83,9 @@ if [[ "$source_choice" == "1" ]]; then
         echo "yt-dlp not found. Installing..."
         install_package "yt-dlp" || { echo "Failed to install yt-dlp."; exit 1; }
     fi
-
+    echo -e "${BRIGHT_YELLOW}"
     read -p "Enter YouTube video link: " yt_url
+    echo -e "${NC}"
 
     # List available resolutions
     echo "Fetching available resolutions..."
@@ -98,7 +99,9 @@ if [[ "$source_choice" == "1" ]]; then
     fi
 
     echo "$yt_dlp_resolutions"
+    echo -e "${BRIGHT_YELLOW}"
     read -p "Enter the format code for the desired resolution: " format_code
+    echo -e "${NC}"
 
     # Download video
     yt_dlp_output="downloaded_video.mp4"
@@ -109,7 +112,7 @@ if [[ "$source_choice" == "1" ]]; then
     video="$yt_dlp_output"
 elif [[ "$source_choice" == "2" ]]; then
     # Local video selected
-    read -p "Enter video path (e.g., /path/to/video.mp4): " video
+    read -p "Enter video path (e.g. /path/to/video.mp4): " video
     if [ ! -f "$video" ]; then
         echo "Error: Video file does not exist."
         exit 1
