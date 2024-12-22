@@ -28,7 +28,7 @@ pip install yt-dlp
 
 
 ## 🚀 How To Use?
-- Copy and paste this below command in linux terminal or termux
+- Copy and paste this below command in `linux terminal` or `termux`
 ```
 curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-Creator-Script/main/cbootanim.sh -o cbootanim.sh
 chmod +x cbootanim.sh
