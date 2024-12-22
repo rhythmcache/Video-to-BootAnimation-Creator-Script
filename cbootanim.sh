@@ -144,10 +144,10 @@ echo "- 1. Bootanimation should stop if the device completes boot successfully.
 - 3. Keep looping the animation until the device boots.
    - If your video is too short or if it is a GIF, choose '3'.
    - If you are unsure, choose 1."
-    
-    echo -e "${BRIGHT_YELLOW}"
-    read -p "Select Your Desired Option (1,2 or 3): " loop_option
-    echo -e "${NC}"
+
+echo -e "${BRIGHT_YELLOW}"
+read -r -p "Select Your Desired Option (1, 2, or 3): " loop_option
+echo -e "${NC}"
     
     if [[ "$loop_option" != "1" && "$loop_option" != "2" && "$loop_option" != "3" ]]; then
         echo "Error: Invalid option selected. Please select 1 ,2 or 3"
@@ -170,10 +170,10 @@ echo "- 1. Bootanimation should stop if the device completes boot successfully.
 - 3. Keep looping the animation until the device boots.
    - If your video is too short or if it is a GIF, choose '3'.
    - If you are unsure, choose 1."
-    
-    echo -e "${BRIGHT_YELLOW}"
-    read -p "Select Your Desired Option (1,2 or 3): " loop_option
-    echo -e "${NC}"
+
+echo -e "${BRIGHT_YELLOW}"
+read -r -p "Select Your Desired Option (1, 2, or 3): " loop_option
+echo -e "${NC}"
     
     if [[ "$loop_option" != "1" && "$loop_option" != "2" && "$loop_option" != "3" ]]; then
         echo "Error: Invalid option selected. Please select 1 ,2 or 3"
