@@ -156,13 +156,19 @@ else
     echo -e "${BRIGHT_YELLOW}"
     read -p "Enter frame rate you want to put in bootanimation: " fps
     echo -e "${NC}"
-
+    echo "Select BootAnimation Behaviour:
+1. Bootanimation should stop if the device completes boot successfully.
+2. Bootanimation should play its full length, no matter what.
+3. Keep looping the animation until the device boots.
+   - If your video is too short or if it is a GIF, choose '3'.
+   - If you are unsure, choose '1'."
+    
     echo -e "${BRIGHT_YELLOW}"
-    read -p "Loop animation? (1 for yes, 2 for no): " loop_option
+    read -p "Select Your Desired Option (1,2 or 3): " loop_option
     echo -e "${NC}"
     
-    if [[ "$loop_option" != "1" && "$loop_option" != "2" ]]; then
-        echo "Error: Invalid option selected. Please select 1 or 2."
+    if [[ "$loop_option" != "1" && "$loop_option" != "2" && "$loop_option" != "3" ]]; then
+        echo "Error: Invalid option selected. Please select 1 ,2 or 3"
         exit 1
     fi
 fi
@@ -225,12 +231,15 @@ done
 # Create desc.txt and handle looping
 if [[ "$loop_option" == "1" ]]; then
   for i in $(seq 0 "$part_index"); do
-    echo "c 0 0 part$i" >> "$desc_file"
+    echo "p 1 0 part$i" >> "$desc_file"
+  done
+  elif [[ "$loop_option" == "2" ]]; then
+  for i in $(seq 0 "$part_index"); do
+  echo "c 1 0 part$i" >> "$desc_file"
   done
 else
-  # Append part entries in desc.txt
   for i in $(seq 0 "$part_index"); do
-    echo "p 1 0 part$i" >> "$desc_file"
+    echo "c 0 0 part$i" >> "$desc_file"
   done
 fi
 
