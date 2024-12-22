@@ -111,7 +111,7 @@ if [ "$loop_option" == "yes" ]; then
     done
 else
     for i in $(seq 0 "$part_index"); do
-        echo "c 1 0 part$i" >> "$desc_file"
+        echo "p 1 0 part$i" >> "$desc_file"
     done
 fi
 
