@@ -263,7 +263,7 @@ echo -e "${GREEN} > > > animation written successfully${NC}"
 echo -e "${BRIGHT_CYAN} > > > Writing Module${NC}"
 mkdir -p "./magisk_module/animation"
 mod="./magisk_module"
-mkdir -p "$mod//META-INF/com/google/android/"
+mkdir -p "$mod/META-INF/com/google/android/"
 
 # Write Customize.sh
 cat <<'EOF' > "$mod/customize.sh"
