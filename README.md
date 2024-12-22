@@ -79,13 +79,6 @@ chmod +x boot2mp4.sh
 ```
 
 
-
-
-
-
-Also see - https://github.com/rhythmcache/video-to-bootanimation
-
-
 ## License
 
     This Program Is Free Software. You can redistribute
@@ -105,3 +98,4 @@ Also see - https://github.com/rhythmcache/video-to-bootanimation
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 - dont use releases section to download scripts. they are unmaintained
+
