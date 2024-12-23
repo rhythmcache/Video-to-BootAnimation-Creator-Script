@@ -107,7 +107,7 @@ extract_audio_blocks() {
     local has_audio
     has_audio=$(ffprobe -v error -show_entries stream=codec_type -select_streams a -of csv=p=0 "$video")
     if [[ -z "$has_audio" ]]; then
-        echo "{BRIGHT_RED} Warning: No audio stream found in the video. Skipping audio extraction. {NC}" >&2
+        echo "Warning: No audio stream found in the video. Skipping audio extraction " >&2
         return 0
     fi
     local frame_block_duration
@@ -124,7 +124,7 @@ extract_audio_blocks() {
         local output_audio="$output_dir/audio${part}.wav"
        ffmpeg -y -i "$video" -ss "$start_time" -t "$frame_block_duration" -vn -acodec pcm_s16le -ar 44100 -ac 2 "$output_audio" 2>&1 | \
     grep -i -e "audio" -e "wav" || {
-        echo "{BRIGHT_RED} Error: Failed to extract audio for block $part. >&2 {NC}"
+        echo -e "Error: Failed to extract audio for block $part. " >&2 
     }
         start_time=$(bc <<< "$start_time + $frame_block_duration")
         part=$((part + 1))
