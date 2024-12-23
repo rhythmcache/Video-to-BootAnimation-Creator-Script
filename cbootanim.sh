@@ -1,11 +1,17 @@
 #!/bin/bash
 # Bootanimation creator script by github.com/rhythmcache
+TMP_DIR="$(pwd)/bootanim"
+rm -rf "$TMP_DIR"
+mkdir -p "$TMP_DIR/frames" "$TMP_DIR/result"
+desc_file="$TMP_DIR/result/desc.txt"
+output_zip="./bootanimation.zip"
 WHITE='\033[1;37m'
 BRIGHT_YELLOW='\033[1;33m'
 BRIGHT_RED='\033[1;31m'
 BRIGHT_CYAN='\033[1;36m'
 GREEN='\033[0;32m'
 NC='\033[0m'
+rm -f downloaded_video.*
 echo -e "${BRIGHT_CYAN}"
 echo "░█▀▄░█▀█░█▀█░▀█▀░█▀█░█▀█░▀█▀░█▄█░█▀█░▀█▀░▀█▀░█▀█░█▀█"
 echo "░█▀▄░█░█░█░█░░█░░█▀█░█░█░░█░░█░█░█▀█░░█░░░█░░█░█░█░█"
@@ -82,14 +88,51 @@ if ! command -v unzip &> /dev/null; then
     echo "unzip not found. Installing..."
     install_package "unzip" || { echo "Failed to install unzip."; exit 1; }
 fi
-rm -f downloaded_video.*
-
 get_video_properties() {
     local video_file="$1"
     width=$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$video_file")
     height=$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$video_file")
     fps=$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$video_file" | bc)
 }
+########################
+extract_audio_blocks() {
+    local video="$1"
+    local output_dir="$TMP_DIR/audio"
+    mkdir -p "$output_dir"
+    get_video_properties "$video"
+    if [[ -z "$fps" || "$fps" -eq 0 ]]; then
+        echo "Error: Invalid frame rate (fps) detected: $fps" >&2
+        return 1
+    fi
+    local has_audio
+    has_audio=$(ffprobe -v error -show_entries stream=codec_type -select_streams a -of csv=p=0 "$video")
+    if [[ -z "$has_audio" ]]; then
+        echo "{BRIGHT_RED} Warning: No audio stream found in the video. Skipping audio extraction. {NC}" >&2
+        return 0
+    fi
+    local frame_block_duration
+    frame_block_duration=$(bc <<< "scale=2; 400 / $fps")
+    local duration
+    duration=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$video")
+    if [[ -z "$duration" ]]; then
+        echo "Error: Could not determine the duration of the video." >&2
+        return 1
+    fi
+    local start_time=0
+    local part=0
+    while (( $(echo "$start_time < $duration" | bc -l) )); do
+        local output_audio="$output_dir/audio${part}.wav"
+       ffmpeg -y -i "$video" -ss "$start_time" -t "$frame_block_duration" -vn -acodec pcm_s16le -ar 44100 -ac 2 "$output_audio" 2>&1 | \
+    grep -i -e "audio" -e "wav" || {
+        echo "{BRIGHT_RED} Error: Failed to extract audio for block $part. >&2 {NC}"
+    }
+        start_time=$(bc <<< "$start_time + $frame_block_duration")
+        part=$((part + 1))
+    done
+    echo -e "${BRIGHT_CYAN} Audio extraction completed successfully. ${NC}"
+    return 0
+}
+#########################
 
 echo -e "${GREEN}Choose video source:${NC}"
 echo "1. YouTube Video"
@@ -157,60 +200,81 @@ if [[ "$config_choice" == "1" ]]; then
     echo "Resolution: ${width}x${height}"
     echo "FPS: $fps"
     
-    # Add loop prompt for default configuration
-    echo -e "${BRIGHT_YELLOW}"Select BootAnimation Behaviour:"${NC}"
+    # Prompt for audio inclusion
+    echo -e "${BRIGHT_CYAN}"
+    read -p "Do you want to include audio with the bootanimation? (y/n): " include_audio
+    echo -e "${NC}"
+
+    if [[ "$include_audio" =~ ^[Yy]$ ]]; then
+        echo "Audio will be included in the bootanimation."
+        extract_audio_blocks "$video"
+    else
+        echo "Audio will not be included."
+    fi
+
+    # Loop prompt for default configuration
+    echo -e "${BRIGHT_YELLOW}Select BootAnimation Behaviour:${NC}"
     sleep 1
-echo " - 1. Bootanimation should stop if the device completes boot successfully.
+    echo " - 1. Bootanimation should stop if the device completes boot successfully.
  - 2. Bootanimation should play its full length, no matter what.
  - 3. Keep looping the animation until the device boots.
    - If your video is too short or if it is a GIF, choose 3.
    - If you are unsure, choose 1. "
 
-echo -e "${BRIGHT_YELLOW}"
-read -p "Select Your Desired Option (1, 2, or 3): " loop_option
-echo -e "${NC}"
+    echo -e "${BRIGHT_YELLOW}"
+    read -p "Select Your Desired Option (1, 2, or 3): " loop_option
+    echo -e "${NC}"
     
     if [[ "$loop_option" != "1" && "$loop_option" != "2" && "$loop_option" != "3" ]]; then
-        echo "Error: Invalid option selected. Please select 1 ,2 or 3"
+        echo "Error: Invalid option selected. Please select 1, 2, or 3."
         exit 1
     fi
+
 else
+    # Custom configuration
+    echo "Custom configuration selected. Audio will be disabled by default."
+    
+    # Resolution Input
     echo -e "${BRIGHT_YELLOW}"
     read -p "Enter output resolution (e.g., 1080x1920): " resolution
     echo -e "${NC}"
+
+    # Validate Resolution
+    if [[ ! "$resolution" =~ ^[0-9]+x[0-9]+$ ]]; then
+        echo -e "{BRIGHT_RED}Error: Invalid resolution format. Please use the format 'widthxheight' (e.g., 1080x1920). {NC}"
+        exit 1
+    fi
     width=$(echo "$resolution" | cut -d'x' -f1)
     height=$(echo "$resolution" | cut -d'x' -f2)
 
+    # Frame Rate Input
     echo -e "${BRIGHT_YELLOW}"
     read -p "Enter frame rate you want to put in bootanimation: " fps
     echo -e "${NC}"
-    echo -e "${BRIGHT_YELLOW}"Select BootAnimation Behaviour:"${NC}"
+    
+    # Loop Option Prompt
+    echo -e "${BRIGHT_YELLOW}Select BootAnimation Behaviour:${NC}"
     sleep 1
-echo "- 1. Bootanimation should stop if the device completes boot successfully.
-- 2. Bootanimation should play its full length, no matter what.
-- 3. Keep looping the animation until the device boots.
+    echo " - 1. Bootanimation should stop if the device completes boot successfully.
+ - 2. Bootanimation should play its full length, no matter what.
+ - 3. Keep looping the animation until the device boots.
    - If your video is too short or if it is a GIF, choose '3'.
    - If you are unsure, choose 1."
 
-echo -e "${BRIGHT_YELLOW}"
-read -p "Select Your Desired Option (1, 2, or 3): " loop_option
-echo -e "${NC}"
+    echo -e "${BRIGHT_YELLOW}"
+    read -p "Select Your Desired Option (1, 2, or 3): " loop_option
+    echo -e "${NC}"
     
     if [[ "$loop_option" != "1" && "$loop_option" != "2" && "$loop_option" != "3" ]]; then
-        echo "Error: Invalid option selected. Please select 1 ,2 or 3"
+        echo "Error: Invalid option selected. Please select 1, 2, or 3."
         exit 1
     fi
 fi
+
 # Prompt for output path after loop option is specified
 echo -e "${GREEN}"
 read -p "Enter path to save the Magisk module (e.g., /path/to/module/name.zip): " output_path
 echo -e "${NC}"
-# Temporary directory setup
-TMP_DIR="$(pwd)/bootanim"
-rm -rf "$TMP_DIR"
-mkdir -p "$TMP_DIR/frames" "$TMP_DIR/result"
-desc_file="$TMP_DIR/result/desc.txt"
-output_zip="./bootanimation.zip"
 sleep 1
 echo -e "${BRIGHT_CYAN}========================================${NC}"
 echo -e "${WHITE}            Running Core Script               ${NC}"
@@ -224,6 +288,7 @@ while IFS= read -r line; do
 done
 
 echo "Processing completed."
+echo -e "${GREEN} Arranging Frames ${NC}"
 
 
 # Count frames
@@ -236,26 +301,47 @@ if [ "$frame_count" -eq 0 ]; then
     exit 1
 fi
 echo "Processed $frame_count frames."
-
-# Create desc.txt
 echo "$width $height $fps" > "$desc_file"
 
-# Pack frames into parts if more than 400 frames
+# Maximum frames per part
 max_frames=400
 part_index=0
 frame_index=0
 
+# Prepare initial part directory
 mkdir -p "$TMP_DIR/result/part$part_index"
+
+# Pack frames into parts
 for frame in "$TMP_DIR/frames"/*.jpg; do
   mv "$frame" "$TMP_DIR/result/part$part_index/"
   frame_index=$((frame_index + 1))
 
+  # If the maximum frames per part is reached, create a new part
   if [ "$frame_index" -ge "$max_frames" ]; then
     frame_index=0
     part_index=$((part_index + 1))
     mkdir -p "$TMP_DIR/result/part$part_index"
   fi
 done
+
+# audio
+if [[ "$include_audio" =~ ^[Yy]$ ]]; then
+  echo "Including audio for each part..."
+  audio_index=0
+
+  for part_dir in "$TMP_DIR/result/part"*; do
+    audio_file="$TMP_DIR/audio/audio${audio_index}.wav"
+    if [ -f "$audio_file" ]; then
+      mv "$audio_file" "$part_dir/audio.wav"
+      echo "Added audio${audio_index}.wav to $part_dir/audio.wav"
+    else
+      echo -e "{BRIGHT_RED} Warning: Expected audio file $audio_file not found.{NC}"
+    fi
+    audio_index=$((audio_index + 1))
+  done
+else
+  echo "Audio not selected. Skipping audio processing."
+fi
 
 # Create desc.txt and handle looping
 if [[ "$loop_option" == "1" ]]; then
