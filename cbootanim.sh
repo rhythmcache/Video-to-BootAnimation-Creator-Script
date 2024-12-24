@@ -212,6 +212,8 @@ if [[ "$config_choice" == "1" ]]; then
 
     if [[ "$include_audio" =~ ^[Yy]$ ]]; then
         echo "Audio will be included in the bootanimation."
+        echo -e "${BRIGHT_RED} => ⚠️ Warning: Not all ROMs/devices support audio in bootanimations. Proceed at your own risk. ${NC}"
+    
         extract_audio_blocks "$video"
     else
         echo "Audio will not be included."
