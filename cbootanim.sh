@@ -280,11 +280,14 @@ echo -e "${BRIGHT_YELLOW} Enter path to save the Magisk module (e.g., /path/to/m
 echo -e "${BRIGHT_YELLOW}"
 read -p "PATH: " output_path
 echo -e "${NC}"
+if [[ ! "${output_path}" =~ \.zip$ ]]; then
+    output_path="${output_path%/}/CreatedMagiskModule.zip"
+fi
+echo -e "${NC}"
 sleep 1
 echo -e "${BRIGHT_CYAN}========================================${NC}"
 echo -e "${WHITE}               PROCESSING VIDEO               ${NC}"
 echo -e "${BRIGHT_CYAN}========================================${NC}"
-
 # Generate frames with ffmpeg
 ffmpeg -i "$video" -vf "scale=${width}:${height}" "$TMP_DIR/frames/%06d.jpg" 2>&1 | \
 grep --line-buffered -o 'frame=.*' | \
