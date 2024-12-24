@@ -337,7 +337,7 @@ if [[ "$include_audio" =~ ^[Yy]$ ]]; then
       mv "$audio_file" "$part_dir/audio.wav"
       echo "Added audio${audio_index}.wav to $part_dir/audio.wav"
     else
-      echo -e "${BRIGHT_RED} Warning: Expected audio file $audio_file not found.${NC}"
+      echo -e "${BRIGHT_RED} Warning: Expected audio file $audio_file not found. Video has no audio ? ${NC}"
     fi
     audio_index=$((audio_index + 1))
   done
