@@ -176,7 +176,9 @@ if [[ "$source_choice" == "1" ]]; then
     video="$yt_dlp_output"
 elif [[ "$source_choice" == "2" ]]; then
     # Local video selected
+    echo -e "${BRIGHT_YELLOW}"
     read -p "Enter video path (e.g. /path/to/video.mp4): " video
+    echo -e "${NC}"
     if [ ! -f "$video" ]; then
         echo "Error: Video file does not exist."
         exit 1
@@ -201,7 +203,7 @@ if [[ "$config_choice" == "1" ]]; then
     echo "FPS: $fps"
     
     # Prompt for audio inclusion
-    echo -e "${BRIGHT_CYAN}"
+    echo -e "${BRIGHT_YELLOW}"
     read -p "Do you want to include audio with the bootanimation? (y/n): " include_audio
     echo -e "${NC}"
 
@@ -272,12 +274,12 @@ else
 fi
 
 # Prompt for output path after loop option is specified
-echo -e "${GREEN}"
+echo -e "${BRIGHT_YELLOW}"
 read -p "Enter path to save the Magisk module (e.g., /path/to/module/name.zip): " output_path
 echo -e "${NC}"
 sleep 1
 echo -e "${BRIGHT_CYAN}========================================${NC}"
-echo -e "${WHITE}            Running Core Script               ${NC}"
+echo -e "${WHITE}               PROCESSING VIDEO               ${NC}"
 echo -e "${BRIGHT_CYAN}========================================${NC}"
 
 # Generate frames with ffmpeg
@@ -288,7 +290,6 @@ while IFS= read -r line; do
 done
 
 echo "Processing completed."
-echo -e "${GREEN} Arranging Frames ${NC}"
 
 
 # Count frames
@@ -301,6 +302,7 @@ if [ "$frame_count" -eq 0 ]; then
     exit 1
 fi
 echo "Processed $frame_count frames."
+echo -e "${GREEN} Arranging Frames ${NC}"
 echo "$width $height $fps" > "$desc_file"
 
 # Maximum frames per part
