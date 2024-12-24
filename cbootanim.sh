@@ -420,169 +420,91 @@ cat <<'EOF' > "$mod/webroot/index.html"
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bootanimation</title>
-   <style>
-    body {
-        font-family: 'Arial', sans-serif;
-        background-color: #2f3136;
-        color: #ffffff;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        background: linear-gradient(45deg, #1a237e, #e91e63);
-        box-shadow: inset 0px 0px 30px rgba(0,0,0,0.5);
-    }
-    .window {
-        background-color: rgba(30, 30, 30, 0.9);
-        border-radius: 15px;
-        width: 80%;
-        max-width: 500px;
-        padding: 20px;
-        text-align: center;
-        position: relative;
-        box-shadow: 0 0 20px rgba(255, 255, 255, 0.2), 0 0 20px rgba(255, 255, 255, 0.5);
-        backdrop-filter: blur(10px);
-    }
-    .window-header {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        gap: 10px;
-    }
-    .window-header .button {
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        background-color: #ff4e50;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-    .window-header .button.green {
-        background-color: #4CAF50;
-    }
-    .window-header .button.yellow {
-        background-color: #FFEB3B;
-    }
-    .window-header .button:hover {
-        transform: scale(1.2);
-    }
-    .language-container {
-        position: fixed;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        display: flex;
-        gap: 10px;
-        background-color: rgba(47, 49, 54, 0.8);
-        padding: 10px;
-        border-radius: 25px;
-        z-index: 1000;
-    }
-    .lang-btn {
-        background-color: #42a5f5;
-        color: #2f3136;
-        border: none;
-        padding: 10px 20px; 
-        border-radius: 12px; 
-        cursor: pointer;
-        font-size: 14px;
-        transition: all 0.3s ease;
-        min-width: 80px;
-    }
-    .lang-btn:hover {
-        background-color: #1e88e5;
-    }
-    .lang-btn.active {
-        background-color: #1e88e5;
-        transform: scale(1.1);
-    }
-    .header {
-        font-size: 36px;
-        font-weight: bold;
-        color: #42a5f5;
-        margin-bottom: 20px;
-        margin-top: 40px;
-        text-shadow: 0 0 10px rgba(66, 165, 245, 0.5);
-    }
-    .subheading {
-        font-size: 24px;
-        color: #ffffff;
-        margin: 20px 0;
-    }
-    .icons {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        margin-top: 30px;
-    }
-    .icon {
-        width: 150px;
-        height: 50px;
-        margin: 10px;
-        border-radius: 12px; 
-        background-color: #ec407a;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 18px;
-        font-weight: bold;
-        color: #ffffff;
-        cursor: pointer;
-        transition: transform 0.3s ease, background-color 0.3s ease;
-    }
-    .icon:hover {
-        transform: scale(1.1);
-        background-color: #d81b60;
-    }
-    .icon:active {
-        background-color: #c2185b;
-    }
-    .play-icon {
-        width: 100%;
-        height: 60px;
-        margin: 10px 0;
-        border-radius: 12px; 
-        background-color: #42a5f5;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 18px;
-        font-weight: bold;
-        color: #ffffff;
-        cursor: pointer;
-        transition: transform 0.3s ease, background-color 0.3s ease;
-        flex-direction: column;
-        box-shadow: 0 0 20px rgba(66, 165, 245, 0.6);
-    }
-    .play-icon:hover {
-        transform: scale(1.05);
-        background-color: #1e88e5;
-    }
-    .play-icon:active {
-        background-color: #1e54b0;
-    }
-    .play-warning {
-        margin-top: 15px;
-        font-size: 14px;
-        color: #b0bec5;
-    }
-    @media (max-width: 600px) {
-        .language-container {
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #1e1e2f;
+            color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #3c4a73, #6d8299);
+            overflow: hidden;
+        }
+        .window {
+            background-color: rgba(30, 30, 30, 0.85);
+            border-radius: 15px;
             width: 90%;
-            gap: 5px;
+            max-width: 400px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
         }
-        .lang-btn {
-            padding: 6px 10px;
+        .window-header {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 15px;
+        }
+        .button {
+            width: 10px;
+            height: 10px;
+            margin-left: 5px;
+            border-radius: 50%;
+            background-color: #f44336;
+            cursor: pointer;
+        }
+        .button.green { background-color: #4CAF50; }
+        .button.yellow { background-color: #FFEB3B; }
+        .header {
+            font-size: 28px;
+            font-weight: bold;
+            color: #42a5f5;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 6px rgba(66, 165, 245, 0.5);
+        }
+        .subheading {
+            font-size: 18px;
+            color: #cccccc;
+            margin: 10px 0 20px;
+        }
+        .icons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .icon {
+            padding: 12px;
+            border-radius: 10px;
+            background-color: #4CAF50;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .icon:hover { background-color: #3E8E41; }
+        .play-icon {
+            padding: 12px;
+            margin: 20px 0;
+            border-radius: 10px;
+            background-color: #1e88e5;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .play-icon:hover { background-color: #1565C0; }
+        .play-warning {
             font-size: 12px;
-            min-width: 50px;
+            color: #b0bec5;
         }
-    }
-</style>
+    </style>
 </head>
 <body>
     <div class="window">
@@ -591,86 +513,19 @@ cat <<'EOF' > "$mod/webroot/index.html"
             <div class="button yellow"></div>
             <div class="button"></div>
         </div>
-
         <div class="header">Hi There</div>
-
         <div class="subheading">Bootanimation-Creator-Script</div>
-
         <div class="icons">
-            <div class="icon" onclick="openGitHub()">
-                <span class="icon-text">GitHub Page</span>
-            </div>
-            <div class="icon" onclick="openTelegram()">
-                <span class="icon-text">Telegram</span>
-            </div>
+            <div class="icon" onclick="openGitHub()">GitHub Page</div>
+            <div class="icon" onclick="openTelegram()">Telegram</div>
         </div>
-
-        <div class="play-icon" onclick="playBootAnimation()">
-            <span>Play Current Bootanimation</span>
-        </div>
-
+        <div class="play-icon" onclick="playBootAnimation()">Preview Current Bootanimation</div>
         <div class="play-warning">
-            May not work on some devices or if you chose "Bootanimation Behaviour 1" while creating bootanimation.
+            Preview may not work on some devices or if you chose "Bootanimation Behaviour 1" while creating bootanimation.
         </div>
-    </div>
-
-    <div class="language-container">
-        <button class="lang-btn active" data-lang="en">🇺🇸</button>
-        <button class="lang-btn" data-lang="hi">🇮🇳</button>
-        <button class="lang-btn" data-lang="ru">🇷🇺</button>
-        <button class="lang-btn" data-lang="zh">🇨🇳</button>
     </div>
 
     <script>
-        const translations = {
-            en: {
-                header: 'Hi There',
-                subheading: 'bootanimation-creator-script',
-                githubBtn: 'GitHub Page',
-                telegramBtn: 'Telegram',
-                playBtn: 'Play Current Bootanimation',
-                playWarning: 'May not work on some devices or if you chose "Bootanimation Behaviour 1" while creating bootanimation.'
-            },
-            hi: {
-                header: 'नमस्ते',
-                subheading: 'बूट-एनिमेशन-क्रिएटर-स्क्रिप्ट',
-                githubBtn: 'गिटहब पेज',
-                telegramBtn: 'टेलीग्राम',
-                playBtn: 'वर्तमान बूटएनिमेशन चलाएं',
-                playWarning: 'सभी उपकरणों पर काम नहीं कर सकता या यदि आपने बूटएनीमेशन बनाते समय "बूटएनीमेशन व्यवहार 1" चुना है।'
-            },
-            ru: {
-    header: 'Привет',
-    subheading: 'Боот аниматион цреатор сцрипт',
-    githubBtn: 'Страница GitHub',
-    telegramBtn: 'Телеграм',
-    playBtn: 'Воспроизвести текущую загрузочную анимацию',
-    playWarning: 'Может не работать на некоторых устройствах или если при создании bootanimation вы выбрали «Bootanimation Behaviour 1».'
-},
-            zh: {
-                header: '你好',
-                subheading: '引导动画创建脚本',
-                githubBtn: 'GitHub页面',
-                telegramBtn: '电报',
-                playBtn: '播放当前启动动画',
-                playWarning: '如果您在创建启动动画时选择了“启动动画行为 1”，则可能无法在某些设备上工作。'
-            }
-        };
-
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                const lang = this.dataset.lang;
-                document.querySelector('.header').textContent = translations[lang].header;
-                document.querySelector('.subheading').textContent = translations[lang].subheading;
-                document.querySelectorAll('.icon-text')[0].textContent = translations[lang].githubBtn;
-                document.querySelectorAll('.icon-text')[1].textContent = translations[lang].telegramBtn;
-                document.querySelector('.play-icon span').textContent = translations[lang].playBtn;
-                document.querySelector('.play-warning').textContent = translations[lang].playWarning;
-            });
-        });
-
         function openGitHub() {
             exec('am start -a android.intent.action.VIEW -d "https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script"');
         }
@@ -684,26 +539,26 @@ cat <<'EOF' > "$mod/webroot/index.html"
         }
 
         let callbackCounter = 0;
-        function getUniqueCallbackName(e) {
-            return `${e}_callback_${Date.now()}_` + callbackCounter++;
+
+        function getUniqueCallbackName(base) {
+            return `${base}_callback_${Date.now()}_${callbackCounter++}`;
         }
 
-        function exec(e, n) {
-            return void 0 === n && (n = {}),
-            new Promise((i, t) => {
-                let r = getUniqueCallbackName("exec");
-                function o(e) {
-                    delete window[e]
-                }
-                window[r] = (e, t, n) => {
-                    i({ errno: e, stdout: t, stderr: n }), o(r)
+        function exec(command, options = {}) {
+            return new Promise((resolve, reject) => {
+                const callbackName = getUniqueCallbackName('exec');
+                window[callbackName] = (errno, stdout, stderr) => {
+                    resolve({ errno, stdout, stderr });
+                    delete window[callbackName];
                 };
+
                 try {
-                    ksu.exec(e, JSON.stringify(n), r)
-                } catch (e) {
-                    t(e), o(r)
+                    ksu.exec(command, JSON.stringify(options), callbackName);
+                } catch (error) {
+                    reject(error);
+                    delete window[callbackName];
                 }
-            })
+            });
         }
     </script>
 </body>
