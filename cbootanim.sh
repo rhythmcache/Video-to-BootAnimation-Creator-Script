@@ -179,7 +179,7 @@ elif [[ "$source_choice" == "2" ]]; then
     # Local video selected
     echo -e "${BRIGHT_YELLOW} Enter video path (e.g. /path/to/video.mp4) ${NC}"
     echo -e "${BRIGHT_YELLOW}"
-    read -p "PATH: " video
+    read -p "=> PATH: " video
     echo -e "${NC}"
     if [ ! -f "$video" ]; then
         echo "Error: Video file does not exist."
@@ -262,8 +262,8 @@ else
     echo " - 1. Bootanimation should stop if the device completes boot successfully.
  - 2. Bootanimation should play its full length, no matter what.
  - 3. Keep looping the animation until the device boots.
-   - If your video is too short or if it is a GIF, choose '3'.
-   - If you are unsure, choose 1."
+   => If your video is too short or if it is a GIF, choose '3'.
+   => If you are unsure, choose 1."
 
     echo -e "${BRIGHT_YELLOW}"
     read -p "Select Your Desired Option (1, 2, or 3): " loop_option
@@ -278,7 +278,7 @@ fi
 # Prompt for output path after loop option is specified
 echo -e "${BRIGHT_YELLOW} Enter path to save the Magisk module (e.g., /path/to/module/name.zip) ${NC}"
 echo -e "${BRIGHT_YELLOW}"
-read -p "PATH: " output_path
+read -p "=> PATH: " output_path
 echo -e "${NC}"
 if [[ ! "${output_path}" =~ \.zip$ ]]; then
     output_path="${output_path%/}/CreatedMagiskModule.zip"
@@ -372,10 +372,10 @@ echo -e "${BRIGHT_CYAN}=========================================${NC}"
 # Zip the bootanimation
 echo " > > > Creating bootanimation.zip..."
 cd "$TMP_DIR/result" && zip -r -0 "$output_zip" ./* > /dev/null 2>&1 || { echo "Error creating zip file."; exit 1; }
-echo -e "${GREEN} > > > animation written successfully${NC}"
+echo -e "${GREEN} => Animation Written Successfully ✅${NC}"
 
 #Writing Module
-echo -e "${BRIGHT_CYAN} > > > Writing Module${NC}"
+echo -e "${BRIGHT_CYAN} => Writing Module${NC}"
 mkdir -p "./magisk_module/animation"
 mod="./magisk_module"
 mkdir -p "$mod/META-INF/com/google/android/"
@@ -385,16 +385,17 @@ cat <<'EOF' > "$mod/customize.sh"
 # This Installer is a part of Bootanimation-Creator-Script
 # https://github.com/rhythmcache
 # rhythmcache.t.me
+ui_print "This Module Was Created Using BootAnimation-Creator-Script"
 if [ -f "/system/product/media/bootanimation.zip" ]; then
     mkdir -p "$MODPATH/system/product/media"
     cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH/system/product/media/"
     ui_print "Installing bootanimation to product/media"
-    echo "description=bootanimation installed at /system/product/media , if it isn't working, report it to @ximistuffschat on tg" >> "$MODPATH/module.prop"
+    echo "description=if you are seeing this , it means bootanimation is installed at /system/product/media , if it isn't working, report it to @ximistuffschat on TG" >> "$MODPATH/module.prop"
 elif [ -f "/system/media/bootanimation.zip" ]; then
     mkdir -p "$MODPATH/system/media"
     cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH/system/media/"
     ui_print "Installing bootanimation to system/media"
-    echo "description=bootanimation installed at /system/media, if it isn't working, report it to @ximistuffschat on tg" >> "$MODPATH/module.prop"
+    echo "description=if you are seeing this , it means bootanimation is installed at /system/media, if it isn't working, report it to @ximistuffschat on TG" >> "$MODPATH/module.prop"
 else
     ui_print "Failed to install. Bootanimation file not found in system/product/media or system/media."
     abort
@@ -415,7 +416,7 @@ versionCode=26
 author=rhythmcache.t.me | github.com/rhythmcache
 EOF
 #If written
-echo -e "${BRIGHT_CYAN} > > > Created props${NC}"
+echo -e "${BRIGHT_CYAN} => Created Props${NC}"
 
 #  update-binary
 echo " > > > Writing update-binary"
@@ -456,20 +457,20 @@ exit 0
 #######
 EOF
 #written
-echo -e "${BRIGHT_CYAN} > > > update-binary written succesfully${NC}"
+echo -e "${BRIGHT_CYAN} => update-binary Written Succesfully${NC}"
 sleep 1 
 
 # Updater Script
-echo " > > > writing updater-script"
+echo " => writing updater-script"
 cat <<'EOF' > "$mod/META-INF/com/google/android/updater-script"
 #MAGISK
 EOF
-echo -e "${BRIGHT_CYAN} > > > written succesfully${NC}"
+echo -e "${BRIGHT_CYAN} => Written Succesfully${NC}"
 
 # Copy the bootanimation.zip into the animation folder
 if [ -d "$mod/animation" ]; then
 cp "$output_zip" "$mod/animation/bootanimation.zip"
-echo " > > > Creating Magisk Module."
+echo " => Creating Magisk Module."
 # creating module
 cd "$mod" && zip -r "$output_path" ./* > /dev/null 2>&1 || { echo "Error creating module zip file."; exit 1; }
 sleep 1
@@ -484,7 +485,7 @@ echo " Removing Temporary Files "
 rm -rf "$TMP_DIR"
 rm -rf "$mod"
 echo -e "${GREEN}Process Complete${NC}"
-echo -e "${BRIGHT_CYAN} > > > Report Bugs at @ximistuffschat${NC}"
+echo -e "${BRIGHT_CYAN} => Report Bugs at @ximistuffschat${NC}"
 
 exit 0
 else
