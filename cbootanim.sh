@@ -1,5 +1,6 @@
 #!/bin/bash
 # Bootanimation creator script by github.com/rhythmcache
+# Telegram @rhythmcache
 TMP_DIR="$(pwd)/bootanim"
 rm -rf "$TMP_DIR"
 mkdir -p "$TMP_DIR/frames" "$TMP_DIR/result"
