@@ -179,7 +179,7 @@ elif [[ "$source_choice" == "2" ]]; then
     # Local video selected
     echo -e "${BRIGHT_YELLOW} Enter video path (e.g. /path/to/video.mp4) ${NC}"
     echo -e "${BRIGHT_YELLOW}"
-    read -p "PATH: " video
+    read -p "=> PATH: " video
     echo -e "${NC}"
     if [ ! -f "$video" ]; then
         echo "Error: Video file does not exist."
@@ -222,8 +222,8 @@ if [[ "$config_choice" == "1" ]]; then
     echo " - 1. Bootanimation should stop if the device completes boot successfully.
  - 2. Bootanimation should play its full length, no matter what.
  - 3. Keep looping the animation until the device boots.
-   - If your video is too short or if it is a GIF, choose 3.
-   - If you are unsure, choose 1. "
+   => If your video is too short or if it is a GIF, choose 3.
+   => If you are unsure, choose 1. "
 
     echo -e "${BRIGHT_YELLOW}"
     read -p "Select Your Desired Option (1, 2, or 3): " loop_option
@@ -278,7 +278,7 @@ fi
 # Prompt for output path after loop option is specified
 echo -e "${BRIGHT_YELLOW} Enter path to save the Magisk module (e.g., /path/to/module/name.zip) ${NC}"
 echo -e "${BRIGHT_YELLOW}"
-read -p "PATH: " output_path
+read -p "=> PATH: " output_path
 echo -e "${NC}"
 if [[ ! "${output_path}" =~ \.zip$ ]]; then
     output_path="${output_path%/}/CreatedMagiskModule.zip"
