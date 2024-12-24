@@ -77,7 +77,10 @@ if ! command -v ffmpeg &> /dev/null; then
     echo "ffmpeg not found. Installing..."
     install_package "ffmpeg" || { echo "Failed to install ffmpeg."; exit 1; }
 fi
-
+if ! command -v bc &> /dev/null; then
+    echo "bc not found. Installing..."
+    install_package "bc" || { echo "Failed to install bc. Please install it manually."; exit 1; }
+fi
 if ! command -v zip &> /dev/null; then
     echo "zip not found. Installing..."
     install_package "zip" || { echo "Failed to install zip."; exit 1; }
