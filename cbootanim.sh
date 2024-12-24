@@ -1,8 +1,6 @@
 #!/bin/bash
 # Bootanimation creator script by github.com/rhythmcache
 # Telegram @rhythmcache
-
-check_termux_environment
 TMP_DIR="$(pwd)/bootanim"
 rm -rf "$TMP_DIR"
 mkdir -p "$TMP_DIR/frames" "$TMP_DIR/result"
@@ -27,6 +25,7 @@ check_termux_environment() {
         fi
     fi
 }
+check_termux_environment
 echo -e "${BRIGHT_CYAN}"
 echo "░█▀▄░█▀█░█▀█░▀█▀░█▀█░█▀█░▀█▀░█▄█░█▀█░▀█▀░▀█▀░█▀█░█▀█"
 echo "░█▀▄░█░█░█░█░░█░░█▀█░█░█░░█░░█░█░█▀█░░█░░░█░░█░█░█░█"
