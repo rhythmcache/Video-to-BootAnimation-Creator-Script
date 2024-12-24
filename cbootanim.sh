@@ -1,18 +1,7 @@
 #!/bin/bash
 # Bootanimation creator script by github.com/rhythmcache
 # Telegram @rhythmcache
-check_termux_environment() {
-    if [ -n "$PREFIX" ] && [ -d "$PREFIX" ] && [ -x "$(command -v termux-setup-storage)" ]; then
-        echo -e "${BRIGHT_RED}Termux Detected${NC}"
-        echo -e "${BRIGHT_RED}Checking Internal Storage Access${NC}"
-        if [ -r /storage/emulated/0/ ] && [ -w /storage/emulated/0/ ]; then
-            echo -e "${GREEN}Internal Storage Is Accessible..${NC}"
-        else
-            echo "Internal Storage is not fully accessible. Setting up storage..."
-            termux-setup-storage
-        fi
-    fi
-}
+
 check_termux_environment
 TMP_DIR="$(pwd)/bootanim"
 rm -rf "$TMP_DIR"
@@ -26,6 +15,18 @@ BRIGHT_CYAN='\033[1;36m'
 GREEN='\033[0;32m'
 NC='\033[0m'
 rm -f downloaded_video.*
+check_termux_environment() {
+    if [ -n "$PREFIX" ] && [ -d "$PREFIX" ] && [ -x "$(command -v termux-setup-storage)" ]; then
+        echo -e "${BRIGHT_RED}Termux Detected${NC}"
+        echo -e "${BRIGHT_RED}Checking Internal Storage Access${NC}"
+        if [ -r /storage/emulated/0/ ] && [ -w /storage/emulated/0/ ]; then
+            echo -e "${GREEN}Internal Storage Is Accessible..${NC}"
+        else
+            echo "Internal Storage is not fully accessible. Setting up storage..."
+            termux-setup-storage
+        fi
+    fi
+}
 echo -e "${BRIGHT_CYAN}"
 echo "░█▀▄░█▀█░█▀█░▀█▀░█▀█░█▀█░▀█▀░█▄█░█▀█░▀█▀░▀█▀░█▀█░█▀█"
 echo "░█▀▄░█░█░█░█░░█░░█▀█░█░█░░█░░█░█░█▀█░░█░░░█░░█░█░█░█"
