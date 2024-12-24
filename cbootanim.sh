@@ -386,34 +386,34 @@ cat <<'EOF' > "$mod/customize.sh"
 # This Installer is a part of Bootanimation-Creator-Script
 # https://github.com/rhythmcache
 # rhythmcache.t.me
-ui_print "This Module Was Created Using BootAnimation-Creator-Script"
+ui_print " => This Module Was Created Using BootAnimation-Creator-Script"
 if [ -f "/system/product/media/bootanimation.zip" ]; then
     mkdir -p "$MODPATH/system/product/media"
     cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH/system/product/media/"
-    ui_print "Installing bootanimation to product/media"
+    ui_print " => Installing bootanimation to product/media"
     echo "description=if you are seeing this , it means bootanimation is installed at /system/product/media , if it isn't working, report it to @ximistuffschat on TG" >> "$MODPATH/module.prop"
 elif [ -f "/system/media/bootanimation.zip" ]; then
     mkdir -p "$MODPATH/system/media"
     cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH/system/media/"
-    ui_print "Installing bootanimation to system/media"
+    ui_print " => Installing bootanimation to system/media"
     echo "description=if you are seeing this , it means bootanimation is installed at /system/media, if it isn't working, report it to @ximistuffschat on TG" >> "$MODPATH/module.prop"
 else
     ui_print "Failed to install. Bootanimation file not found in system/product/media or system/media."
     abort
 fi
 ui_print ""
-ui_print "[*] Installation Complete ! "
 ui_print ""
 set_perm_recursive "$MODPATH/system" 0 0 0755 0644
 rm -rf "$MODPATH/animation"
+ui_print "[*] Installation Complete ! "
 
 EOF
 # Create or overwrite the file "module.prop" with the content below
 cat <<'EOF' > "$mod/module.prop"
 id=cbootanimation
 name=Bootanimation-Creator-Script
-version=1.0
-versionCode=26
+version=2
+versionCode=30
 author=rhythmcache.t.me | github.com/rhythmcache
 EOF
 #If written
