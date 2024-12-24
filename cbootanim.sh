@@ -371,7 +371,7 @@ sleep 1
 echo -e "${BRIGHT_CYAN}=========================================${NC}"
 
 # Zip the bootanimation
-echo " > > > Creating bootanimation.zip..."
+echo " => Creating bootanimation.zip..."
 cd "$TMP_DIR/result" && zip -r -0 "$output_zip" ./* > /dev/null 2>&1 || { echo "Error creating zip file."; exit 1; }
 echo -e "${GREEN} => Animation Written Successfully ✅${NC}"
 
@@ -420,7 +420,7 @@ EOF
 echo -e "${BRIGHT_CYAN} => Created Props${NC}"
 
 #  update-binary
-echo " > > > Writing update-binary"
+echo " => Writing update-binary"
 cat <<'EOF' > "$mod/META-INF/com/google/android/update-binary"
 #!/sbin/sh
 
@@ -482,10 +482,10 @@ echo -e "${BRIGHT_CYAN}==================================================== ${NC
 sleep 1
 
 # Clean up temporary files
-echo " Removing Temporary Files "
+echo " => Removing Temporary Files "
 rm -rf "$TMP_DIR"
 rm -rf "$mod"
-echo -e "${GREEN}Process Complete${NC}"
+echo -e "${GREEN} => Process Complete${NC}"
 echo -e "${BRIGHT_CYAN} => Report Bugs at @ximistuffschat${NC}"
 
 exit 0
