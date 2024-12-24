@@ -12,7 +12,7 @@
 
 ## ⚠️ Requirements
 
-> **Warning**: Ensure these dependencies are installed. The script will attempt to install missing dependencies.
+> **Warning**: Ensure these dependencies are installed. Though the script will attempt to install missing dependencies.
 
 - **FFmpeg and FFprobe**: Used for extracting information and frames from the video
 - **Zip**: Used for creating the `bootanimation.zip`
@@ -46,6 +46,7 @@ chmod +x cbootanim.sh
 
 
 ## Use As Command-Line
+- ⚠️ These are `unmaintained` and has less features
 - [Download This](https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script/releases/download/V2/bootc) and give executable permission
 - it will create just a bootanimation.zip (not module)
 - General Syntax to use for creating a looped boot-animation 
