@@ -32,7 +32,7 @@ check_termux_environment() {
         echo -e "${BRIGHT_RED}Termux Detected${NC}"
         echo -e "${BRIGHT_RED}Checking Internal Storage Access${NC}"
         if [ -r /storage/emulated/0/ ] && [ -w /storage/emulated/0/ ]; then
-            echo "Internal Storage Is Accessible...."
+            echo -e "${GREEN}Internal Storage Is Accessible..${NC}"
         else
             echo "Internal Storage is not fully accessible. Setting up storage..."
             termux-setup-storage
@@ -176,8 +176,9 @@ if [[ "$source_choice" == "1" ]]; then
     video="$yt_dlp_output"
 elif [[ "$source_choice" == "2" ]]; then
     # Local video selected
+    echo -e "${BRIGHT_YELLOW} Enter video path (e.g. /path/to/video.mp4) ${NC}"
     echo -e "${BRIGHT_YELLOW}"
-    read -p "Enter video path (e.g. /path/to/video.mp4): " video
+    read -p "PATH: " video
     echo -e "${NC}"
     if [ ! -f "$video" ]; then
         echo "Error: Video file does not exist."
@@ -274,8 +275,9 @@ else
 fi
 
 # Prompt for output path after loop option is specified
+echo -e "${BRIGHT_YELLOW} Enter path to save the Magisk module (e.g., /path/to/module/name.zip) ${NC}"
 echo -e "${BRIGHT_YELLOW}"
-read -p "Enter path to save the Magisk module (e.g., /path/to/module/name.zip): " output_path
+read -p "PATH: " output_path
 echo -e "${NC}"
 sleep 1
 echo -e "${BRIGHT_CYAN}========================================${NC}"
