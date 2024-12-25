@@ -141,7 +141,7 @@ echo "1. YouTube Video"
 echo "2. Local Video"
 
 echo -e "${BRIGHT_CYAN}"
-read -p "Enter your choice (1 or 2): " source_choice
+read -r -p "Enter your choice (1 or 2): " source_choice
 echo -e "${NC}"
 
 if [[ "$source_choice" == "1" ]]; then
@@ -150,7 +150,7 @@ if [[ "$source_choice" == "1" ]]; then
         install_package "yt-dlp" || { echo "Failed to install yt-dlp. Plz Install it Manually. "; exit 1; }
     fi
     echo -e "${BRIGHT_YELLOW}"
-    read -p "Enter YouTube video link: " yt_url
+    read -r -p "Enter YouTube video link: " yt_url
     echo -e "${NC}"
 
     # List available resolutions
@@ -166,7 +166,7 @@ if [[ "$source_choice" == "1" ]]; then
 
     echo "$yt_dlp_resolutions"
     echo -e "${BRIGHT_YELLOW}"
-    read -p "Enter the format code for the desired resolution: " format_code
+    read -r -p "Enter the format code for the desired resolution: " format_code
     echo -e "${NC}"
 
     # Download video
@@ -180,7 +180,7 @@ elif [[ "$source_choice" == "2" ]]; then
     # Local video selected
     echo -e "${BRIGHT_YELLOW} Enter video path (e.g. /path/to/video.mp4) ${NC}"
     echo -e "${BRIGHT_YELLOW}"
-    read -p "=> PATH: " video
+    read -r -p "=> PATH: " video
     echo -e "${NC}"
     if [ ! -f "$video" ]; then
         echo "Error: Video file does not exist."
@@ -196,7 +196,7 @@ echo -e "${BRIGHT_YELLOW}Choose configuration type to create bootanimation:${NC}
 echo "1. Use Video's Default Resolution and FPS"
 echo "2. Custom configuration"
 echo -e "${BRIGHT_CYAN}"
-read -p "Enter your choice (1 or 2): " config_choice
+read -r -p "Enter your choice (1 or 2): " config_choice
 echo -e "${NC}"
 
 if [[ "$config_choice" == "1" ]]; then
@@ -207,7 +207,7 @@ if [[ "$config_choice" == "1" ]]; then
     
     # Prompt for audio inclusion
     echo -e "${BRIGHT_YELLOW}"
-    read -p "Do you want to include audio with the bootanimation? (y/n): " include_audio
+    read -r -p "Do you want to include audio with the bootanimation? (y/n): " include_audio
     echo -e "${NC}"
 
     if [[ "$include_audio" =~ ^[Yy]$ ]]; then
@@ -229,7 +229,7 @@ if [[ "$config_choice" == "1" ]]; then
    => If you are unsure, choose 1. "
 
     echo -e "${BRIGHT_YELLOW}"
-    read -p "Select Your Desired Option (1, 2, or 3): " loop_option
+    read -r -p "Select Your Desired Option (1, 2, or 3): " loop_option
     echo -e "${NC}"
     
     if [[ "$loop_option" != "1" && "$loop_option" != "2" && "$loop_option" != "3" ]]; then
@@ -243,7 +243,7 @@ else
     
     # Resolution Input
     echo -e "${BRIGHT_YELLOW}"
-    read -p "Enter output resolution (e.g., 1080x1920): " resolution
+    read -r -p "Enter output resolution (e.g., 1080x1920): " resolution
     echo -e "${NC}"
 
     # Validate Resolution
@@ -256,7 +256,7 @@ else
 
     # Frame Rate Input
     echo -e "${BRIGHT_YELLOW}"
-    read -p "Enter frame rate you want to put in bootanimation: " fps
+    read -r -p "Enter frame rate you want to put in bootanimation: " fps
     echo -e "${NC}"
     
     # Loop Option Prompt
@@ -269,7 +269,7 @@ else
    => If you are unsure, choose 1."
 
     echo -e "${BRIGHT_YELLOW}"
-    read -p "Select Your Desired Option (1, 2, or 3): " loop_option
+    read -r -p "Select Your Desired Option (1, 2, or 3): " loop_option
     echo -e "${NC}"
     
     if [[ "$loop_option" != "1" && "$loop_option" != "2" && "$loop_option" != "3" ]]; then
@@ -281,7 +281,7 @@ fi
 # Prompt for output path after loop option is specified
 echo -e "${BRIGHT_YELLOW} Enter path to save the Magisk module (e.g., /path/to/module/name.zip) ${NC}"
 echo -e "${BRIGHT_YELLOW}"
-read -p "=> PATH: " output_path
+read -r -p "=> PATH: " output_path
 echo -e "${NC}"
 if [[ ! "${output_path}" =~ \.zip$ ]]; then
     output_path="${output_path%/}/CreatedMagiskModule.zip"
@@ -302,7 +302,7 @@ echo "Processing completed."
 
 
 # Count frames
-frame_count=$(ls -1 "$TMP_DIR/frames" | wc -l)
+frame_count=$(find "$TMP_DIR/frames" -type f | wc -l)
 if [ "$frame_count" -eq 0 ]; then
     echo "Error: No frames generated. Exiting."
     echo "If you are using Termux, make sure you grant storage permissions by running:"
@@ -374,7 +374,12 @@ echo -e "${BRIGHT_CYAN}=========================================${NC}"
 
 # Zip the bootanimation
 echo " => Creating bootanimation.zip..."
-cd "$TMP_DIR/result" && zip -r -0 "$output_zip" ./* > /dev/null 2>&1 || { echo "Error creating zip file."; exit 1; }
+if cd "$TMP_DIR/result" && zip -r -0 -q "$output_zip" ./; then
+    :
+else
+    echo "Error creating zip file."
+    exit 1
+fi
 echo -e "${GREEN} => Animation Written Successfully ✅${NC}"
 
 #Writing Module
@@ -630,7 +635,13 @@ if [ -d "$mod/animation" ]; then
 cp "$output_zip" "$mod/animation/bootanimation.zip"
 echo " => Creating Magisk Module."
 # creating module
-cd "$mod" && zip -r "$output_path" ./* > /dev/null 2>&1 || { echo "Error creating module zip file."; exit 1; }
+if cd "$mod" && zip -r -q "$output_path" ./; then
+    :
+else
+    echo "Error creating module zip file."
+    exit 1
+fi
+
 sleep 1
 echo -e "${BRIGHT_CYAN}=====================================================${NC}"
 echo -e "${WHITE}         -Magisk-Module ${NC}"
