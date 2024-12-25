@@ -19,7 +19,7 @@
 - **yt-dlp**: Download YouTube videos (if selected as input)
 
 
-### 🔧 Termux-Specific Setup
+###  Termux-Specific Setup
 - Since `Termux` doesn't have yt-dlp in their repositories , you need to run this commands first if you want to use youtube to bootanimation converter
 ```
 termux-setup-storage && pkg install -y openssl-tool python && pip install yt-dlp
