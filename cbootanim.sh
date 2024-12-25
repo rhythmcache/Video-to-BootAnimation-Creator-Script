@@ -25,25 +25,8 @@ check_termux_environment() {
         fi
     fi
 }
-check_termux_environment
-echo -e "${BRIGHT_CYAN}"
-echo "░█▀▄░█▀█░█▀█░▀█▀░█▀█░█▀█░▀█▀░█▄█░█▀█░▀█▀░▀█▀░█▀█░█▀█"
-echo "░█▀▄░█░█░█░█░░█░░█▀█░█░█░░█░░█░█░█▀█░░█░░░█░░█░█░█░█"
-echo "░▀▀░░▀▀▀░▀▀▀░░▀░░▀░▀░▀░▀░▀▀▀░▀░▀░▀░▀░░▀░░▀▀▀░▀▀▀░▀░▀"
-echo -e "${NC}"
-echo -e "${BRIGHT_YELLOW}"
-echo "░█▀▀░█▀▄░█▀▀░█▀█░▀█▀░█▀█░█▀▄"
-echo "░█░░░█▀▄░█▀▀░█▀█░░█░░█░█░█▀▄"
-echo "░▀▀▀░▀░▀░▀▀▀░▀░▀░░▀░░▀▀▀░▀░▀"
-echo -e "${NC}"
-sleep 1
-echo -e "${BRIGHT_CYAN}========================================${NC}"
-echo -e "${WHITE}                 by  rhythmcache              ${NC}"
-echo -e "${BRIGHT_CYAN}========================================${NC}"
-sleep 2
 install_package() {
   local package="$1"
-
   if command -v pkg &> /dev/null; then
     echo "Termux detected"
     if [ "$package" == "yt-dlp" ]; then
@@ -72,7 +55,6 @@ install_package() {
     exit 1
   fi
 }
-
 if ! command -v ffmpeg &> /dev/null; then
     echo "ffmpeg not found. Installing..."
     install_package "ffmpeg" || { echo "Failed to install ffmpeg."; exit 1; }
@@ -85,11 +67,22 @@ if ! command -v zip &> /dev/null; then
     echo "zip not found. Installing..."
     install_package "zip" || { echo "Failed to install zip."; exit 1; }
 fi
-
-if ! command -v unzip &> /dev/null; then
-    echo "unzip not found. Installing..."
-    install_package "unzip" || { echo "Failed to install unzip."; exit 1; }
-fi
+check_termux_environment
+echo -e "${BRIGHT_CYAN}"
+echo "░█▀▄░█▀█░█▀█░▀█▀░█▀█░█▀█░▀█▀░█▄█░█▀█░▀█▀░▀█▀░█▀█░█▀█"
+echo "░█▀▄░█░█░█░█░░█░░█▀█░█░█░░█░░█░█░█▀█░░█░░░█░░█░█░█░█"
+echo "░▀▀░░▀▀▀░▀▀▀░░▀░░▀░▀░▀░▀░▀▀▀░▀░▀░▀░▀░░▀░░▀▀▀░▀▀▀░▀░▀"
+echo -e "${NC}"
+echo -e "${BRIGHT_YELLOW}"
+echo "░█▀▀░█▀▄░█▀▀░█▀█░▀█▀░█▀█░█▀▄"
+echo "░█░░░█▀▄░█▀▀░█▀█░░█░░█░█░█▀▄"
+echo "░▀▀▀░▀░▀░▀▀▀░▀░▀░░▀░░▀▀▀░▀░▀"
+echo -e "${NC}"
+sleep 1
+echo -e "${BRIGHT_CYAN}========================================${NC}"
+echo -e "${WHITE}                 by  rhythmcache              ${NC}"
+echo -e "${BRIGHT_CYAN}========================================${NC}"
+sleep 2
 get_video_properties() {
     local video_file="$1"
     width=$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$video_file")
