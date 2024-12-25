@@ -27,9 +27,12 @@ termux-setup-storage && pkg install -y openssl-tool python && pip install yt-dlp
 
 
 # How To Use?
-- Copy and paste this below command in `linux terminal` or `termux`
+- Copy and paste any one of below command in `linux terminal` or `termux`
 ```
 bash <(curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-Creator-Script/main/cbootanim.sh)
+```
+```
+curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-Creator-Script/main/cbootanim.sh -o cbootanim.sh && chmod +x cbootanim.sh && ./cbootanim.sh
 ```
 
 > [!Tip] 
