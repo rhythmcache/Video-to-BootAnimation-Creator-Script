@@ -5,12 +5,12 @@
  
 [![Telegram](https://img.shields.io/badge/Telegram-Join%20Chat-blue?style=flat-square&logo=telegram)](https://t.me/ximistuffschat)
 
-## 🌟 Features
+##  Features
 
 - Convert `YouTube` or `local` video files into boot animations
 -  Scale bootanimations to desired resolution and FPS
 
-## ⚠️ Requirements
+##  Requirements
 
 > **Warning**: Ensure these dependencies are installed. Though the script will attempt to install missing dependencies.
 
@@ -19,15 +19,11 @@
 - **yt-dlp**: Download YouTube videos (if selected as input)
 
 
-<!--
 ### 🔧 Termux-Specific Setup
-- Since `Termux` doesn't have yt-dlp in their repositories , you need to run these commands first if you want to use youtube to bootanimation converter
+- Since `Termux` doesn't have yt-dlp in their repositories , you need to run this commands first if you want to use youtube to bootanimation converter
 ```
-termux-setup-storage
-pkg install openssl-tool python -y
-pip install yt-dlp
+termux-setup-storage && pkg install -y openssl-tool python && pip install yt-dlp
 ```
--->
 
 
 # How To Use?
