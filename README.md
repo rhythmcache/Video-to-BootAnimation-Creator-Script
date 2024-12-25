@@ -18,6 +18,8 @@
 - **Zip**: Used for creating the `bootanimation.zip`
 - **yt-dlp**: Download YouTube videos (if selected as input)
 
+
+<!--
 ### 🔧 Termux-Specific Setup
 - Since `Termux` doesn't have yt-dlp in their repositories , you need to run these commands first if you want to use youtube to bootanimation converter
 ```
@@ -25,9 +27,10 @@ termux-setup-storage
 pkg install openssl-tool python -y
 pip install yt-dlp
 ```
+-->
 
 
-## 🚀 How To Use?
+# How To Use?
 - Copy and paste this below command in `linux terminal` or `termux`
 ```
 bash <(curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-Creator-Script/main/cbootanim.sh)
