@@ -42,33 +42,11 @@ curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-C
 > - Script generates a flashable Magisk module
 > - Flash created zip in Magisk, KernelSU, or aPatch
 > - Recommended to select `loop animation` if your video is too short or if its a gif.
+> - if you need just a `bootanimation.zip` , you can extract it from the created magisk modyle
 
 
 
-## Use As Command-Line
-- ⚠️ These are `unmaintained` and has less features
-- [Download This](https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script/releases/download/V2/bootc) and give executable permission
-- it will create just a bootanimation.zip (not module)
-- General Syntax to use for creating a looped boot-animation 
-```
-bootc -i <path to video file> <resolution> <fps> loop <output/path/bootanimation.zip>
-```
-- General Syntax to use for creating a non-looped boot-animation (same just remove the loop)
-```
-bootc -i <path to video file> <resolution> <fps <output/path/bootanimation.zip>
-```
-- For example
-```
-./bootc -i /storage/emulated/0/Movies/VID_20241211_201851_329.mp4 1080x2400 50 /sdcard/bootanimation.zip
-```
 ---
-- same but interactive script to create bootanimation.zip (not module)
-```
-curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-Creator-Script/main/genbootanim.sh -o genbootanim.sh
-chmod +x genbootanim.sh
-./genbootanim.sh
-```
-
 ## Convert Bootanimation.zip to video
 
 - Converts bootanimation.zip into video
