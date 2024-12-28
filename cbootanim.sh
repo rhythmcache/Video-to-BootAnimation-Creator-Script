@@ -327,26 +327,23 @@ for frame in "$TMP_DIR/frames"/*.jpg; do
     mkdir -p "$TMP_DIR/result/part$part_index"
   fi
 done
-
-# audio
+# Audio
 if [[ "$include_audio" =~ ^[Yy]$ ]]; then
   echo "Including audio for each part..."
   audio_index=0
-
-  for part_dir in "$TMP_DIR/result/part"*; do
+  for part_dir in $(find "$TMP_DIR/result" -type d -name "part*" | sort -V); do
     audio_file="$TMP_DIR/audio/audio${audio_index}.wav"
     if [ -f "$audio_file" ]; then
       mv "$audio_file" "$part_dir/audio.wav"
       echo "Added audio${audio_index}.wav to $part_dir/audio.wav"
     else
-      echo -e "${BRIGHT_RED} Warning: Expected audio file $audio_file not found. Frames has no audio ? ${NC}"
+      echo -e "${BRIGHT_RED} Warning: Expected audio file $audio_file not found. Frames have no audio? ${NC}"
     fi
     audio_index=$((audio_index + 1))
   done
 else
   echo "Audio not selected. Skipping audio processing."
 fi
-
 # Create desc.txt and handle looping
 if [[ "$loop_option" == "1" ]]; then
   for i in $(seq 0 "$part_index"); do
