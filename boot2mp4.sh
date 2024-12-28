@@ -70,13 +70,13 @@ else
     exit 1
 fi
 
-echo -e "${YELLOW}Checking for audio.wav in parts...${NC}"
+echo -e "${YELLOW}Checking for audio...${NC}"
 audio_found=false
 part_videos=()
 for part_dir in "$extract_dir"/*/; do
     if [[ -f "$part_dir/audio.wav" ]]; then
         audio_found=true
-        echo -e "${GREEN}Found audio.wav in $part_dir${NC}"
+        echo -e "${GREEN}Found audio in $part_dir${NC}"
         mkdir -p "$frames_dir"
         part_frames_dir="$frames_dir/$(basename "$part_dir")"
         mkdir -p "$part_frames_dir"
@@ -121,9 +121,9 @@ if [ "$audio_found" = true ]; then
         echo -e "${RED}Failed to merge videos.${NC}"
         exit 1
     }
-    echo -e "${GREEN}Video successfully generated with audio at $output_path.${NC}"
+    echo -e "${GREEN}Video successfully generated  at $output_path.${NC}"
 else
-    echo -e "${YELLOW}No audio.wav found, proceeding with original logic...${NC}"
+    echo -e "${YELLOW}No audio found in bootanimation ?...${NC}"
     # Original frame processing logic
     mkdir -p "$frames_dir"
     frame_counter=1
