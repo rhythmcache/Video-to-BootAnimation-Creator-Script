@@ -130,7 +130,7 @@ extract_audio_blocks() {
 #########################
 
 echo -e "${GREEN}Choose video source:${NC}"
-echo "1. YouTube Video"
+echo "1. Online Video"
 echo "2. Local Video"
 
 echo -e "${BRIGHT_CYAN}"
@@ -143,7 +143,7 @@ if [[ "$source_choice" == "1" ]]; then
         install_package "yt-dlp" || { echo "Failed to install yt-dlp. Plz Install it Manually. "; exit 1; }
     fi
     echo -e "${BRIGHT_YELLOW}"
-    read -r -p "Enter YouTube video link: " yt_url
+    read -r -p "Enter video link: " yt_url
     echo -e "${NC}"
 
     # List available resolutions
