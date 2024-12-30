@@ -149,8 +149,8 @@ if [[ "$source_choice" == "1" ]]; then
     # List available resolutions
     echo "Fetching available resolutions..."
     yt_dlp_info=$(yt-dlp -F "$yt_url")
-    echo "Available resolutions (MP4 only):"
-    yt_dlp_resolutions=$(echo "$yt_dlp_info" | grep -E '^[0-9]+ ' | grep -i "mp4" | awk '{print $1, $2, $3, $NF}')
+    echo "Available resolutions:"
+    yt_dlp_resolutions=$(echo "$yt_dlp_info" | grep -E '^[0-9]+ ' | awk '{print $1, $2, $3, $NF}')
 
     if [[ -z "$yt_dlp_resolutions" ]]; then
         echo "No MP4 formats available for this video."
@@ -163,7 +163,7 @@ if [[ "$source_choice" == "1" ]]; then
     echo -e "${NC}"
 
     # Download video
-    yt_dlp_output="downloaded_video.mp4"
+    yt_dlp_output='downloaded_video.%(ext)s'
     yt-dlp -f "$format_code" -o "$yt_dlp_output" "$yt_url" || {
         echo "Error downloading video from YouTube."
         exit 1
