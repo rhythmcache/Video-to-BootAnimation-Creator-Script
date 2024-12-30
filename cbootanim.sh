@@ -154,7 +154,7 @@ if [[ "$source_choice" == "1" ]]; then
 
 
     if [[ -z "$yt_dlp_resolutions" ]]; then
-        echo "No MP4 formats available for this video."
+        echo "No formats available for this video."
         exit 1
     fi
 
@@ -164,12 +164,11 @@ if [[ "$source_choice" == "1" ]]; then
     echo -e "${NC}"
 
     # Download video
-    yt_dlp_output="downloaded_video.mp4"
     yt-dlp -f "$format_code" -o "$yt_dlp_output" "$yt_url" || {
-        echo "Error downloading video from YouTube."
-        exit 1
-    }
-    video="$yt_dlp_output"
+    echo "Error downloading video from YouTube."
+    exit 1
+}
+    video='$yt_dlp_output'
 elif [[ "$source_choice" == "2" ]]; then
     # Local video selected
     echo -e "${BRIGHT_YELLOW} Enter video path (e.g. /path/to/video.mp4) ${NC}"
