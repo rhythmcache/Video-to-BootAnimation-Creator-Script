@@ -25,8 +25,25 @@ check_termux_environment() {
         fi
     fi
 }
+check_termux_environment
+echo -e "${BRIGHT_CYAN}"
+echo "░█▀▄░█▀█░█▀█░▀█▀░█▀█░█▀█░▀█▀░█▄█░█▀█░▀█▀░▀█▀░█▀█░█▀█"
+echo "░█▀▄░█░█░█░█░░█░░█▀█░█░█░░█░░█░█░█▀█░░█░░░█░░█░█░█░█"
+echo "░▀▀░░▀▀▀░▀▀▀░░▀░░▀░▀░▀░▀░▀▀▀░▀░▀░▀░▀░░▀░░▀▀▀░▀▀▀░▀░▀"
+echo -e "${NC}"
+echo -e "${BRIGHT_YELLOW}"
+echo "░█▀▀░█▀▄░█▀▀░█▀█░▀█▀░█▀█░█▀▄"
+echo "░█░░░█▀▄░█▀▀░█▀█░░█░░█░█░█▀▄"
+echo "░▀▀▀░▀░▀░▀▀▀░▀░▀░░▀░░▀▀▀░▀░▀"
+echo -e "${NC}"
+sleep 1
+echo -e "${BRIGHT_CYAN}========================================${NC}"
+echo -e "${WHITE}                 by  rhythmcache              ${NC}"
+echo -e "${BRIGHT_CYAN}========================================${NC}"
+sleep 2
 install_package() {
   local package="$1"
+
   if command -v pkg &> /dev/null; then
     echo "Termux detected"
     if [ "$package" == "yt-dlp" ]; then
@@ -55,6 +72,7 @@ install_package() {
     exit 1
   fi
 }
+
 if ! command -v ffmpeg &> /dev/null; then
     echo "ffmpeg not found. Installing..."
     install_package "ffmpeg" || { echo "Failed to install ffmpeg."; exit 1; }
@@ -67,22 +85,11 @@ if ! command -v zip &> /dev/null; then
     echo "zip not found. Installing..."
     install_package "zip" || { echo "Failed to install zip."; exit 1; }
 fi
-check_termux_environment
-echo -e "${BRIGHT_CYAN}"
-echo "░█▀▄░█▀█░█▀█░▀█▀░█▀█░█▀█░▀█▀░█▄█░█▀█░▀█▀░▀█▀░█▀█░█▀█"
-echo "░█▀▄░█░█░█░█░░█░░█▀█░█░█░░█░░█░█░█▀█░░█░░░█░░█░█░█░█"
-echo "░▀▀░░▀▀▀░▀▀▀░░▀░░▀░▀░▀░▀░▀▀▀░▀░▀░▀░▀░░▀░░▀▀▀░▀▀▀░▀░▀"
-echo -e "${NC}"
-echo -e "${BRIGHT_YELLOW}"
-echo "░█▀▀░█▀▄░█▀▀░█▀█░▀█▀░█▀█░█▀▄"
-echo "░█░░░█▀▄░█▀▀░█▀█░░█░░█░█░█▀▄"
-echo "░▀▀▀░▀░▀░▀▀▀░▀░▀░░▀░░▀▀▀░▀░▀"
-echo -e "${NC}"
-sleep 1
-echo -e "${BRIGHT_CYAN}========================================${NC}"
-echo -e "${WHITE}                 by  rhythmcache              ${NC}"
-echo -e "${BRIGHT_CYAN}========================================${NC}"
-sleep 2
+
+if ! command -v unzip &> /dev/null; then
+    echo "unzip not found. Installing..."
+    install_package "unzip" || { echo "Failed to install unzip."; exit 1; }
+fi
 get_video_properties() {
     local video_file="$1"
     width=$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$video_file")
@@ -130,11 +137,11 @@ extract_audio_blocks() {
 #########################
 
 echo -e "${GREEN}Choose video source:${NC}"
-echo "1. Online Video"
+echo "1. YouTube Video"
 echo "2. Local Video"
 
 echo -e "${BRIGHT_CYAN}"
-read -r -p "Enter your choice (1 or 2): " source_choice
+read -p "Enter your choice (1 or 2): " source_choice
 echo -e "${NC}"
 
 if [[ "$source_choice" == "1" ]]; then
@@ -143,37 +150,37 @@ if [[ "$source_choice" == "1" ]]; then
         install_package "yt-dlp" || { echo "Failed to install yt-dlp. Plz Install it Manually. "; exit 1; }
     fi
     echo -e "${BRIGHT_YELLOW}"
-    read -r -p "Enter video link: " yt_url
+    read -p "Enter YouTube video link: " yt_url
     echo -e "${NC}"
 
     # List available resolutions
     echo "Fetching available resolutions..."
     yt_dlp_info=$(yt-dlp -F "$yt_url")
-    echo "Available resolutions :"
-    yt_dlp_resolutions=$(echo "$yt_dlp_info" | grep -E '^[0-9]+ ' | awk '{print $1, $2, $3, $NF}')
-
+    echo "Available resolutions (MP4 only):"
+    yt_dlp_resolutions=$(echo "$yt_dlp_info" | grep -E '^[0-9]+ ' | grep -i "mp4" | awk '{print $1, $2, $3, $NF}')
 
     if [[ -z "$yt_dlp_resolutions" ]]; then
-        echo "No formats available for this video."
+        echo "No MP4 formats available for this video."
         exit 1
     fi
 
     echo "$yt_dlp_resolutions"
     echo -e "${BRIGHT_YELLOW}"
-    read -r -p "Enter the format code for the desired resolution: " format_code
+    read -p "Enter the format code for the desired resolution: " format_code
     echo -e "${NC}"
 
     # Download video
+    yt_dlp_output="downloaded_video.mp4"
     yt-dlp -f "$format_code" -o "$yt_dlp_output" "$yt_url" || {
-    echo "Error downloading video from YouTube."
-    exit 1
-}
-    video='$yt_dlp_output'
+        echo "Error downloading video from YouTube."
+        exit 1
+    }
+    video="$yt_dlp_output"
 elif [[ "$source_choice" == "2" ]]; then
     # Local video selected
     echo -e "${BRIGHT_YELLOW} Enter video path (e.g. /path/to/video.mp4) ${NC}"
     echo -e "${BRIGHT_YELLOW}"
-    read -r -p "=> PATH: " video
+    read -p "=> PATH: " video
     echo -e "${NC}"
     if [ ! -f "$video" ]; then
         echo "Error: Video file does not exist."
@@ -189,7 +196,7 @@ echo -e "${BRIGHT_YELLOW}Choose configuration type to create bootanimation:${NC}
 echo "1. Use Video's Default Resolution and FPS"
 echo "2. Custom configuration"
 echo -e "${BRIGHT_CYAN}"
-read -r -p "Enter your choice (1 or 2): " config_choice
+read -p "Enter your choice (1 or 2): " config_choice
 echo -e "${NC}"
 
 if [[ "$config_choice" == "1" ]]; then
@@ -200,7 +207,7 @@ if [[ "$config_choice" == "1" ]]; then
     
     # Prompt for audio inclusion
     echo -e "${BRIGHT_YELLOW}"
-    read -r -p "Do you want to include audio with the bootanimation? (y/n): " include_audio
+    read -p "Do you want to include audio with the bootanimation? (y/n): " include_audio
     echo -e "${NC}"
 
     if [[ "$include_audio" =~ ^[Yy]$ ]]; then
@@ -222,7 +229,7 @@ if [[ "$config_choice" == "1" ]]; then
    => If you are unsure, choose 1. "
 
     echo -e "${BRIGHT_YELLOW}"
-    read -r -p "Select Your Desired Option (1, 2, or 3): " loop_option
+    read -p "Select Your Desired Option (1, 2, or 3): " loop_option
     echo -e "${NC}"
     
     if [[ "$loop_option" != "1" && "$loop_option" != "2" && "$loop_option" != "3" ]]; then
@@ -236,7 +243,7 @@ else
     
     # Resolution Input
     echo -e "${BRIGHT_YELLOW}"
-    read -r -p "Enter output resolution (e.g., 1080x1920): " resolution
+    read -p "Enter output resolution (e.g., 1080x1920): " resolution
     echo -e "${NC}"
 
     # Validate Resolution
@@ -249,7 +256,7 @@ else
 
     # Frame Rate Input
     echo -e "${BRIGHT_YELLOW}"
-    read -r -p "Enter frame rate you want to put in bootanimation: " fps
+    read -p "Enter frame rate you want to put in bootanimation: " fps
     echo -e "${NC}"
     
     # Loop Option Prompt
@@ -262,7 +269,7 @@ else
    => If you are unsure, choose 1."
 
     echo -e "${BRIGHT_YELLOW}"
-    read -r -p "Select Your Desired Option (1, 2, or 3): " loop_option
+    read -p "Select Your Desired Option (1, 2, or 3): " loop_option
     echo -e "${NC}"
     
     if [[ "$loop_option" != "1" && "$loop_option" != "2" && "$loop_option" != "3" ]]; then
@@ -274,7 +281,7 @@ fi
 # Prompt for output path after loop option is specified
 echo -e "${BRIGHT_YELLOW} Enter path to save the Magisk module (e.g., /path/to/module/name.zip) ${NC}"
 echo -e "${BRIGHT_YELLOW}"
-read -r -p "=> PATH: " output_path
+read -p "=> PATH: " output_path
 echo -e "${NC}"
 if [[ ! "${output_path}" =~ \.zip$ ]]; then
     output_path="${output_path%/}/CreatedMagiskModule.zip"
@@ -295,7 +302,7 @@ echo "Processing completed."
 
 
 # Count frames
-frame_count=$(find "$TMP_DIR/frames" -type f | wc -l)
+frame_count=$(ls -1 "$TMP_DIR/frames" | wc -l)
 if [ "$frame_count" -eq 0 ]; then
     echo "Error: No frames generated. Exiting."
     echo "If you are using Termux, make sure you grant storage permissions by running:"
@@ -327,23 +334,26 @@ for frame in "$TMP_DIR/frames"/*.jpg; do
     mkdir -p "$TMP_DIR/result/part$part_index"
   fi
 done
-# Audio
+
+# audio
 if [[ "$include_audio" =~ ^[Yy]$ ]]; then
   echo "Including audio for each part..."
   audio_index=0
-  for part_dir in $(find "$TMP_DIR/result" -type d -name "part*" | sort -V); do
+
+  for part_dir in "$TMP_DIR/result/part"*; do
     audio_file="$TMP_DIR/audio/audio${audio_index}.wav"
     if [ -f "$audio_file" ]; then
       mv "$audio_file" "$part_dir/audio.wav"
       echo "Added audio${audio_index}.wav to $part_dir/audio.wav"
     else
-      echo -e "${BRIGHT_RED} Warning: Expected audio file $audio_file not found. Frames have no audio? ${NC}"
+      echo -e "${BRIGHT_RED} Warning: Expected audio file $audio_file not found. Video has no audio ? ${NC}"
     fi
     audio_index=$((audio_index + 1))
   done
 else
   echo "Audio not selected. Skipping audio processing."
 fi
+
 # Create desc.txt and handle looping
 if [[ "$loop_option" == "1" ]]; then
   for i in $(seq 0 "$part_index"); do
@@ -364,12 +374,7 @@ echo -e "${BRIGHT_CYAN}=========================================${NC}"
 
 # Zip the bootanimation
 echo " => Creating bootanimation.zip..."
-if cd "$TMP_DIR/result" && zip -r -0 -q "$output_zip" ./; then
-    :
-else
-    echo "Error creating zip file."
-    exit 1
-fi
+cd "$TMP_DIR/result" && zip -r -0 "$output_zip" ./* > /dev/null 2>&1 || { echo "Error creating zip file."; exit 1; }
 echo -e "${GREEN} => Animation Written Successfully ✅${NC}"
 
 #Writing Module
@@ -409,6 +414,7 @@ EOF
 # Create index.html
 ###########
 cat <<'EOF' > "$mod/webroot/index.html"
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -416,10 +422,11 @@ cat <<'EOF' > "$mod/webroot/index.html"
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bootanimation</title>
     <style>
+        /* General Styles */
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #1e1e2f;
-            color: #f5f5f5;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #ffffff;
             margin: 0;
             padding: 0;
             display: flex;
@@ -427,86 +434,120 @@ cat <<'EOF' > "$mod/webroot/index.html"
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background: linear-gradient(135deg, #3c4a73, #6d8299);
             overflow: hidden;
         }
+
+        /* Window Container */
         .window {
-            background-color: rgba(30, 30, 30, 0.85);
-            border-radius: 15px;
+            background-color: rgba(30, 30, 30, 0.9);
+            border-radius: 20px;
             width: 90%;
             max-width: 400px;
-            padding: 20px;
+            padding: 25px;
             text-align: center;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
+
+        /* Window Header (Dots) */
         .window-header {
             display: flex;
             justify-content: flex-end;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
+
         .button {
-            width: 10px;
-            height: 10px;
-            margin-left: 5px;
+            width: 12px;
+            height: 12px;
+            margin-left: 8px;
             border-radius: 50%;
-            background-color: #f44336;
             cursor: pointer;
+            transition: transform 0.2s ease;
         }
-        .button.green { background-color: #4CAF50; }
-        .button.yellow { background-color: #FFEB3B; }
+
+        .button.red { background-color: #ff5f56; }
+        .button.yellow { background-color: #ffbd2e; }
+        .button.green { background-color: #27c93f; }
+
+        .button:hover {
+            transform: scale(1.2);
+        }
+
+        /* Header and Subheading */
         .header {
-            font-size: 28px;
+            font-size: 32px;
             font-weight: bold;
-            color: #42a5f5;
+            color: #64b5f6;
             margin-bottom: 10px;
-            text-shadow: 0 2px 6px rgba(66, 165, 245, 0.5);
+            text-shadow: 0 2px 6px rgba(100, 181, 246, 0.5);
         }
+
         .subheading {
-            font-size: 18px;
-            color: #cccccc;
-            margin: 10px 0 20px;
+            font-size: 16px;
+            color: #b0bec5;
+            margin: 10px 0 25px;
         }
+
+        /* Icons (Buttons) */
         .icons {
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
+
         .icon {
-            padding: 12px;
-            border-radius: 10px;
+            padding: 15px;
+            border-radius: 12px;
             background-color: #4CAF50;
             color: #ffffff;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
-        .icon:hover { background-color: #3E8E41; }
+
+        .icon:hover {
+            background-color: #3E8E41;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Play Button */
         .play-icon {
-            padding: 12px;
+            padding: 15px;
             margin: 20px 0;
-            border-radius: 10px;
+            border-radius: 12px;
             background-color: #1e88e5;
             color: #ffffff;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
-        .play-icon:hover { background-color: #1565C0; }
+
+        .play-icon:hover {
+            background-color: #1565C0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Warning Text */
         .play-warning {
             font-size: 12px;
             color: #b0bec5;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
     <div class="window">
         <div class="window-header">
-            <div class="button green"></div>
+            <div class="button red"></div>
             <div class="button yellow"></div>
-            <div class="button"></div>
+            <div class="button green"></div>
         </div>
         <div class="header">Hi There</div>
         <div class="subheading">Bootanimation-Creator-Script</div>
@@ -625,13 +666,7 @@ if [ -d "$mod/animation" ]; then
 cp "$output_zip" "$mod/animation/bootanimation.zip"
 echo " => Creating Magisk Module."
 # creating module
-if cd "$mod" && zip -r -q "$output_path" ./; then
-    :
-else
-    echo "Error creating module zip file."
-    exit 1
-fi
-
+cd "$mod" && zip -r "$output_path" ./* > /dev/null 2>&1 || { echo "Error creating module zip file."; exit 1; }
 sleep 1
 echo -e "${BRIGHT_CYAN}=====================================================${NC}"
 echo -e "${WHITE}         -Magisk-Module ${NC}"
