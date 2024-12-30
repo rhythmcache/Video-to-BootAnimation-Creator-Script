@@ -85,11 +85,6 @@ if ! command -v zip &> /dev/null; then
     echo "zip not found. Installing..."
     install_package "zip" || { echo "Failed to install zip."; exit 1; }
 fi
-
-if ! command -v unzip &> /dev/null; then
-    echo "unzip not found. Installing..."
-    install_package "unzip" || { echo "Failed to install unzip."; exit 1; }
-fi
 get_video_properties() {
     local video_file="$1"
     width=$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$video_file")
