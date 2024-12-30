@@ -1,6 +1,6 @@
 # BootAnimation-Creator-Script
 
- A Termux/Linux Interactive script that converts YouTube videos or local video files into Android-compatible bootanimation Magisk modules.
+ A Termux/Linux Interactive Bash script that converts YouTube videos or local video files into Android-compatible bootanimation Magisk modules. It Can Also convert bootanimations into mp4 videos
 
  
 [![Telegram](https://img.shields.io/badge/Telegram-Join%20Chat-blue?style=flat-square&logo=telegram)](https://t.me/ximistuffschat)
