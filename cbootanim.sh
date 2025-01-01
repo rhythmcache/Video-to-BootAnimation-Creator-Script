@@ -273,7 +273,20 @@ else
     fi
 fi
 
-# Prompt for output path after loop option is specified
+# Prompt the user for the background color code
+echo -e "${BRIGHT_CYAN}Select Background Color${NC}"
+echo -e "${BRIGHT_RED} Leave Empty If you are not Sure ${NC}"
+echo -e "${BRIGHT_YELLOW}"
+read -r -p "=> Enter Background Color Code (e.g #FFFFFF) :" BC
+echo -e "${NC}"
+if [[ -n "$BC" ]]; then
+    if [[ ! "$BC" =~ ^#?([0-9A-Fa-f]{6}|[0-9A-Fa-f]{3})$ ]]; then
+        echo -e "${BRIGHT_RED}Error: Invalid color code format. Use #FFFFFF, FFFFFF, #FFF, or FFF.${NC}"
+        exit 1
+    fi
+    BC="#${BC#\#}"
+fi
+# Prompt for output path 
 echo -e "${BRIGHT_YELLOW} Enter path to save the Magisk module (e.g., /path/to/module/name.zip) ${NC}"
 echo -e "${BRIGHT_YELLOW}"
 read -r -p "=> PATH: " output_path
@@ -352,15 +365,15 @@ fi
 # Create desc.txt and handle looping
 if [[ "$loop_option" == "1" ]]; then
   for i in $(seq 0 "$part_index"); do
-    echo "p 1 0 part$i" >> "$desc_file"
+    echo "p 1 0 part$i${BC:+ $BC}" >> "$desc_file"
   done
-  elif [[ "$loop_option" == "2" ]]; then
+elif [[ "$loop_option" == "2" ]]; then
   for i in $(seq 0 "$part_index"); do
-  echo "c 1 0 part$i" >> "$desc_file"
+    echo "c 1 0 part$i${BC:+ $BC}" >> "$desc_file"
   done
 else
   for i in $(seq 0 "$part_index"); do
-    echo "c 0 0 part$i" >> "$desc_file"
+    echo "c 0 0 part$i${BC:+ $BC}" >> "$desc_file"
   done
 fi
 
