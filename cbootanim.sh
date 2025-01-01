@@ -281,7 +281,7 @@ read -r -p "=> Enter Background Color Code (e.g #FFFFFF) :" BC
 echo -e "${NC}"
 if [[ -n "$BC" ]]; then
     if [[ ! "$BC" =~ ^#?([0-9A-Fa-f]{6}|[0-9A-Fa-f]{3})$ ]]; then
-        echo -e "${BRIGHT_RED}Error: Invalid color code format. Use #FFFFFF, FFFFFF, #FFF, or FFF.${NC}"
+        echo -e "${BRIGHT_RED}Error: Invalid color code format.${NC}"
         exit 1
     fi
     BC="#${BC#\#}"
