@@ -437,7 +437,7 @@ fi
 
 ui_print ""
 ui_print ""
-set_perm_recursive "$MODPATH/system" 0 0 0755 0644
+set_perm_recursive "$MODPATH" 0 0 0755 0644
 rm -rf "$MODPATH/animation"
 ui_print "[*] Installation Complete ! "
 
