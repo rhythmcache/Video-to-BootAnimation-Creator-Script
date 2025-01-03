@@ -45,6 +45,9 @@ curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-C
 > - if you need just a `bootanimation.zip` , you can extract it from the created magisk modyle
 
 
+# Limitations 
+- May not work on Some Phones like OnePlus , Samsung and other highly modified roms
+
 
 ---
 ## Convert Bootanimation.zip to video
