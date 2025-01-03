@@ -403,6 +403,8 @@ cat <<'EOF' > "$mod/customize.sh"
 # https://github.com/rhythmcache
 # rhythmcache.t.me
 ui_print " => This Module Was Created Using BootAnimation-Creator-Script"
+
+# Check for bootanimation.zip in various directories
 if [ -f "/system/product/media/bootanimation.zip" ]; then
     mkdir -p "$MODPATH/system/product/media"
     cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH/system/product/media/"
@@ -413,10 +415,26 @@ elif [ -f "/system/media/bootanimation.zip" ]; then
     cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH/system/media/"
     ui_print " => Installing bootanimation to system/media"
     echo "description=if you are seeing this , it means bootanimation is installed at /system/media, if it isn't working, report it to @ximistuffschat on TG" >> "$MODPATH/module.prop"
+elif [ -f "/my_product/media/bootanimation/bootanimation.zip" ]; then
+    mkdir -p "$MODPATH/my_product/media/bootanimation"
+    cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH/my_product/media/bootanimation/"
+    ui_print " => Installing bootanimation to my_product/media/bootanimation"
+    echo "description=if you are seeing this , it means bootanimation is installed at /my_product/media/bootanimation, if it isn't working, report it to @ximistuffschat on TG" >> "$MODPATH/module.prop"
+elif [ -f "/system/my_product/media/bootanimation/bootanimation.zip" ]; then
+    mkdir -p "$MODPATH/system/my_product/media/bootanimation"
+    cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH/system/my_product/media/bootanimation/"
+    ui_print " => Installing bootanimation to system/my_product/media/bootanimation"
+    echo "description=if you are seeing this , it means bootanimation is installed at /system/my_product/media/bootanimation, if it isn't working, report it to @ximistuffschat on TG" >> "$MODPATH/module.prop"
+elif [ -f "/system/my_product/media/bootanimation.zip" ]; then
+    mkdir -p "$MODPATH/system/my_product/media"
+    cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH/system/my_product/media/"
+    ui_print " => Installing bootanimation to system/my_product/media"
+    echo "description=if you are seeing this , it means bootanimation is installed at /system/my_product/media, if it isn't working, report it to @ximistuffschat on TG" >> "$MODPATH/module.prop"
 else
-    ui_print "Failed to install. Bootanimation file not found in system/product/media or system/media."
+    ui_print "Failed to install. Bootanimation file not found in any of the specified directories."
     abort
 fi
+
 ui_print ""
 ui_print ""
 set_perm_recursive "$MODPATH/system" 0 0 0755 0644
