@@ -418,20 +418,11 @@ elif [ -f "/system/media/bootanimation.zip" ]; then
 elif [ -f "/my_product/media/bootanimation/bootanimation.zip" ]; then
     mkdir -p "$MODPATH/my_product/media/bootanimation"
     cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH/my_product/media/bootanimation/"
+    ui_print " 1+ detected. Bootanimation may not work "
     ui_print " => Installing bootanimation to my_product/media/bootanimation"
     echo "description=if you are seeing this , it means bootanimation is installed at /my_product/media/bootanimation, if it isn't working, report it to @ximistuffschat on TG" >> "$MODPATH/module.prop"
-elif [ -f "/system/my_product/media/bootanimation/bootanimation.zip" ]; then
-    mkdir -p "$MODPATH/system/my_product/media/bootanimation"
-    cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH/system/my_product/media/bootanimation/"
-    ui_print " => Installing bootanimation to system/my_product/media/bootanimation"
-    echo "description=if you are seeing this , it means bootanimation is installed at /system/my_product/media/bootanimation, if it isn't working, report it to @ximistuffschat on TG" >> "$MODPATH/module.prop"
-elif [ -f "/system/my_product/media/bootanimation.zip" ]; then
-    mkdir -p "$MODPATH/system/my_product/media"
-    cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH/system/my_product/media/"
-    ui_print " => Installing bootanimation to system/my_product/media"
-    echo "description=if you are seeing this , it means bootanimation is installed at /system/my_product/media, if it isn't working, report it to @ximistuffschat on TG" >> "$MODPATH/module.prop"
 else
-    ui_print "Failed to install. Bootanimation file not found in any of the specified directories."
+    ui_print "Failed to install. Your Device is not Currently Supported"
     abort
 fi
 
