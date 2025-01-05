@@ -706,9 +706,7 @@ sleep 1
 echo " => Removing Temporary Files "
 rm -rf "$TMP_DIR"
 rm -rf "$mod"
-echo -e "${GREEN} => Process Complete${NC}"
-echo -e "${BRIGHT_CYAN} => Report Bugs at @ximistuffschat${NC}"
-
+echo -e "${BRIGHT_CYAN} => Process Complete${NC}"
 exit 0
 else
   echo "Error: Animation folder not found in $TMP_DIR/module."
