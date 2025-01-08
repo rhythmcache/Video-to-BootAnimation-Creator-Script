@@ -36,10 +36,19 @@ if ! command -v zip &> /dev/null; then
     install_package "zip" || { echo "Failed to install zip."; exit 1; }
 fi
 
-echo -e "${GREEN}Enter bootanimation zip path (e.g., /path/to/bootanimation.zip):${NC}"
-read zip_path
-echo -e "${GREEN}Enter output video path (e.g., /path/to/output.mp4):${NC}"
-read output_path
+if [ $# -eq 2 ]; then
+    zip_path="$1"
+    output_path="$2"
+elif [ $# -eq 0 ]; then
+    echo -e "${GREEN}Enter bootanimation zip path (e.g., /path/to/bootanimation.zip):${NC}"
+    read zip_path
+    echo -e "${GREEN}Enter output video path (e.g., /path/to/output.mp4):${NC}"
+    read output_path
+else
+    echo "Usage: $0 [bootanimation_zip_path output_video_path]"
+    echo "Example: $0 /path/to/bootanimation.zip /path/to/output.mp4"
+    exit 1
+fi
 
 work_dir="$(pwd)/tmp"
 mkdir -p "$work_dir"
