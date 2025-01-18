@@ -49,7 +49,7 @@ curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-C
 
 - Copy/Paste this below command on Termux to install this tool permanently on Termux. You can use `vid2boot` to start the video to bootanimation converter and `boot2vid` to use bootanimation to video converter
 ```
-bash <(curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-Creator-Script/main/cbootanim.sh)
+bash <(curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-Creator-Script/main/install.sh)
 ```
 
 
