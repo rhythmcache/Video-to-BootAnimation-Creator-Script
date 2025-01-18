@@ -35,6 +35,14 @@ bash <(curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnim
 curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-Creator-Script/main/cbootanim.sh -o cbootanim.sh && chmod +x cbootanim.sh && ./cbootanim.sh
 ```
 
+## Install Permanently on `Termux`
+
+- Copy/Paste this below command in Termux to install this tool permanently.... You can use `vid2boot` to start the video to bootanimation converter and `boot2vid` to use bootanimation to video converter
+```
+bash <(curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-Creator-Script/main/install.sh)
+```
+
+
 > [!Tip] 
 > - Choose either `YouTube` video or `local video` as the source
 > - Select desired resolution for `YouTube` videos
@@ -45,12 +53,7 @@ curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-C
 > - if you need just a `bootanimation.zip` , you can extract it from the created magisk modyle
 
 
-## Install Permanently on `Termux`
 
-- Copy/Paste this below command on Termux to install this tool permanently on Termux. You can use `vid2boot` to start the video to bootanimation converter and `boot2vid` to use bootanimation to video converter
-```
-bash <(curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-Creator-Script/main/install.sh)
-```
 
 
 
