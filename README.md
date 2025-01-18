@@ -45,6 +45,17 @@ curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-C
 > - if you need just a `bootanimation.zip` , you can extract it from the created magisk modyle
 
 
+## Install Permanently on `Termux`
+
+- Copy/Paste this below command on Termux to install this tool permanently on Termux. You can use `vid2boot` to start the video to bootanimation converter and `boot2vid` to use bootanimation to video converter
+```
+bash <(curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-Creator-Script/main/cbootanim.sh)
+```
+
+
+
+
+
 # Limitations 
 - May not work on Some Phones like OnePlus , Samsung and other highly modified roms
 
