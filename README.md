@@ -60,7 +60,7 @@ bash <(curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnim
 
 
 # Limitations 
-- May not work on Some Phones like OnePlus , Samsung and other highly modified roms
+- The created Magisk module will only work for devices that use the typical `bootanimation.zip` format and have the `bootanimation.zip` located in either `/system/product/media` or `/system/media/`.
 
 
 ---
