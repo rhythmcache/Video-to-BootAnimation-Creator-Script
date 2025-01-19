@@ -589,7 +589,7 @@ cat <<'EOF' > "$mod/webroot/index.html"
         }
 
         function openTelegram() {
-            exec('am start -a android.intent.action.VIEW -d "https://ximistuffschat.t.me"');
+            exec('am start -a android.intent.action.VIEW -d "https://b14nk1.t.me"');
         }
 
         function playBootAnimation() {
