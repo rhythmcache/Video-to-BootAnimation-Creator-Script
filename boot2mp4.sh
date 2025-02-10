@@ -1,4 +1,18 @@
 #!/bin/bash
+# Copyright (C) 2025 github.com/rhythmcache
+#
+# This is a free script: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+
+# The above copyright notice and this license notice shall be included
+# in all copies or substantial portions of the Software.
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -66,8 +80,20 @@ unzip -o "$zip_path" -d "$extract_dir" > /dev/null || { echo -e "${RED}Failed to
 desc_file="$extract_dir/desc.txt"
 
 if [[ -f "$desc_file" ]]; then
-    resolution=$(awk 'NR==1 {print $1 "x" $2}' "$desc_file")
-    fps=$(awk 'NR==1 {print $3}' "$desc_file")  
+    # Find first non-comment line
+    first_line=$(grep -vE '^\s*#' "$desc_file" | head -n 1)
+    
+    # Check for the global format first
+    if [[ "$first_line" == g* ]]; then
+        # Parse global format: g width height offsetx offsety fps
+        read -r _ width height offsetx offsety fps <<< "$first_line"
+        resolution="${width}x${height}"
+        echo -e "${GREEN}Resolution: $resolution, FPS: $fps${NC}"
+    else
+        # Fallback to original format
+        read -r width height fps <<< "$first_line"
+        resolution="${width}x${height}"
+    fi
     
     if [[ -z "$resolution" || -z "$fps" ]]; then
         echo -e "${RED}Error: Unable to extract resolution or frame rate from desc.txt.${NC}"
