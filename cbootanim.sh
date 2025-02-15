@@ -1,21 +1,6 @@
 #!/bin/bash
-
-# Copyright (C) 2025 github.com/rhythmcache
-#
-# This is a free script: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-
-# The above copyright notice shall be included
-# in all copies or substantial portions of the Script
-
-
+# Bootanimation creator script by github.com/rhythmcache
+# Telegram @rhythmcache
 TMP_DIR="$(pwd)/bootanim"
 rm -rf "$TMP_DIR"
 mkdir -p "$TMP_DIR/frames" "$TMP_DIR/result"
@@ -106,8 +91,7 @@ get_video_properties() {
     height=$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$video_file")
     fps=$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$video_file" | bc)
 }
-# Function to extract audio blocks
-
+########################
 extract_audio_blocks() {
     local video="$1"
     local output_dir="$TMP_DIR/audio"
@@ -145,24 +129,7 @@ extract_audio_blocks() {
     echo -e "${BRIGHT_CYAN} Audio extraction completed successfully. ${NC}"
     return 0
 }
-
-# Video Source
-
-
-while true; do
-    echo -e "${GREEN}Are you creating this bootanimation for OXYGEN OS? ${NC}"
-    echo "- 1. Yes"
-    echo "- 2. No"
-    read -p "Enter your choice (1/2): " is_oos
-
-    # Check if the input is either 1 or 2
-    if [[ "$is_oos" == "1" || "$is_oos" == "2" ]]; then
-        break
-    else
-        echo "Invalid input. Please enter either 1 or 2."
-    fi
-done
-
+#########################
 
 echo -e "${GREEN}Choose video source:${NC}"
 echo "1. YouTube Video"
@@ -319,8 +286,6 @@ if [[ -n "$BC" ]]; then
     fi
     BC="#${BC#\#}"
 fi
-
-
 # Prompt for output path 
 echo -e "${BRIGHT_YELLOW} Enter path to save the Magisk module (e.g., /path/to/module/name.zip) ${NC}"
 echo -e "${BRIGHT_YELLOW}"
@@ -353,16 +318,9 @@ if [ "$frame_count" -eq 0 ]; then
     echo "and ensure the video file is correct"
     exit 1
 fi
-
-if [[ $is_oos == "1" ]]; then
-    offsetx=0
-    offsety=0
-    # Oxygen OS format
-    echo "g $width $height $offsetx $offsety $fps" > "$desc_file"
-else
-    # Default format
-    echo "$width $height $fps" > "$desc_file"
-fi
+echo "Processed $frame_count frames."
+echo -e "${GREEN} Arranging Frames ${NC}"
+echo "$width $height $fps" > "$desc_file"
 
 # Maximum frames per part
 max_frames=400
@@ -449,30 +407,20 @@ ui_print " => This Module Was Created Using BootAnimation-Creator-Script"
 # Check for bootanimation.zip in various directories
 if [ -f "/system/product/media/bootanimation.zip" ]; then
     mkdir -p "$MODPATH/system/product/media"
-    mv "$MODPATH/animation/bootanimation.zip" "$MODPATH/system/product/media/"
+    cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH/system/product/media/"
     ui_print " => Installing bootanimation to product/media"
     echo "description=if you are seeing this , it means bootanimation is installed at /system/product/media , if it isn't working, report it to @ximistuffschat on TG" >> "$MODPATH/module.prop"
 elif [ -f "/system/media/bootanimation.zip" ]; then
     mkdir -p "$MODPATH/system/media"
-    mv "$MODPATH/animation/bootanimation.zip" "$MODPATH/system/media/"
+    cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH/system/media/"
     ui_print " => Installing bootanimation to system/media"
     echo "description=if you are seeing this , it means bootanimation is installed at /system/media, if it isn't working, report it to @ximistuffschat on TG" >> "$MODPATH/module.prop"
 elif [ -f "/my_product/media/bootanimation/bootanimation.zip" ]; then
-    ui_print "- OOS detected. This is experimental"
-    echo "description=if you are seeing this , it means bootanimation is using experimental mount, Functionality is not Guaraanted" >> "$MODPATH/module.prop"
-
-    cat > "$MODPATH/post-fs-data.sh" <<EOF2
-#!/system/bin/sh
-MODDIR=\${0%/*}
-ORIGINAL="/my_product/media/bootanimation"
-OVERLAY="\$MODDIR/animation"
-WORKDIR="\$MODDIR/work"
-mkdir -p \$OVERLAY \$WORKDIR
-chmod 644 "\$OVERLAY/bootanimation.zip"
-chown 0:0 "\$OVERLAY/bootanimation.zip"
-mount -t overlay bootanimation-creator-script -o lowerdir=\$ORIGINAL,upperdir=\$OVERLAY,workdir=\$WORKDIR \$ORIGINAL
-EOF2
-
+    mkdir -p "$MODPATH/my_product/media/bootanimation"
+    cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH/my_product/media/bootanimation/"
+    ui_print " 1+ detected. Bootanimation may not work "
+    ui_print " => Installing bootanimation to my_product/media/bootanimation"
+    echo "description=if you are seeing this , it means bootanimation is installed at /my_product/media/bootanimation, if it isn't working, report it to @ximistuffschat on TG" >> "$MODPATH/module.prop"
 else
     ui_print "Failed to install. Your Device is not Currently Supported"
     abort
@@ -481,12 +429,12 @@ fi
 ui_print ""
 ui_print ""
 set_perm_recursive "$MODPATH" 0 0 0755 0644
+rm -rf "$MODPATH/animation"
 ui_print "[*] Installation Complete ! "
 
 EOF
-
 # Create index.html
-
+###########
 cat <<'EOF' > "$mod/webroot/index.html"
 
 <!DOCTYPE html>
