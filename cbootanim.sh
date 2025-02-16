@@ -436,132 +436,114 @@ EOF
 # Create index.html
 ###########
 cat <<'EOF' > "$mod/webroot/index.html"
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bootanimation</title>
+    <title>Bootanimation Creator Script</title>
     <style>
-        /* General Styles */
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            background-color: #000000;
             color: #ffffff;
             margin: 0;
             padding: 0;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
             overflow: hidden;
         }
-
-        /* Window Container */
         .window {
-            background-color: rgba(30, 30, 30, 0.9);
-            border-radius: 20px;
-            width: 90%;
-            max-width: 400px;
-            padding: 25px;
+            background: rgba(18, 18, 18, 0.9);
+            border-radius: 12px;
+            width: 80%;
+            max-width: 350px;
+            padding: 20px;
             text-align: center;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
-
-        /* Window Header (Dots) */
         .window-header {
             display: flex;
             justify-content: flex-end;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
-
         .button {
-            width: 12px;
-            height: 12px;
-            margin-left: 8px;
+            width: 10px;
+            height: 10px;
+            margin-left: 6px;
             border-radius: 50%;
             cursor: pointer;
-            transition: transform 0.2s ease;
         }
-
         .button.red { background-color: #ff5f56; }
         .button.yellow { background-color: #ffbd2e; }
         .button.green { background-color: #27c93f; }
-
-        .button:hover {
-            transform: scale(1.2);
-        }
-
-        /* Header and Subheading */
         .header {
-            font-size: 32px;
+            font-size: 20px;
             font-weight: bold;
-            color: #64b5f6;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 6px rgba(100, 181, 246, 0.5);
+            color: #bb86fc;
+            margin-bottom: 8px;
         }
-
         .subheading {
-            font-size: 16px;
+            font-size: 14px;
             color: #b0bec5;
-            margin: 10px 0 25px;
+            margin-bottom: 15px;
         }
-
-        /* Icons (Buttons) */
         .icons {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 10px;
         }
-
-        .icon {
-            padding: 15px;
-            border-radius: 12px;
-            background-color: #4CAF50;
+        .icon, .play-icon {
+            padding: 12px;
+            border-radius: 10px;
+            background-color: #333333;
             color: #ffffff;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
-
-        .icon:hover {
-            background-color: #3E8E41;
+        .icon:hover, .play-icon:hover {
+            background-color: #444444;
             transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
         }
-
-        /* Play Button */
         .play-icon {
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 12px;
-            background-color: #1e88e5;
-            color: #ffffff;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            margin-top: 12px;
         }
-
-        .play-icon:hover {
-            background-color: #1565C0;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Warning Text */
         .play-warning {
             font-size: 12px;
             color: #b0bec5;
-            margin-top: 10px;
+            margin-top: 8px;
         }
+        .ksu-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #121212; /* Opaque black */
+    padding: 10px;
+    border-radius: 6px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: none;
+    z-index: 1000;
+    font-size: 12px;
+}
+.ksu-dialog button {
+    background: #222222;
+    color: #ffffff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 5px;
+    font-size: 12px;
+}
     </style>
 </head>
 <body>
@@ -574,54 +556,57 @@ cat <<'EOF' > "$mod/webroot/index.html"
         <div class="header">Hi There</div>
         <div class="subheading">Bootanimation-Creator-Script</div>
         <div class="icons">
-            <div class="icon" onclick="openGitHub()">GitHub Page</div>
-            <div class="icon" onclick="openTelegram()">Telegram</div>
+            <div class="icon" onclick="openLink('https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script')">GitHub Page</div>
+            <div class="icon" onclick="openLink('https://rhythmcache.t.me')">Telegram</div>
         </div>
         <div class="play-icon" onclick="playBootAnimation()">Preview Current Bootanimation</div>
         <div class="play-warning">
             Preview may not work on some devices or if you chose "Bootanimation Behaviour 1" while creating bootanimation.
         </div>
     </div>
+    <div id="ksuDialog" class="ksu-dialog">
+        <p>KernelSU API access is required. Grant access?</p>
+        <button id="requestKsuApiButton">Grant Access</button>
+    </div>
 
     <script>
-        function openGitHub() {
-            exec('am start -a android.intent.action.VIEW -d "https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script"');
+        function openLink(url) {
+            if (typeof ksu !== 'undefined' && ksu.exec) {
+                ksu.exec(`am start -a android.intent.action.VIEW -d "${url}"`);
+            } else {
+                window.open(url, '_blank');
+            }
         }
-
-        function openTelegram() {
-            exec('am start -a android.intent.action.VIEW -d "https://rhythmcache.t.me"');
-        }
-
         function playBootAnimation() {
-            exec('bootanimation');
+            if (typeof ksu !== 'undefined' && ksu.exec) {
+                ksu.exec('bootanimation');
+            }
         }
-
-        let callbackCounter = 0;
-
-        function getUniqueCallbackName(base) {
-            return `${base}_callback_${Date.now()}_${callbackCounter++}`;
-        }
-
-        function exec(command, options = {}) {
-            return new Promise((resolve, reject) => {
-                const callbackName = getUniqueCallbackName('exec');
-                window[callbackName] = (errno, stdout, stderr) => {
-                    resolve({ errno, stdout, stderr });
-                    delete window[callbackName];
-                };
-
-                try {
-                    ksu.exec(command, JSON.stringify(options), callbackName);
-                } catch (error) {
-                    reject(error);
-                    delete window[callbackName];
+        async function initializeEnvironment() {
+            try {
+                if (typeof ksu === 'undefined' && typeof mmrl === 'undefined' && typeof $cbootanimation === 'undefined') {
+                    return;
                 }
-            });
+                if (typeof ksu === 'undefined' || !ksu.exec) {
+                    if (typeof mmrl !== 'undefined' && typeof $cbootanimation !== 'undefined') {
+                        const ksuDialog = document.getElementById('ksuDialog');
+                        ksuDialog.style.display = 'flex';
+                        document.getElementById('requestKsuApiButton').addEventListener('click', async () => {
+                            try {
+                                await $cbootanimation.requestAdvancedKernelSUAPI();
+                                ksuDialog.style.display = 'none';
+                                initializeEnvironment();
+                            } catch {}
+                        });
+                    }
+                    return;
+                }
+            } catch {}
         }
+        initializeEnvironment();
     </script>
 </body>
 </html>
-
 EOF
 ###########
 cat <<'EOF' > "$mod/module.prop"
