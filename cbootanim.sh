@@ -404,34 +404,42 @@ cat <<'EOF' > "$mod/customize.sh"
 # rhythmcache.t.me
 ui_print " => This Module Was Created Using BootAnimation-Creator-Script"
 
-# Check for bootanimation.zip in various directories
-if [ -f "/system/product/media/bootanimation.zip" ]; then
-    mkdir -p "$MODPATH/system/product/media"
-    cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH/system/product/media/"
-    ui_print " => Installing bootanimation to product/media"
-    echo "description=if you are seeing this , it means bootanimation is installed at /system/product/media , if it isn't working, report it to @ximistuffschat on TG" >> "$MODPATH/module.prop"
-elif [ -f "/system/media/bootanimation.zip" ]; then
-    mkdir -p "$MODPATH/system/media"
-    cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH/system/media/"
-    ui_print " => Installing bootanimation to system/media"
-    echo "description=if you are seeing this , it means bootanimation is installed at /system/media, if it isn't working, report it to @ximistuffschat on TG" >> "$MODPATH/module.prop"
-elif [ -f "/my_product/media/bootanimation/bootanimation.zip" ]; then
-    mkdir -p "$MODPATH/my_product/media/bootanimation"
-    cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH/my_product/media/bootanimation/"
-    ui_print " 1+ detected. Bootanimation may not work "
-    ui_print " => Installing bootanimation to my_product/media/bootanimation"
-    echo "description=if you are seeing this , it means bootanimation is installed at /my_product/media/bootanimation, if it isn't working, report it to @ximistuffschat on TG" >> "$MODPATH/module.prop"
+# Function to install bootanimation files
+install_bootanimation() {
+    local target_dir="$1"
+    mkdir -p "$MODPATH/$target_dir"
+    if [ -f "/$target_dir/bootanimation.zip" ] && [ -f "/$target_dir/bootanimation-dark.zip" ]; then
+        cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH/$target_dir/bootanimation.zip"
+        cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH/$target_dir/bootanimation-dark.zip"
+        ui_print " => Both bootanimation.zip and bootanimation-dark.zip detected. Copying bootanimation.zip as both."
+        echo "description=Both bootanimations installed at $target_dir" >> "$MODPATH/module.prop"
+    elif [ -f "/$target_dir/bootanimation.zip" ]; then
+        cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH/$target_dir/bootanimation.zip"
+        ui_print " => bootanimation.zip found. Copying it."
+        echo "description=bootanimation.zip installed at $target_dir" >> "$MODPATH/module.prop"
+    elif [ -f "/$target_dir/bootanimation-dark.zip" ]; then
+        cp -f "$MODPATH/animation/bootanimation-dark.zip" "$MODPATH/$target_dir/bootanimation-dark.zip"
+        ui_print " => bootanimation-dark.zip found. Copying it."
+        echo "description=bootanimation-dark.zip installed at $target_dir" >> "$MODPATH/module.prop"
+    
+    else
+        ui_print " => Error: No bootanimation files found in $target_dir! Skipping..."
+        return 1
+    fi
+}
+if [ -f "/system/product/media/bootanimation.zip" ] || [ -f "/system/product/media/bootanimation-dark.zip" ]; then
+    install_bootanimation "system/product/media"
+elif [ -f "/system/media/bootanimation.zip" ] || [ -f "/system/media/bootanimation-dark.zip" ]; then
+    install_bootanimation "system/media"
 else
-    ui_print "Failed to install. Your Device is not Currently Supported"
+    ui_print "Failed to install. Your device is not currently supported."
     abort
 fi
-
 ui_print ""
 ui_print ""
 set_perm_recursive "$MODPATH" 0 0 0755 0644
 rm -rf "$MODPATH/animation"
-ui_print "[*] Installation Complete ! "
-
+ui_print "[*] Installation Complete!"
 EOF
 # Create index.html
 ###########
