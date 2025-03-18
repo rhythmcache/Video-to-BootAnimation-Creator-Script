@@ -411,19 +411,14 @@ install_bootanimation() {
     if [ -f "/$target_dir/bootanimation.zip" ] && [ -f "/$target_dir/bootanimation-dark.zip" ]; then
         cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH/$target_dir/bootanimation.zip"
         cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH/$target_dir/bootanimation-dark.zip"
-        ui_print " => Both bootanimation.zip and bootanimation-dark.zip detected. Copying bootanimation.zip as both."
-        echo "description=Both bootanimations installed at $target_dir" >> "$MODPATH/module.prop"
+        echo "description=Bootanimations installed at $target_dir" >> "$MODPATH/module.prop"
     elif [ -f "/$target_dir/bootanimation.zip" ]; then
         cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH/$target_dir/bootanimation.zip"
-        ui_print " => bootanimation.zip found. Copying it."
-        echo "description=bootanimation.zip installed at $target_dir" >> "$MODPATH/module.prop"
+        echo "description=Bootanimation installed at $target_dir" >> "$MODPATH/module.prop"
     elif [ -f "/$target_dir/bootanimation-dark.zip" ]; then
-        cp -f "$MODPATH/animation/bootanimation-dark.zip" "$MODPATH/$target_dir/bootanimation-dark.zip"
-        ui_print " => bootanimation-dark.zip found. Copying it."
-        echo "description=bootanimation-dark.zip installed at $target_dir" >> "$MODPATH/module.prop"
-    
+        cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH/$target_dir/bootanimation-dark.zip"
+        echo "description=Bootanimation-dark.zip installed at $target_dir" >> "$MODPATH/module.prop"
     else
-        ui_print " => Error: No bootanimation files found in $target_dir! Skipping..."
         return 1
     fi
 }
