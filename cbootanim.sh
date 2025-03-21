@@ -701,6 +701,6 @@ exit 0
 else
   echo "Error: Animation folder not found in $TMP_DIR/module."
   sleep 1
-  echo -e "${BRIGHT_CYAN}Report Bugs at @ximistuffschat${NC}"
+  echo -e "${BRIGHT_CYAN}Report Bugs at @xlmlchat${NC}"
   exit 1
 fi
