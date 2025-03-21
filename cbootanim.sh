@@ -14,7 +14,7 @@ GREEN='\033[0;32m'
 NC='\033[0m'
 rm -f downloaded_video.*
 check_termux_environment() {
-    if [ -n "$PREFIX" ] && [ -d "$PREFIX" ] && [ -x "$(command -v termux-setup-storage)" ]; then
+    if echo "$PREFIX" | grep -q "com.termux"; then
         echo -e "${BRIGHT_RED}Termux Detected${NC}"
         echo -e "${BRIGHT_RED}Checking Internal Storage Access${NC}"
         if [ -r /storage/emulated/0/ ] && [ -w /storage/emulated/0/ ]; then
@@ -23,6 +23,8 @@ check_termux_environment() {
             echo "Internal Storage is not fully accessible. Setting up storage..."
             termux-setup-storage
         fi
+    else
+        echo "Not running in Termux."
     fi
 }
 check_termux_environment
