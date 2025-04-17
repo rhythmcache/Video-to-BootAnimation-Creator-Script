@@ -45,10 +45,10 @@ if ! command -v ffmpeg &> /dev/null; then
     install_package "ffmpeg" || { echo "Failed to install ffmpeg."; exit 1; }
 fi
 
-if ! command -v zip &> /dev/null; then
-    echo "zip not found. Installing..."
-    install_package "zip" || { echo "Failed to install zip."; exit 1; }
-fi
+#if ! command -v zip &> /dev/null; then
+ #   echo "zip not found. Installing..."
+  #  install_package "zip" || { echo "Failed to install zip."; exit 1; }
+#fi
 
 if [ $# -eq 2 ]; then
     zip_path="$1"
