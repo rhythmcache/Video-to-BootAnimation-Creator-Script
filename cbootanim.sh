@@ -86,21 +86,29 @@ if ! command -v zip &> /dev/null; then
     install_package "zip" || { echo "Failed to install zip."; exit 1; }
 fi
 
+
 get_video_properties() {
     local video_file="$1"
+
     width=$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$video_file")
     height=$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$video_file")
     frame_rate=$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$video_file")
+
+    if [[ -z "$width" || -z "$height" || -z "$frame_rate" ]]; then
+        echo "Error: Could not retrieve video properties (width, height, or frame_rate)." >&2
+        return 1
+    fi
+
     if [[ "$frame_rate" == */* ]]; then
         numerator=$(echo "$frame_rate" | cut -d'/' -f1)
         denominator=$(echo "$frame_rate" | cut -d'/' -f2)
-        fps=$(echo "($numerator + $denominator/2) / $denominator" | bc)
+        fps=$(echo "scale=2; ($numerator + $denominator/2) / $denominator" | bc)
     else
         fps=$frame_rate
     fi
+
+    return 0
 }
-
-
 
 ########################
 extract_audio_blocks() {
