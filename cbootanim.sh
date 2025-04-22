@@ -23,8 +23,6 @@ check_termux_environment() {
             echo "Internal Storage is not fully accessible. Setting up storage..."
             termux-setup-storage
         fi
-    else
-        echo "Not running in Termux."
     fi
 }
 check_termux_environment
