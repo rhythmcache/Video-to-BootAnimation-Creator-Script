@@ -102,7 +102,7 @@ get_video_properties() {
     if [[ "$frame_rate" == */* ]]; then
         numerator=$(echo "$frame_rate" | cut -d'/' -f1)
         denominator=$(echo "$frame_rate" | cut -d'/' -f2)
-        fps=$(echo "scale=2; ($numerator + $denominator/2) / $denominator" | bc)
+        fps=$(echo "($numerator + $denominator/2) / $denominator" | bc)
     else
         fps=$frame_rate
     fi
