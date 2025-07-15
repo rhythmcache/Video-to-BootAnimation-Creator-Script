@@ -421,7 +421,7 @@ cat <<'EOF' > "$mod/customize.sh"
 # This Installer is a part of Bootanimation-Creator-Script
 # https://github.com/rhythmcache
 # rhythmcache.t.me
-ui_print " => This Module Was Created Using BootAnimation-Creator-Script"
+ui_print "- This Module Was Created Using BootAnimation-Creator-Script"
 
 # Function to install bootanimation files
 install_bootanimation() {
@@ -434,9 +434,6 @@ install_bootanimation() {
     elif [ -f "/$target_dir/bootanimation.zip" ]; then
         cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH/$target_dir/bootanimation.zip"
         echo "description=Bootanimation installed at $target_dir" >> "$MODPATH/module.prop"
-    elif [ -f "/$target_dir/bootanimation-dark.zip" ]; then
-        cp -f "$MODPATH/animation/bootanimation.zip" "$MODPATH/$target_dir/bootanimation-dark.zip"
-        echo "description=Bootanimation-dark.zip installed at $target_dir" >> "$MODPATH/module.prop"
     else
         return 1
     fi
@@ -446,14 +443,14 @@ if [ -f "/system/product/media/bootanimation.zip" ] || [ -f "/system/product/med
 elif [ -f "/system/media/bootanimation.zip" ] || [ -f "/system/media/bootanimation-dark.zip" ]; then
     install_bootanimation "system/media"
 else
-    ui_print "Failed to install. Your device is not currently supported."
+    ui_print "- Failed to install. Your device is not currently supported."
     abort
 fi
 ui_print ""
 ui_print ""
 set_perm_recursive "$MODPATH" 0 0 0755 0644
 rm -rf "$MODPATH/animation"
-ui_print "[*] Installation Complete!"
+ui_print "- Installation Complete!"
 EOF
 # Create index.html
 ###########
