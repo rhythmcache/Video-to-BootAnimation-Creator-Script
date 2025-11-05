@@ -1,0 +1,49 @@
+[package]
+name = "bootanimation-tools"
+version = "0.1.0"
+edition = "2024"
+authors = ["rhythmcache"]
+description = "CLI utility to convert between Android bootanimations and videos"
+repository = "https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script"
+readme = "README.md"
+license = "GPL-3.0"
+homepage = "https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script"
+keywords = ["bootanimation", "android", "boot2vid", "vid2boot", "video"]
+categories = [
+    "command-line-utilities",
+    "multimedia::video",
+    "multimedia",
+    "encoding",
+    "development-tools::build-utils"
+]
+
+include = [
+    "src/**",
+    "LICENSE",
+    "README.md",
+    "Cargo.toml"
+]
+
+[[bin]]
+name = "vid2boot"
+path = "src/vid2boot.rs"
+
+[[bin]]
+name = "boot2vid"
+path = "src/boot2vid.rs"
+
+[dependencies]
+anyhow = "1.0.100"
+clap = { version = "4.5.51", features = ["derive"] }
+tempfile = "3.23.0"
+zip = { version = "6.0.0", default-features = false }
+
+[profile.release]
+opt-level = "z"    
+lto = "fat"      
+codegen-units = 1      
+strip = true         
+panic = "abort"       
+incremental = false    
+debug = false           
+rpath = false        
