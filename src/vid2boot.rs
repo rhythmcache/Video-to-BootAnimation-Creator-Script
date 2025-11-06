@@ -5,7 +5,7 @@ use std::io::{BufWriter, Write};
 use std::path::{Path, PathBuf};
 use std::process::Command;
 use tempfile::TempDir;
-use zip::CompressionMethod;
+use zip::{CompressionMethod, ZipArchive};
 use zip::write::FileOptions;
 
 #[derive(Parser)]
@@ -19,6 +19,10 @@ struct Cli {
     /// Output bootanimation.zip path
     #[arg(short, long)]
     output: PathBuf,
+
+    /// Read configuration from existing bootanimation.zip
+    #[arg(short, long)]
+    config_from: Option<PathBuf>,
 
     /// Output width (optional, uses video width if not specified)
     #[arg(short = 'W', long)]
@@ -77,6 +81,15 @@ struct VideoProperties {
     has_audio: bool,
 }
 
+struct BootAnimConfig {
+    width: u32,
+    height: u32,
+    fps: u32,
+    is_global_format: bool,
+    offset_x: u32,
+    offset_y: u32,
+}
+
 fn get_ffmpeg_path() -> String {
     std::env::var("FFMPEG_PATH").unwrap_or_else(|_| "ffmpeg".to_string())
 }
@@ -88,9 +101,10 @@ fn get_ffprobe_path() -> String {
 fn get_video_properties(video_path: &Path) -> Result<VideoProperties> {
     let ffprobe = get_ffprobe_path();
 
-    // Get width
+    // get width
     let width_output = Command::new(&ffprobe)
         .args([
+            "-hide_banner",
             "-v",
             "error",
             "-select_streams",
@@ -109,9 +123,10 @@ fn get_video_properties(video_path: &Path) -> Result<VideoProperties> {
         .parse()
         .context("Failed to parse width")?;
 
-    // Get height
+    // get height
     let height_output = Command::new(&ffprobe)
         .args([
+            "-hide_banner",
             "-v",
             "error",
             "-select_streams",
@@ -130,9 +145,10 @@ fn get_video_properties(video_path: &Path) -> Result<VideoProperties> {
         .parse()
         .context("Failed to parse height")?;
 
-    // Get frame rate
+    // get frame rate
     let fps_output = Command::new(&ffprobe)
         .args([
+            "-hide_banner",
             "-v",
             "error",
             "-select_streams",
@@ -160,9 +176,10 @@ fn get_video_properties(video_path: &Path) -> Result<VideoProperties> {
         fps_str.parse().context("Failed to parse fps")?
     };
 
-    // Get duration
+    // get duration
     let duration_output = Command::new(&ffprobe)
         .args([
+            "-hide_banner",
             "-v",
             "error",
             "-show_entries",
@@ -179,9 +196,10 @@ fn get_video_properties(video_path: &Path) -> Result<VideoProperties> {
         .parse()
         .context("Failed to parse duration")?;
 
-    // Check for audio
+    // check for audio
     let audio_output = Command::new(&ffprobe)
         .args([
+            "-hide_banner",
             "-v",
             "error",
             "-show_entries",
@@ -206,6 +224,97 @@ fn get_video_properties(video_path: &Path) -> Result<VideoProperties> {
         duration,
         has_audio,
     })
+}
+
+fn read_config_from_bootanimation(zip_path: &Path) -> Result<BootAnimConfig> {
+    println!("Reading configuration from {}...", zip_path.display());
+    
+    let temp_dir = TempDir::new()?;
+    let extract_dir = temp_dir.path();
+    
+    // extract the zip
+    let file = File::open(zip_path).context("Failed to open bootanimation.zip")?;
+    let mut archive = ZipArchive::new(file)?;
+    
+    for i in 0..archive.len() {
+        let mut file = archive.by_index(i)?;
+        let outpath = extract_dir.join(file.mangled_name());
+        
+        if file.name().ends_with('/') {
+            fs::create_dir_all(&outpath)?;
+        } else {
+            if let Some(p) = outpath.parent() {
+                fs::create_dir_all(p)?;
+            }
+            let mut outfile = File::create(&outpath)?;
+            std::io::copy(&mut file, &mut outfile)?;
+        }
+    }
+    
+    // parse desc.txt
+    let desc_path = extract_dir.join("desc.txt");
+    if !desc_path.exists() {
+        bail!("desc.txt not found in bootanimation.zip");
+    }
+    
+    let content = fs::read_to_string(&desc_path)?;
+    
+    for line in content.lines() {
+        let trimmed = line.trim();
+        if trimmed.is_empty() || trimmed.starts_with('#') {
+            continue;
+        }
+        
+        let parts: Vec<&str> = trimmed.split_whitespace().collect();
+        
+        if parts.is_empty() {
+            continue;
+        }
+        
+        // parse first line (dimensions and fps)
+        if parts[0] == "g" && parts.len() >= 6 {
+            // global format: g width height offsetx offsety fps
+            let width = parts[1].parse().context("Failed to parse width")?;
+            let height = parts[2].parse().context("Failed to parse height")?;
+            let offset_x = parts[3].parse().context("Failed to parse offset_x")?;
+            let offset_y = parts[4].parse().context("Failed to parse offset_y")?;
+            let fps = parts[5].parse().context("Failed to parse fps")?;
+            
+            println!("Loaded configuration (global format):");
+            println!("  Resolution: {}x{}", width, height);
+            println!("  Offsets: x={}, y={}", offset_x, offset_y);
+            println!("  FPS: {}", fps);
+            
+            return Ok(BootAnimConfig {
+                width,
+                height,
+                fps,
+                is_global_format: true,
+                offset_x,
+                offset_y,
+            });
+        } else if parts.len() >= 3 {
+            // original format: width height fps
+            let width = parts[0].parse().context("Failed to parse width")?;
+            let height = parts[1].parse().context("Failed to parse height")?;
+            let fps = parts[2].parse().context("Failed to parse fps")?;
+            
+            println!("Loaded configuration (standard format):");
+            println!("  Resolution: {}x{}", width, height);
+            println!("  FPS: {}", fps);
+            
+            return Ok(BootAnimConfig {
+                width,
+                height,
+                fps,
+                is_global_format: false,
+                offset_x: 0,
+                offset_y: 0,
+            });
+        }
+    }
+    
+    bail!("Unable to parse desc.txt")
 }
 
 fn extract_frames(
@@ -380,11 +489,19 @@ fn create_desc_file(
     num_parts: u32,
     loop_mode: LoopMode,
     background: Option<&str>,
+    use_global_format: bool,
+    offset_x: u32,
+    offset_y: u32,
 ) -> Result<()> {
     let desc_path = result_dir.join("desc.txt");
     let mut file = File::create(desc_path)?;
 
-    writeln!(file, "{} {} {}", width, height, fps)?;
+    // write first line based on format type
+    if use_global_format {
+        writeln!(file, "g {} {} {} {} {}", width, height, offset_x, offset_y, fps)?;
+    } else {
+        writeln!(file, "{} {} {}", width, height, fps)?;
+    }
 
     for part_idx in 0..=num_parts {
         let line = match loop_mode {
@@ -446,7 +563,7 @@ fn create_bootanimation_zip(result_dir: &Path, output_path: &Path) -> Result<()>
         {
             let part_name = path.file_name().unwrap().to_str().unwrap();
 
-            // Add all files in this part directory
+            // add all files in this part directory
             for file_entry in fs::read_dir(&path)? {
                 let file_entry = file_entry?;
                 let file_path = file_entry.path();
@@ -474,6 +591,16 @@ fn main() -> Result<()> {
         bail!("Input video file does not exist: {}", cli.input.display());
     }
 
+    // load configuration from existing bootanimation if specified
+    let bootanim_config = if let Some(ref config_path) = cli.config_from {
+        if !config_path.exists() {
+            bail!("Config bootanimation file does not exist: {}", config_path.display());
+        }
+        Some(read_config_from_bootanimation(config_path)?)
+    } else {
+        None
+    };
+
     // validate background color if provided
     let background = if let Some(ref bg) = cli.background {
         Some(validate_color(bg)?)
@@ -481,33 +608,78 @@ fn main() -> Result<()> {
         None
     };
 
-    // get video properties
-    println!("Analyzing video...");
-    let props = get_video_properties(&cli.input)?;
+    // determine what information we need from video properties
+    let need_width = cli.width.is_none() && bootanim_config.as_ref().map(|c| c.width).is_none();
+    let need_height = cli.height.is_none() && bootanim_config.as_ref().map(|c| c.height).is_none();
+    let need_fps = cli.fps.is_none() && bootanim_config.as_ref().map(|c| c.fps).is_none();
+    let need_audio_check = cli.with_audio;
 
-    println!("Video properties:");
-    println!("  Resolution: {}x{}", props.width, props.height);
-    println!("  FPS: {}", props.fps);
-    println!("  Duration: {:.2}s", props.duration);
-    println!("  Has audio: {}", props.has_audio);
+    // only get video properties if we actually need them
+    let props = if need_width || need_height || need_fps || need_audio_check {
+        println!("Analyzing video...");
+        let p = get_video_properties(&cli.input)?;
+
+        println!("Video properties:");
+        println!("  Resolution: {}x{}", p.width, p.height);
+        println!("  FPS: {}", p.fps);
+        println!("  Duration: {:.2}s", p.duration);
+        println!("  Has audio: {}", p.has_audio);
+
+        Some(p)
+    } else {
+        println!("Skipping video analysis (all parameters provided via config/CLI)");
+        None
+    };
 
     // determine output resolution and fps
-    let width = cli.width.unwrap_or(props.width);
-    let height = cli.height.unwrap_or(props.height);
-    let fps = cli.fps.unwrap_or(props.fps);
+    // priority-> CLI args > config from bootanimation > video properties
+    let width = cli.width
+        .or_else(|| bootanim_config.as_ref().map(|c| c.width))
+        .or_else(|| props.as_ref().map(|p| p.width))
+        .ok_or_else(|| anyhow::anyhow!("Width not specified and could not be determined from video"))?;
+    
+    let height = cli.height
+        .or_else(|| bootanim_config.as_ref().map(|c| c.height))
+        .or_else(|| props.as_ref().map(|p| p.height))
+        .ok_or_else(|| anyhow::anyhow!("Height not specified and could not be determined from video"))?;
+    
+    let fps = cli.fps
+        .or_else(|| bootanim_config.as_ref().map(|c| c.fps))
+        .or_else(|| props.as_ref().map(|p| p.fps))
+        .ok_or_else(|| anyhow::anyhow!("FPS not specified and could not be determined from video"))?;
+    
+    let use_global_format = bootanim_config.as_ref().map(|c| c.is_global_format).unwrap_or(false);
+    let offset_x = bootanim_config.as_ref().map(|c| c.offset_x).unwrap_or(0);
+    let offset_y = bootanim_config.as_ref().map(|c| c.offset_y).unwrap_or(0);
 
     println!("\nOutput configuration:");
     println!("  Resolution: {}x{}", width, height);
     println!("  FPS: {}", fps);
     println!("  Loop mode: {:?}", cli.loop_mode);
+    if use_global_format {
+        println!("  Format: global (with offsets x={}, y={})", offset_x, offset_y);
+    }
     if let Some(ref bg) = background {
         println!("  Background: {}", bg);
     }
 
     // check audio requirements
-    if cli.with_audio && !props.has_audio {
-        eprintln!("Warning: Audio requested but video has no audio stream");
+    if cli.with_audio {
+        if let Some(ref p) = props {
+            if !p.has_audio {
+                eprintln!("Warning: Audio requested but video has no audio stream");
+            }
+        }
     }
+
+    // Get duration for audio extraction if needed
+    let duration = if cli.with_audio {
+        props.as_ref().map(|p| p.duration).unwrap_or(0.0)
+    } else {
+        0.0
+    };
+
+    let has_audio = cli.with_audio && props.as_ref().map(|p| p.has_audio).unwrap_or(false);
 
     // create temporary directory
     let temp_dir = TempDir::new()?;
@@ -522,9 +694,9 @@ fn main() -> Result<()> {
     extract_frames(&cli.input, &frames_dir, width, height, cli.format)?;
 
     // extract audio if requested
-    if cli.with_audio && props.has_audio {
+    if has_audio {
         fs::create_dir_all(&audio_dir)?;
-        extract_audio_blocks(&cli.input, &audio_dir, fps, props.duration)?;
+        extract_audio_blocks(&cli.input, &audio_dir, fps, duration)?;
     }
 
     // organize frames into parts
@@ -532,7 +704,7 @@ fn main() -> Result<()> {
     println!("Created {} parts", num_parts + 1);
 
     // add audio to parts if requested
-    if cli.with_audio && props.has_audio {
+    if has_audio {
         add_audio_to_parts(&audio_dir, &result_dir, num_parts)?;
     }
 
@@ -545,6 +717,9 @@ fn main() -> Result<()> {
         num_parts,
         cli.loop_mode,
         background.as_deref(),
+        use_global_format,
+        offset_x,
+        offset_y,
     )?;
 
     // create bootanimation.zip
