@@ -34,7 +34,7 @@ struct Cli {
 
     /// Frame rate (optional, uses video fps if not specified)
     #[arg(short, long)]
-    fps: Option<u32>,
+    fps: Option<f64>,
 
     /// Animation loop behavior
     #[arg(short, long, value_enum, default_value = "stop-on-boot")]
@@ -644,9 +644,10 @@ fn main() -> Result<()> {
         .ok_or_else(|| anyhow::anyhow!("Height not specified and could not be determined from video"))?;
     
     let fps = cli.fps
-        .or_else(|| bootanim_config.as_ref().map(|c| c.fps))
-        .or_else(|| props.as_ref().map(|p| p.fps))
-        .ok_or_else(|| anyhow::anyhow!("FPS not specified and could not be determined from video"))?;
+    .map(|f| f.round() as u32)
+    .or_else(|| bootanim_config.as_ref().map(|c| c.fps))
+    .or_else(|| props.as_ref().map(|p| p.fps))
+    .ok_or_else(|| anyhow::anyhow!("FPS not specified and could not be determined from video"))?;
     
     let use_global_format = bootanim_config.as_ref().map(|c| c.is_global_format).unwrap_or(false);
     let offset_x = bootanim_config.as_ref().map(|c| c.offset_x).unwrap_or(0);
