@@ -1,6 +1,6 @@
 [package]
 name = "bootanimation-tools"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 authors = ["rhythmcache"]
 description = "CLI utility to convert between Android bootanimations and videos"
