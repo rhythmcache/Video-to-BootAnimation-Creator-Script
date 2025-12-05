@@ -24,6 +24,13 @@ Tools to convert videos to Android bootanimations and vice versa. Available as b
 ### Using Interactive Scripts
 
 #### Quick Run (No Installation)
+-`vid2boot` (Converts videos into bootanimations.)
+
+```bash
+bash <(curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-Creator-Script/main/cbootanim.sh)
+```
+
+- `boot2vid` (Converts bootanimation.zip into video.)
 ```bash
 bash <(curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-Creator-Script/main/cbootanim.sh)
 ```
@@ -68,6 +75,9 @@ cargo install bootanimation-tools
   Or on Windows:
   ```cmd
   set FFMPEG_PATH=C:\path\to\ffmpeg.exe
+  ```
+
+  ```cmd
   set FFPROBE_PATH=C:\path\to\ffprobe.exe
   ```
 
