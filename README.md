@@ -32,7 +32,7 @@ bash <(curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnim
 
 - `boot2vid` (Converts bootanimation.zip into video.)
 ```bash
-bash <(curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-Creator-Script/main/cbootanim.sh)
+bash <(curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-Creator-Script/main/boot2mp4.sh)
 ```
 
 Or download and run:
