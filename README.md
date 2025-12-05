@@ -13,7 +13,7 @@ Tools to convert videos to Android bootanimations and vice versa. Available as b
 - Creates flashable Magisk modules
 - Works on Linux and Termux
 
-### Rust CLI Binaries (For Advanced Users)
+### CLI Binaries (For Advanced Users)
 - **`vid2boot`** - Convert any video to bootanimation.zip
 - **`boot2vid`** - Convert bootanimation.zip to MP4 video
 - Fast, cross-platform, non-interactive command-line tools
