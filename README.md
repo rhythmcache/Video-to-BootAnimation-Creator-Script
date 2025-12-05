@@ -60,9 +60,15 @@ cargo install bootanimation-tools
   ```bash
   export FFMPEG_PATH=/path/to/ffmpeg
   ```
+- FFprobe is also required for some functions to work properly.
+ ```bash
+ #export the ffprobe path the same way
+ export FFPROBE_PATH=/path/to/ffprobe
+```
   Or on Windows:
   ```cmd
   set FFMPEG_PATH=C:\path\to\ffmpeg.exe
+  set FFPROBE_PATH=C:\path\to\ffprobe.exe
   ```
 
 ## Usage
