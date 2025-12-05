@@ -24,11 +24,12 @@ Tools to convert videos to Android bootanimations and vice versa. Available as b
 ### Using Interactive Scripts
 
 #### Quick Run (No Installation)
--`vid2boot` (Converts videos into bootanimations.)
+- `vid2boot` (Converts videos into bootanimations.)
 
 ```bash
 bash <(curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-Creator-Script/main/cbootanim.sh)
 ```
+---
 
 - `boot2vid` (Converts bootanimation.zip into video.)
 ```bash
@@ -36,11 +37,20 @@ bash <(curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnim
 ```
 
 Or download and run:
+- `vid2boot`
 ```bash
 curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-Creator-Script/main/cbootanim.sh -o cbootanim.sh
 chmod +x cbootanim.sh
 ./cbootanim.sh
 ```
+
+- `boot2vid`
+```bash
+curl -sSL https://raw.githubusercontent.com/rhythmcache/Video-to-BootAnimation-Creator-Script/main/boot2mp4.sh -o boot2mp4.sh
+chmod +x boot2mp4.sh
+./boot2mp4.sh
+```
+
 
 #### Install Permanently on Termux
 ```bash
